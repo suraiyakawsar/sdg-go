@@ -27,6 +27,7 @@ import PreloadScene from './scenes/PreloadScene';
 import MainMenuScene from './scenes/MainMenuScene';
 import Chapter1Scene from './scenes/Chapter1Scene';
 import UIScene from './scenes/UIScene';
+import Chapter2Scene from './scenes/Chapter2Scene';
 
 const config = {
   type: Phaser.AUTO,
@@ -40,7 +41,7 @@ const config = {
       gravity: { y: 0 }
     }
   },
-  scene: [BootScene, PreloadScene, MainMenuScene, Chapter1Scene, UIScene]
+  scene: [BootScene, PreloadScene, MainMenuScene, Chapter1Scene, Chapter2Scene, UIScene]
 };
 
 export default config;

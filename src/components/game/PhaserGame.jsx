@@ -4,8 +4,10 @@ import { emit } from "../../utils/eventBus";
 
 // Import your Phaser scenes
 import BootScene from "../../game/scenes/BootScene";
-import GameScene from "../../game/scenes/GameScene";
+// import GameScene from "../../game/scenes/GameScene";
 import UIScene from "../../game/scenes/UIScene";
+import Chapter1Scene from "../../game/scenes/Chapter1Scene";
+import Chapter2Scene from "../../game/scenes/Chapter2Scene";
 
 export default function PhaserGame() {
   const gameContainer = useRef(null);
@@ -28,7 +30,7 @@ export default function PhaserGame() {
           debug: false,
         },
       },
-      scene: [BootScene, GameScene, UIScene],
+      scene: [BootScene, UIScene, Chapter1Scene, Chapter2Scene],
       scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -50,10 +52,10 @@ export default function PhaserGame() {
   // Optional: test React → Phaser communication
   const triggerDialogue = () => {
     emit("showDialogue", {
-      text: "Hey there! This is a test dialogue from PhaserGame.",
+      text: "Hey there! This is a test dialogue from React → Phaser → React.",
       choices: [
-        { text: "Cool!", next: 1 },
-        { text: "Not now", next: 2 },
+        { text: "Cool!", next: "more" },
+        { text: "Not now", next: "close" },
       ],
     });
   };
@@ -64,12 +66,12 @@ export default function PhaserGame() {
       <div ref={gameContainer} className="w-full h-full" />
 
       {/* Example overlay button to test React → Phaser events */}
-      <button
+      {/* <button
         onClick={triggerDialogue}
         className="absolute bottom-5 right-5 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-lg"
       >
         Test Dialogue
-      </button>
+      </button> */}
     </div>
   );
 }

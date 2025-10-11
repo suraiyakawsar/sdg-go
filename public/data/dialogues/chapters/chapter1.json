@@ -1,0 +1,93 @@
+{
+    "intro": [
+        {
+            "text": "Hey there, explorer! Welcome to SDG World 🌍"
+        },
+        {
+            "text": "Would you like to know more about how you can make a difference?",
+            "choices": [
+                {
+                    "text": "Tell me more!",
+                    "next": "info",
+                    "points": 5
+                },
+                {
+                    "text": "Maybe later",
+                    "next": "end",
+                    "points": -2
+                }
+            ]
+        }
+    ],
+    "info": [
+        {
+            "text": "The SDGs are 17 goals to make the world a better place."
+        },
+        {
+            "text": "They cover poverty, climate, health, and equality."
+        },
+        {
+            "text": "If you see trash on the street, what would you do?",
+            "choices": [
+                {
+                    "text": "Pick it up and throw it away ♻️",
+                    "next": "reward",
+                    "points": 10
+                },
+                {
+                    "text": "Ignore it — not my problem 😐",
+                    "next": "penalty",
+                    "points": -5
+                }
+            ]
+        }
+    ],
+    "reward": [
+        {
+            "text": "Nice work! Small actions make a big difference 🌿"
+        },
+        {
+            "text": "Ready to move on?",
+            "choices": [
+                {
+                    "text": "Yes, let's go!",
+                    "next": "nextChapter",
+                    "points": 0
+                },
+                {
+                    "text": "Not now",
+                    "next": "end",
+                    "points": 0
+                }
+            ]
+        }
+    ],
+    "penalty": [
+        {
+            "text": "Hmm... that wasn’t the best choice 😔"
+        },
+        {
+            "text": "Everyone can make small changes to help our planet.",
+            "choices": [
+                {
+                    "text": "I’ll do better next time",
+                    "next": "nextChapter",
+                    "points": 5
+                },
+                {
+                    "text": "I don’t care",
+                    "next": "end",
+                    "points": -3
+                }
+            ]
+        }
+    ],
+    "end": [
+        {
+            "text": "Thanks for playing this part of the story! 🌏"
+        },
+        {
+            "text": "Keep exploring and making good choices 💪"
+        }
+    ]
+}

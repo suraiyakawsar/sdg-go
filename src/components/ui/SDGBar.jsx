@@ -16,15 +16,14 @@ export default function SDGBar() {
       off("updateSDGPoints", handleSdgUpdate);
     };
   }, []);
-
   return (
-    <div className="fixed top-5 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-4 z-50">
+    <div className="fixed top-5  bg-black/60 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-4 z-50">
       <img
-        src="/assets/ui/sdg-icon.png"
+        src="assets/images/ui/sdg-icon.png"
         alt="SDG Icon"
         className="w-6 h-6"
       />
-      <div className="flex flex-col items-start">
+      <div className="flex w-50 flex-col items-start">
         <p className="text-xs text-gray-300 uppercase tracking-wider">
           SDG Points
         </p>

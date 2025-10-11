@@ -42,33 +42,32 @@ export default function DialogueBox() {
   if (!visible) return null;
 
   return (
-    <div className="w-full bg-black/80 text-white p-6 rounded-t-2xl shadow-lg">
-      <div className="max-w-3xl mx-auto text-center">
-        {/* Dialogue text */}
-        <p className="text-lg mb-4 leading-relaxed">{currentLine}</p>
+    <div className="absolute bottom-0 left-0 w-full pointer-events-none">
+      <div className="w-full bg-black/80 text-white p-6 rounded-t-2xl shadow-lg pointer-events-auto">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-lg mb-4 leading-relaxed">{currentLine}</p>
 
-        {/* Choices (if any) */}
-        {choices.length > 0 ? (
-          <div className="flex flex-wrap justify-center gap-3">
-            {choices.map((choice, index) => (
-              <button
-                key={index}
-                onClick={() => handleChoice(choice)}
-                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl transition-all pointer-events-auto"
-              >
-                {choice.text}
-              </button>
-            ))}
-          </div>
-        ) : (
-          // "Next" button if no choices available
-          <button
-            onClick={handleNext}
-            className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-xl transition-all pointer-events-auto"
-          >
-            Next
-          </button>
-        )}
+          {choices.length > 0 ? (
+            <div className="flex flex-wrap justify-center gap-3">
+              {choices.map((choice, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleChoice(choice)}
+                  className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl transition-all"
+                >
+                  {choice.text}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <button
+              onClick={handleNext}
+              className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-xl transition-all"
+            >
+              Next
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

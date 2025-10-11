@@ -7,16 +7,16 @@ function on(event, callback) {
 
 function off(event, callback) {
   if (!listeners[event]) return;
-  listeners[event] = listeners[event].filter(cb => cb !== callback);
+  listeners[event] = listeners[event].filter((cb) => cb !== callback);
 }
 
 function emit(event, data) {
   if (!listeners[event]) return;
-  listeners[event].forEach(cb => cb(data));
+  listeners[event].forEach((cb) => cb(data));
 }
 
 function clear() {
-  Object.keys(listeners).forEach(event => delete listeners[event]);
+  Object.keys(listeners).forEach((event) => delete listeners[event]);
 }
 
 export { on, off, emit, clear };

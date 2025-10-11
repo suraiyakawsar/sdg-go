@@ -59,7 +59,7 @@ export default function Game() {
         {/* Overlay UI */}
         <div className="absolute inset-0 pointer-events-none">
           {/* SDG progress bar */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 pointer-events-auto">
+          <div className="absolute top-4 left-1/8 -translate-x-1/2 pointer-events-auto">
             <SDGBar />
           </div>
 
