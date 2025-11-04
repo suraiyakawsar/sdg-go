@@ -13,6 +13,10 @@ export default class Chapter1Scene extends Phaser.Scene {
 
     init(data) {
         this.sdgPointsObj = { points: data?.sdgPoints || getPoints() || 0 };
+        // Objective tracking
+        this.trashCollected = 0;
+        this.trashGoal = 2; // Number of trash items needed
+        this.objectiveCompleted = false;
     }
 
     preload() {
@@ -208,6 +212,10 @@ export default class Chapter1Scene extends Phaser.Scene {
     handleTrashClick(trashItem) {
         trashItem.destroy();
         addSDGPoints(10);
+    // --- Objective Progress ---
+    emit("updateObjective", 1); // increase by 1 for each trash
+    
+        // Feedback
         const msg = this.add.text(trashItem.x, trashItem.y - 40, "+10 SDG Points!", {
             font: "16px Arial",
             fill: "#0f0",
@@ -222,7 +230,51 @@ export default class Chapter1Scene extends Phaser.Scene {
             ease: "Power2",
             onComplete: () => msg.destroy()
         });
+
+        this.trashCollected++;
+        emit("updateObjective", {
+            collected: this.trashCollected,
+            goal: this.trashGoal
+        });
+
+        if (!this.objectiveCompleted && this.trashCollected >= this.trashGoal) {
+            this.objectiveCompleted = true;
+            emit("badgeEarned", "Eco Warrior! 🏅"); // Badge trigger
+        }
     }
+
+    showBadge(badgeText) {
+        const badge = this.add.text(this.scale.width / 2, this.scale.height / 2, badgeText, {
+            font: "24px Arial",
+            fill: "#FFD700",
+            fontStyle: "bold",
+            stroke: "#000",
+            strokeThickness: 3,
+            align: "center"
+        }).setOrigin(0.5).setScrollFactor(0).setAlpha(0);
+
+        this.tweens.add({
+            targets: badge,
+            alpha: 1,
+            scale: { from: 0.8, to: 1.2 },
+            duration: 600,
+            ease: "Back.easeOut",
+            yoyo: true,
+            hold: 1000,
+            onComplete: () => {
+                this.tweens.add({
+                    targets: badge,
+                    alpha: 0,
+                    duration: 500,
+                    onComplete: () => badge.destroy()
+                });
+            }
+        });
+
+        // ✅ Emit event to connect to BadgePage.jsx later
+        emit("badgeEarned", badgeText);
+    }
+
 
     update() {
         this.player.update();

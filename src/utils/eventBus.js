@@ -19,5 +19,14 @@ function clear() {
   Object.keys(listeners).forEach((event) => delete listeners[event]);
 }
 
-export { on, off, emit, clear };
-export default { on, off, emit, clear };
+
+function subscribe(event, callback) {
+  if (!listeners[event]) listeners[event] = [];
+  listeners[event].push(callback);
+  return () => { // unsubscribe function
+    listeners[event] = listeners[event].filter(fn => fn !== callback);
+  };
+}
+
+export { on, off, emit, clear, subscribe };
+export default { on, off, emit, clear, subscribe };
