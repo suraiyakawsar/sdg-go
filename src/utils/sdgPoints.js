@@ -76,21 +76,46 @@
 //   };
 // };
 
+
+// let sdgPoints = 0;
+
+// // Get current points
+// export function getPoints() {
+//   return sdgPoints;
+// }
+
+// // Add (or subtract) points
+// export function addPoints(amount) {
+//   sdgPoints += amount;
+//   if (sdgPoints < 0) sdgPoints = 0;
+//   return sdgPoints;
+// }
+
+// // Optional: reset points
+// export function resetPoints() {
+//   sdgPoints = 0;
+// }
+
+
+import { emit } from "./eventBus";
+
 let sdgPoints = 0;
 
-// Get current points
 export function getPoints() {
   return sdgPoints;
 }
 
-// Add (or subtract) points
-export function addPoints(amount) {
+export function addSDGPoints(amount) {
   sdgPoints += amount;
   if (sdgPoints < 0) sdgPoints = 0;
+
+  // Emit for your SDGBar in React
+  emit("updateSDGPoints", sdgPoints);
+
   return sdgPoints;
 }
 
-// Optional: reset points
 export function resetPoints() {
   sdgPoints = 0;
+  emit("updateSDGPoints", sdgPoints);
 }

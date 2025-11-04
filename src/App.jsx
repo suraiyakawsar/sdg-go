@@ -31,7 +31,7 @@
 // //       <SDGBar value={sdgValue} />
 // //       <div id="phaser-game" />
 // //     </>
-    
+
 // //   );
 // // }
 
@@ -58,24 +58,44 @@
 // export default App;
 
 
-// src/App.jsx
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Game from './pages/Game';
-import './App.css';
 
-function App() {
+// function App() {
+//   return (
+//     <Router>
+//       <div className="App">
+//         <Routes>
+//           <Route path="/" element={<Home />} />
+//           <Route path="/game" element={<Game />} />
+//           <Route path="/badges" element={<BadgePage />} />
+//           <Route path="/profile" element={<Profile />} />
+//           {/* Add more routes as needed */}
+//         </Routes>
+//       </div>
+//     </Router>
+//   );
+// }
+
+// export default App;
+
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import BadgePage from "./components/BadgePage";
+import Profile from "./components/Profile";
+import Game from "./pages/Game";
+
+
+export default function App() {
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/game" element={<Game />} />
-          {/* Add more routes as needed */}
-        </Routes>
-      </div>
+      {/* <Navbar /> */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/badges" element={<BadgePage />} />
+        <Route path="/game" element={<Game />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
     </Router>
   );
 }
-
-export default App;

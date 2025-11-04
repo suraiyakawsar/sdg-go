@@ -28,11 +28,13 @@ import MainMenuScene from './scenes/MainMenuScene';
 import Chapter1Scene from './scenes/Chapter1Scene';
 import UIScene from './scenes/UIScene';
 import Chapter2Scene from './scenes/Chapter2Scene';
+import NineSlicePlugin from 'phaser3-nineslice';
+
 
 const config = {
   type: Phaser.AUTO,
-  width: 1280,
-  height: 720,
+  width: 1140,
+  height: 540,
   parent: 'phaser-game',
   physics: {
     default: 'arcade',
@@ -41,7 +43,24 @@ const config = {
       gravity: { y: 0 }
     }
   },
-  scene: [BootScene, PreloadScene, MainMenuScene, Chapter1Scene, Chapter2Scene, UIScene]
+  pixelArt: true,
+  scene: [BootScene, PreloadScene, MainMenuScene, Chapter1Scene, Chapter2Scene, UIScene],
+  plugins: {
+    global: [
+      {
+        key: 'NineSlicePlugin',
+        plugin: window.rexNinePatchPlugin || Phaser.Plugins.NineSlicePlugin,
+        start: true
+      }
+    ]
+  },
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+
 };
 
 export default config;

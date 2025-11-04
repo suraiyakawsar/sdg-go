@@ -1,34 +1,31 @@
+// src/components/game/PhaserGame.jsx
 import { useEffect, useRef } from "react";
 import Phaser from "phaser";
+import "phaser3-nineslice";
 import { emit } from "../../utils/eventBus";
 
-// Import your Phaser scenes
+// Import Phaser scenes
 import BootScene from "../../game/scenes/BootScene";
-// import GameScene from "../../game/scenes/GameScene";
 import UIScene from "../../game/scenes/UIScene";
 import Chapter1Scene from "../../game/scenes/Chapter1Scene";
 import Chapter2Scene from "../../game/scenes/Chapter2Scene";
 
 export default function PhaserGame() {
-  const gameContainer = useRef(null);
-  const gameInstance = useRef(null);
+  const containerRef = useRef(null);
+  const phaserRef = useRef(null);
 
   useEffect(() => {
-    if (gameInstance.current) return; // Prevent multiple initializations
+    if (phaserRef.current) return; // Prevent multiple initializations
 
-    // ✅ Phaser configuration
     const config = {
       type: Phaser.AUTO,
-      width: 960,
+      width: 1140,
       height: 540,
-      backgroundColor: "#000000",
-      parent: gameContainer.current,
+      backgroundColor: "#000",
+      parent: containerRef.current,
       physics: {
         default: "arcade",
-        arcade: {
-          gravity: { y: 0 },
-          debug: false,
-        },
+        arcade: { gravity: { y: 0 }, debug: false },
       },
       scene: [BootScene, UIScene, Chapter1Scene, Chapter2Scene],
       scale: {
@@ -37,41 +34,20 @@ export default function PhaserGame() {
       },
     };
 
-    // ✅ Create Phaser game instance
-    gameInstance.current = new Phaser.Game(config);
+    phaserRef.current = new Phaser.Game(config);
 
-    // ✅ Optional: handle cleanup when React unmounts
+    // Clean up Phaser on component unmount
     return () => {
-      if (gameInstance.current) {
-        gameInstance.current.destroy(true);
-        gameInstance.current = null;
+      if (phaserRef.current) {
+        phaserRef.current.destroy(true);
+        phaserRef.current = null;
       }
     };
   }, []);
 
-  // Optional: test React → Phaser communication
-  const triggerDialogue = () => {
-    emit("showDialogue", {
-      text: "Hey there! This is a test dialogue from React → Phaser → React.",
-      choices: [
-        { text: "Cool!", next: "more" },
-        { text: "Not now", next: "close" },
-      ],
-    });
-  };
-
   return (
-    <div className="w-full h-full relative">
-      {/* Phaser canvas container */}
-      <div ref={gameContainer} className="w-full h-full" />
-
-      {/* Example overlay button to test React → Phaser events */}
-      {/* <button
-        onClick={triggerDialogue}
-        className="absolute bottom-5 right-5 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-lg"
-      >
-        Test Dialogue
-      </button> */}
+    <div className="relative w-full h-full">
+      <div ref={containerRef} className="w-full h-full" />
     </div>
   );
 }

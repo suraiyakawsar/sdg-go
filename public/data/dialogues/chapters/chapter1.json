@@ -89,5 +89,53 @@
         {
             "text": "Keep exploring and making good choices 💪"
         }
+    ],
+    "npc1": [
+        {
+            "text": "Hi there! I’m Aina, the town’s eco volunteer 🌱"
+        },
+        {
+            "text": "We’re cleaning up the park today. Want to lend a hand?",
+            "choices": [
+                {
+                    "text": "Of course! Let’s do it 💪",
+                    "next": "npc1_help",
+                    "points": 10
+                },
+                {
+                    "text": "Sorry, I’m busy right now 😅",
+                    "next": "npc1_skip",
+                    "points": -2
+                }
+            ]
+        }
+    ],
+    "npc1_help": [
+        {
+            "text": "That’s awesome! Every bit of effort counts 🌿"
+        },
+        {
+            "text": "Here, take this reusable bag — you’ll earn SDG points as you go!"
+        },
+        {
+            "text": "Let’s make GreenVille cleaner together 💚",
+            "choices": [
+                {
+                    "text": "Let’s start!",
+                    "next": "reward",
+                    "points": 5
+                }
+            ]
+        }
+    ],
+    "npc1_skip": [
+        {
+            "text": "No worries, maybe next time! Remember, small actions matter 🌎"
+        },
+        {
+            "text": "See you around, explorer!",
+            "next": "end",
+            "points": 0
+        }
     ]
 }
