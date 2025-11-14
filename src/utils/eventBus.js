@@ -27,6 +27,11 @@ function subscribe(event, callback) {
     listeners[event] = listeners[event].filter(fn => fn !== callback);
   };
 }
-
+export const chapter1Scenes = [
+  { id: "scene1", dialogueId: "intro", background: "bg" },
+  { id: "scene2", dialogueId: "classroom", background: "classroomBg" },
+  { id: "scene3", dialogueId: "cafeteria", background: "cafeteriaBg" }
+];
 export { on, off, emit, clear, subscribe };
 export default { on, off, emit, clear, subscribe };
+

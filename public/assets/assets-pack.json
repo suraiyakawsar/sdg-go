@@ -1,0 +1,69 @@
+{
+    "section1": {
+        "files": [
+            {
+                "url": "public/assets/images/environments/bg.png",
+                "type": "image",
+                "key": "bg"
+            },
+            {
+                "url": "public/assets/hero-image.png",
+                "type": "image",
+                "key": "hero-image"
+            },
+            {
+                "url": "public/assets/images/characters/npc1.png",
+                "type": "image",
+                "key": "npc1"
+            },
+            {
+                "url": "public/assets/images/props/trash1.png",
+                "type": "image",
+                "key": "trash1"
+            },
+            {
+                "url": "public/assets/images/props/trash2.png",
+                "type": "image",
+                "key": "trash2"
+            },
+            {
+                "url": "public/assets/images/ui/arrow_down.png",
+                "type": "image",
+                "key": "ui_arrow_down"
+            },
+            {
+                "url": "public/assets/images/ui/speechBubble.png",
+                "type": "image",
+                "key": "speechBubble"
+            },
+            {
+                "url": "public/assets/images/ui/icon_eye.png",
+                "type": "image",
+                "key": "icon_eye"
+            },
+            {
+                "url": "public/assets/images/ui/icon_speech.png",
+                "type": "image",
+                "key": "icon_speech"
+            },
+            {
+                "url": "public/assets/images/ui/ui_tooltip_bg.png",
+                "type": "image",
+                "key": "ui_tooltip_bg"
+            },
+            {
+                "url": "public/assets/audio/intro-music.mp3",
+                "type": "audio",
+                "key": "introMusic"
+            }
+        ]
+    },
+    "meta": {
+        "app": "Phaser Editor 2D - Asset Pack Editor",
+        "contentType": "phasereditor2d.pack.core.AssetContentType",
+        "url": "https://phasereditor2d.com",
+        "version": 2,
+        "showAllFilesInBlocks": false,
+        "visible": true
+    }
+}

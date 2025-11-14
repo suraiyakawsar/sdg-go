@@ -25,7 +25,7 @@ import Phaser from 'phaser';
 import BootScene from './scenes/BootScene';
 import PreloadScene from './scenes/PreloadScene';
 import MainMenuScene from './scenes/MainMenuScene';
-import Chapter1Scene from './scenes/Chapter1Scene';
+import Chapter1SceneShow from './scenes/Chapter1SceneShow';
 import UIScene from './scenes/UIScene';
 import Chapter2Scene from './scenes/Chapter2Scene';
 import NineSlicePlugin from 'phaser3-nineslice';
@@ -44,7 +44,7 @@ const config = {
     }
   },
   pixelArt: true,
-  scene: [BootScene, PreloadScene, MainMenuScene, Chapter1Scene, Chapter2Scene, UIScene],
+  scene: [BootScene, PreloadScene, MainMenuScene, Chapter2Scene, UIScene, Chapter1SceneShow],
   plugins: {
     global: [
       {

@@ -50,7 +50,7 @@ export default function Profile() {
                                 transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
                             ></motion.div>
                             <img
-                                src="assets/images/environments/player.png"
+                                src="assets/images/characters/lady.png"
                                 alt="Avatar"
                                 className="relative z-10 w-40 h-40 rounded-full border-4 border-green-400 shadow-xl"
                             />

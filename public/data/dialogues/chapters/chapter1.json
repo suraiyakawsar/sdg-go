@@ -51,7 +51,7 @@
             "choices": [
                 {
                     "text": "Yes, let's go!",
-                    "next": "nextChapter",
+                    
                     "points": 0
                 },
                 {
@@ -71,7 +71,7 @@
             "choices": [
                 {
                     "text": "I’ll do better next time",
-                    "next": "nextChapter",
+
                     "points": 5
                 },
                 {

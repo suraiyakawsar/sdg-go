@@ -30,7 +30,7 @@
 
 import GameLayout from '../components/layout/GameLayout';
 import PhaserGame from '../components/game/PhaserGame';
-import DialogueBox from '../components/ui/DialogueBox';
+// import DialogueBox from '../components/ui/DialogueBox';
 import SDGBar from '../components/ui/SDGBar';
 import ObjectiveBar from '../components/ui/ObjectiveBar'; // ✅ new
 import BadgePopup from '../components/ui/BadgePopup';     // ✅ new
@@ -54,10 +54,10 @@ export default function Game() {
             <ObjectiveBar />
           </div>
 
-          {/* Dialogue Box */}
+          {/* Dialogue Box
           <div className="absolute bottom-0 w-full pointer-events-auto">
             <DialogueBox />
-          </div>
+          </div> */}
 
           {/* Badge popup */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">

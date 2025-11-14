@@ -5,10 +5,22 @@ import { SceneManager } from "../../utils/sceneManager";
 import { emit } from "../../utils/eventBus";
 import { addSDGPoints, getPoints } from "../../utils/sdgPoints";
 import TooltipManager from "../objects/TooltipManager";
+import NPCIndicator from "../objects/NPCIndicator";
+import InteractionPanel from "../objects/InteractionPanel";
 
 export default class Chapter1Scene extends Phaser.Scene {
     constructor() {
         super("Chapter1Scene");
+
+        this.hallway = {
+            topY: 285,    // furthest point (ceiling) - ok
+            bottomY: 480, // closest point (floor)
+            leftTopX: 495,  // left edge at top
+            rightTopX: 710, // right edge at top
+            leftBottomX: -100, // left edge at bottom
+            rightBottomX: 1400 // right edge at bottom - ok
+        };
+
     }
 
     init(data) {
@@ -20,177 +32,200 @@ export default class Chapter1Scene extends Phaser.Scene {
     }
 
     preload() {
-        // --- Environment & Characters ---
-        this.load.image("bg", "assets/images/environments/bg.png");
-        this.load.image("player", "assets/images/environments/player.png");
-        this.load.image("npc1", "assets/images/characters/npc1.png");
-        this.load.image("trash1", "assets/images/props/trash1.png");
-        this.load.image("trash2", "assets/images/props/trash2.png");
-
-        // --- UI & Audio ---
-        this.load.image("ui_arrow_down", "assets/images/ui/arrow_down.png");
-        this.load.image("speechBubble", "assets/images/ui/speechBubble.png");
-        this.load.image("icon_eye", "assets/images/ui/icon_eye.png");
-        this.load.image("icon_speech", "assets/images/ui/icon_speech.png");
-        this.load.image("ui_tooltip_bg", "assets/images/ui/ui_tooltip_bg.png");
-        this.load.audio("introMusic", "assets/audio/intro-music.mp3");
-
         // --- Dialogue Data ---
+        this.load.spritesheet('lady',
+            '/assets/images/characters/lady.png',
+            { frameWidth: 214, frameHeight: 528 }
+        );
         this.load.json("chapter1Data", "/data/dialogues/chapters/chapter1.json");
+        this.load.pack("assets-pack", "public/assets/assets-pack.json");
     }
 
     create() {
-        // --- Core Setup ---
+
+        // // Create graphics in create()
+        // this.debugGraphics = this.add.graphics();
+        // this.debugGraphics.lineStyle(2, 0xff0000, 1); // red border, thickness 2
+
+        const { topY, bottomY, leftTopX, rightTopX, leftBottomX, rightBottomX } = this.hallway;
+
+        // this.debugGraphics.fillStyle(0x00ff00, 0.2); // green, semi-transparent
+        // this.debugGraphics.fillPoints([
+        //     new Phaser.Geom.Point(leftTopX, topY),
+        //     new Phaser.Geom.Point(rightTopX, topY),
+        //     new Phaser.Geom.Point(rightBottomX, bottomY),
+        //     new Phaser.Geom.Point(leftBottomX, bottomY)
+        // ], true);
+
+        // // this.debugGraphics.fillCircle(this.player.x, this.player.y, 5);
+        // this.debugGraphics.setDepth(10); // adjust as needed
+
+
+        // ============================================================
+        // UI LAYER — FIXED TO SCREEN (DO NOT MOVE WITH CAMERA)
+        // ============================================================
+        this.uiLayer = this.add.container(0, 0)
+            .setScrollFactor(0)
+            .setDepth(9999);     // always on top
+
+
+        // ============================================================
+        // CAMERA + BACKGROUND + PLAYER (WORLD SPACE)
+        // ============================================================
         this.cameras.main.setBackgroundColor("#000000");
         this.cameras.main.fadeIn(1000, 0, 0, 0);
 
-        this.bg = this.add.image(0, 0, "bg").setOrigin(0);
-        this.bg.displayWidth = this.scale.width;
-        this.bg.displayHeight = this.scale.height;
+        this.bg = this.add.image(0, 0, "bg")
+            .setOrigin(0)
+            .setScrollFactor(1)
+            .setDepth(-10)
+            .setDisplaySize(this.scale.width, this.scale.height);
 
-        // Physics Bounds
         this.physics.world.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
-
-        // --- Player Setup ---
-        this.player = new Player(this, 300, 400, "player")
-            .setCollideWorldBounds(true)
-            .setScale(0.5);
-        this.cameras.main.startFollow(this.player);
         this.cameras.main.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
 
+        this.ladyPlayer = this.physics.add.sprite(300, 450, "lady")
+            .setBounce(0.2)
+            .setCollideWorldBounds(true)
+            .setDepth(5)
+            .setScale(0.5);
 
-        // --- Music ---
-        this.music = this.sound.add("introMusic", { loop: true, volume: 0.3 });
-        this.music.play();
+        this.playerShadow = this.add.ellipse(
+            this.ladyPlayer.x,
+            this.ladyPlayer.y + 50,
+            40,
+            15,
+            0x000000,
+            0.2
+        ).setDepth(4);
 
-        // --- Intro Text ---
-        this.introText = this.add.text(
-            this.scale.width / 2,
-            this.scale.height / 2,
-            "It’s a new day in GreenVille.\nSmall actions can make a big difference…",
-            {
-                fontSize: "22px",
-                color: "#ffffff",
-                align: "center",
-                fontStyle: "italic",
-            }
-        ).setOrigin(0.5).setAlpha(0);
-
-        this.tweens.add({
-            targets: this.introText,
-            alpha: 1,
-            duration: 2000,
-            yoyo: true,
-            hold: 2000,
+        this.anims.create({
+            key: "walk",
+            frames: this.anims.generateFrameNumbers("lady", { start: 0, end: 4 }),
+            frameRate: 10,
+            repeat: -1,
         });
 
-        // --- NPC Setup ---
-        this.npc = this.add.image(700, 400, "npc1")
+        this.anims.create({
+            key: "idle",
+            frames: [{ key: "lady", frame: 4 }],
+            frameRate: 20,
+        });
+
+        // this.cameras.main.startFollow(this.ladyPlayer, true, 0.1, 0.1);
+
+
+        // ============================================================
+        // NPC (WORLD)
+        // ============================================================
+        this.npc = this.add.image(600, 288, "npc1")
+            .setScale(0.2)
             .setInteractive({ useHandCursor: true })
-            .setScale(0.5)
             .setDepth(10);
-        this.npc.dialogueId = "npc1"; // attach this property
 
-        // ✅ Clicking NPC shows tooltip icons
-        // ✅ Correct: use this.npc (since you declared it earlier)
-        this.npc.setInteractive({ useHandCursor: true }).on("pointerdown", (pointer) => {
-            console.log("NPC clicked!");
-            this.tooltipManager.show(this.npc.x, this.npc.y, this.npc);
+        this.npc.dialogueId = "npc1";
+
+        this.npcIndicator = new NPCIndicator(this, this.npc);
+
+
+        // ============================================================
+        // UI SYSTEMS (ALL INSIDE uiLayer FOR FIXED SCREEN POSITION)
+        // ============================================================
+        const dialogueData = this.cache.json.get("chapter1Data");
+
+        this.dialogueManager = new DialogueManager(
+            this,
+            dialogueData,
+            this.sdgPointsObj,
+            this.uiLayer
+        );
+
+        this.tooltipManager = new TooltipManager(this, this.uiLayer);
+
+        this.interactionPanel = new InteractionPanel(this, this.uiLayer);
+
+
+        // NPC click → show tooltip on screen, not world
+        this.npc.on("pointerdown", () => {
+            this.tooltipManager.show(
+                this.npc.x,
+                this.npc.y - this.npc.displayHeight / 2,
+                this.npc
+            );
         });
 
 
+        // ============================================================
+        // TRASH (WORLD)
+        // ============================================================
+        this.trash1 = this.add.image(400, 500, "trash1")
+            .setInteractive()
+            .setScale(0.15);
 
-        // // Start dialogue when tooltip triggers
-        // this.events.on("startDialogue", () => {
-        //     console.log("Starting dialogue now...");
-        //     this.startDialogue();
-        // });
+        this.trash2 = this.add.image(600, 475, "trash2")
+            .setInteractive()
+            .setScale(0.15);
 
-
-
-        // --- Trash Items ---
-        this.trash1 = this.add.image(400, 500, "trash1").setInteractive().setScale(0.15);
-        this.trash2 = this.add.image(600, 475, "trash2").setInteractive().setScale(0.15);
         this.trash1.on("pointerdown", () => this.handleTrashClick(this.trash1));
         this.trash2.on("pointerdown", () => this.handleTrashClick(this.trash2));
 
-        // --- Keyboard Controls ---
-        this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+
+        // ============================================================
+        // INPUT
+        // ============================================================
         this.keys = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
             down: Phaser.Input.Keyboard.KeyCodes.S,
             left: Phaser.Input.Keyboard.KeyCodes.A,
-            right: Phaser.Input.Keyboard.KeyCodes.D
-        });
-
-        // --- Next Zone Transition ---
-        // this.nextZone = this.add.circle(this.scale.width - 150, this.scale.height / 2, 50, 0x00ff00, 0.3)
-        //     .setVisible(false);
-        // this.physics.add.existing(this.nextZone);
-        // this.nextZone.body.setAllowGravity(false).setImmovable(true);
-        // this.nextZoneVisible = false;
-
-        // this.tweens.add({
-        //     targets: this.nextZone,
-        //     scale: { from: 1, to: 1.2 },
-        //     alpha: { from: 0.5, to: 0.8 },
-        //     duration: 800,
-        //     yoyo: true,
-        //     repeat: -1,
-        // });
-
-
-        // --- Dialogue + Tooltip ---
-        const dialogueData = this.cache.json.get("chapter1Data");
-        this.dialogueManager = new DialogueManager(this, dialogueData, this.sdgPointsObj);
-
-
-        // ✅ Initialize TooltipManager
-        this.tooltipManager = new TooltipManager(this, (npc) => {
-            if (this.dialogueManager) {
-                this.dialogueManager.startDialogue(npc.dialogueId);
-            } else {
-                console.warn("DialogueManager not found!");
-            }
+            right: Phaser.Input.Keyboard.KeyCodes.D,
         });
 
 
-        // --- Next Zone setup (hidden initially) ---
-        // inside create()
-        // this.nextZone = this.add.circle(this.scale.width - 150, this.scale.height / 2, 50, 0x00ff00, 0.3)
-        //     .setVisible(false);
+        // ============================================================
+        // NEXT ZONE (WORLD)
+        // ============================================================
+        this.nextZone = this.add
+            .zone(this.scale.width - 150, this.scale.height / 2)
+            .setSize(100, 100);
 
-        // this.physics.add.existing(this.nextZone); // adds body
-        // this.nextZone.body.setAllowGravity(false).setImmovable(true).setCircle(50); // ensures body matches visual
+        this.physics.world.enable(this.nextZone);
+        this.nextZone.body.setAllowGravity(false);
+        this.nextZone.body.setImmovable(true);
+        this.nextZone.setVisible(false);
 
-        // ✅ Step 2: Listen for dialogue end to show next zone
-        // this.events.on('dialogueEnded', (dialogueKey) => {
-        //     // Show the next zone only after certain dialogues
-        //     if (dialogueKey === "npc1" || dialogueKey === "intro") {
-        //         this.nextZone.setVisible(true);
-        //         this.nextZoneVisible = true;
-        //     }
-        // });
-        // Only show nextZone after dialogue ends
-
-        // Next Zone setup
-        this.nextZone = this.add.circle(this.scale.width - 150, this.scale.height / 2, 50, 0x00ff00, 0.3)
-            .setVisible(false);
-        this.physics.add.existing(this.nextZone);
-        this.nextZone.body.setAllowGravity(false).setImmovable(true);
-        this.nextZone.body.setCircle(50);
-
-        // Only show nextZone after dialogue ends
         this.nextZoneVisible = false;
-        this.events.on("dialogueEnded", (dialogueKey) => {
-            console.log("Dialogue ended for:", dialogueKey); // <-- debug
-            this.nextZone.setVisible(true);
-            this.nextZoneVisible = true;
+
+
+        // Debug highlight
+        const zoneIndicator = this.add.graphics()
+            .fillStyle(0x00ff00, 0.3)
+            .fillRect(this.nextZone.x - 50, this.nextZone.y - 50, 100, 100);
+
+        this.tweens.add({
+            targets: zoneIndicator,
+            alpha: { from: 0.3, to: 0.7 },
+            duration: 1000,
+            yoyo: true,
+            repeat: -1,
+            onUpdate: () => zoneIndicator.setVisible(this.nextZone.visible),
         });
 
+        // Dialogue → unlock next zone
+        this.events.on("dialogueEnded", () => {
+            this.nextZoneVisible = true;
+            this.nextZone.setVisible(true);
+        });
+    }
 
 
-        this.feedbackText = this.add.text(20, 48, "", { font: "18px Arial", fill: "#00ff99" }).setScrollFactor(0);
+    onZoneOverlap() {
+        if (this.nextZoneVisible) {
+            this.nextZoneVisible = false; // Prevent multiple triggers
+            this.cameras.main.fadeOut(800);
+            this.cameras.main.once("camerafadeoutcomplete", () => {
+                SceneManager.nextScene(this, getPoints());
+            });
+        }
     }
 
     showNPCInfo(npc) {
@@ -210,26 +245,35 @@ export default class Chapter1Scene extends Phaser.Scene {
     }
 
     handleTrashClick(trashItem) {
-        trashItem.destroy();
-        addSDGPoints(10);
-    // --- Objective Progress ---
-    emit("updateObjective", 1); // increase by 1 for each trash
-    
+        if (!trashItem.scene) return; // Prevent errors if clicked multiple times quickly
+
+        const points = 10;
+
+        addSDGPoints(points);
+
+
         // Feedback
-        const msg = this.add.text(trashItem.x, trashItem.y - 40, "+10 SDG Points!", {
+        // const msg = this.add.text(trashItem.x, trashItem.y - 40, "+10 SDG Points!", {
+        const msg = this.add.text(trashItem.x, trashItem.y - 40, `+${points} SDG Points!`, {
             font: "16px Arial",
             fill: "#0f0",
-            stroke: "#000",
-            strokeThickness: 2
-        });
+            // strokeThickness: 2
+        }).setOrigin(0.5);
+
         this.tweens.add({
             targets: msg,
-            y: msg.y - 40,
+            y: msg.y - 50,
             alpha: 0,
-            duration: 800,
+            duration: 1000,
             ease: "Power2",
             onComplete: () => msg.destroy()
         });
+
+        trashItem.destroy();
+
+
+        // --- Objective Progress ---
+        emit("updateObjective", 1); // increase by 1 for each trash
 
         this.trashCollected++;
         emit("updateObjective", {
@@ -270,59 +314,82 @@ export default class Chapter1Scene extends Phaser.Scene {
                 });
             }
         });
-
         // ✅ Emit event to connect to BadgePage.jsx later
         emit("badgeEarned", badgeText);
     }
 
 
-    update() {
-        this.player.update();
+    update(time, delta) {
 
+        const distance = Phaser.Math.Distance.Between(
+            this.ladyPlayer.x,
+            this.ladyPlayer.y,
+            this.npc.x,
+            this.npc.y
+        );
+
+        if (distance < 150) {
+            this.npcIndicator.show();
+        } else {
+            this.npcIndicator.hide();
+        }
+
+
+        // this.tooltipManager.update();
+        this.npcIndicator.update();
+        const playerSpeed = 150;
+
+        // --- Player Movement ---
         let velocityX = 0;
         let velocityY = 0;
 
-        if (this.keys.left.isDown) velocityX = -200;
-        else if (this.keys.right.isDown) velocityX = 200;
-        if (this.keys.up.isDown) velocityY = -200;
-        else if (this.keys.down.isDown) velocityY = 200;
+        if (this.keys.left.isDown) velocityX = -playerSpeed;
+        else if (this.keys.right.isDown) velocityX = playerSpeed;
 
-        this.player.body.setVelocity(velocityX, velocityY);
+        if (this.keys.up.isDown) velocityY = -playerSpeed;
+        else if (this.keys.down.isDown) velocityY = playerSpeed;
 
-        // --- Handle Dialogue Progression ---
-        if (Phaser.Input.Keyboard.JustDown(this.keyE)) {
-            if (!this.dialogueManager.dialogueVisible && !this.dialogueManager.dialogueFinished) {
-                this.dialogueManager.startDialogue("intro");
-            } else if (this.dialogueManager.dialogueVisible) {
-                this.dialogueManager.nextDialogue();
-            }
+        this.ladyPlayer.setVelocity(velocityX, velocityY);
+
+        // Play animation based on movement
+        if (velocityX !== 0 || velocityY !== 0) {
+            this.ladyPlayer.anims.play('walk', true);
+            this.ladyPlayer.setFlipX(velocityX > 0); // Flip for right
+        } else {
+            this.ladyPlayer.anims.play('idle', true);
         }
 
-        // --- Scene Transition ---
-        // if (this.nextZoneVisible) {
-        //     this.physics.world.overlap(this.player, this.nextZone, () => {
-        //         this.nextZoneVisible = false;
-        //         this.cameras.main.fadeOut(800);
-        //         this.cameras.main.once("camerafadeoutcomplete", () => {
-        //             SceneManager.nextScene(this, getPoints());
-        //         });
-        //     });
-        // }
+        // --- Shadow ---
+        this.playerShadow.x = this.ladyPlayer.x;
+        this.playerShadow.y = this.ladyPlayer.y + 50;
+        this.playerShadow.setDepth(this.ladyPlayer.depth - 1);
 
-        // In update()
+        // --- Perspective scaling & camera zoom ---
+        const t = Phaser.Math.Clamp(
+            (this.ladyPlayer.y - this.hallway.bottomY) / (this.hallway.topY - this.hallway.bottomY),
+            0, 1
+        );
+
+        // Scale player
+        const scaleFactor = Phaser.Math.Linear(1.0, 0.15, t); // bottom = 1, top = 0.15
+        this.ladyPlayer.setScale(scaleFactor);
+
+        // Camera zoom
+        // const targetZoom = Phaser.Math.Linear(1, 1.6, t);
+        // this.cameras.main.zoom = Phaser.Math.Linear(this.cameras.main.zoom, targetZoom, 0.05);
+
+        // Clamp position to hallway boundaries
+        const minX = Phaser.Math.Linear(this.hallway.leftBottomX, this.hallway.leftTopX, t);
+        const maxX = Phaser.Math.Linear(this.hallway.rightBottomX, this.hallway.rightTopX, t);
+        this.ladyPlayer.x = Phaser.Math.Clamp(this.ladyPlayer.x, minX, maxX);
+        this.ladyPlayer.y = Phaser.Math.Clamp(this.ladyPlayer.y, this.hallway.topY, this.hallway.bottomY);
+
+
+
+        // --- Next Zone Overlap ---
         if (this.nextZoneVisible) {
-            this.physics.world.overlap(this.player, this.nextZone, () => {
-                this.nextZoneVisible = false;
-                this.cameras.main.fadeOut(800);
-                this.cameras.main.once("camerafadeoutcomplete", () => {
-                    SceneManager.nextScene(this, getPoints());
-                });
-            });
+            this.physics.world.overlap(this.ladyPlayer, this.nextZone, this.onZoneOverlap, null, this);
         }
-
-
     }
+
 }
-
-
-

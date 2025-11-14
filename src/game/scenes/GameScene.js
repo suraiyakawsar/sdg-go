@@ -8,7 +8,7 @@ export default class GameScene extends Phaser.Scene {
 
   preload() {
     this.load.image("bg", "/assets/images/environments/bg.png");
-    this.load.image("player", "assets/images/environments/player.png");
+    this.load.image("lady", "assets/images/characters/lady.png");
   }
 
   create() {
@@ -19,11 +19,11 @@ export default class GameScene extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
 
     // 🧍 Player
-    this.player = new Player(this, this.scale.width / 2, this.scale.height / 2, "player");
-    this.player.setCollideWorldBounds(true);
+    this.lady = new Player(this, this.scale.width / 2, this.scale.height / 2, "lady");
+    this.lady.setCollideWorldBounds(true);
 
     // 🎥 Camera
-    this.cameras.main.startFollow(this.player);
+    this.cameras.main.startFollow(this.lady);
     this.cameras.main.setZoom(1);
     this.cameras.main.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
 
@@ -140,35 +140,35 @@ export default class GameScene extends Phaser.Scene {
     }
 
     if (!this.dialogueVisible) {
-      this.player.update();
+      this.lady.update();
 
       if (this.target) {
         const distance = Phaser.Math.Distance.Between(
-          this.player.x,
-          this.player.y,
+          this.lady.x,
+          this.lady.y,
           this.target.x,
           this.target.y
         );
 
         if (distance < 8) {
-          this.player.body.setVelocity(0, 0);
+          this.lady.body.setVelocity(0, 0);
           this.target = null;
         } else {
           const angle = Phaser.Math.Angle.Between(
-            this.player.x,
-            this.player.y,
+            this.lady.x,
+            this.lady.y,
             this.target.x,
             this.target.y
           );
           this.physics.velocityFromRotation(
             angle,
             this.speed,
-            this.player.body.velocity
+            this.lady.body.velocity
           );
         }
       }
     } else {
-      this.player.body.setVelocity(0, 0);
+      this.lady.body.setVelocity(0, 0);
     }
   }
 
@@ -237,28 +237,28 @@ export default class GameScene extends Phaser.Scene {
     });
   }
 
-handleChoice(choice) {
-  this.choiceButtons.forEach(btn => btn.destroy());
-  this.choiceButtons = [];
+  handleChoice(choice) {
+    this.choiceButtons.forEach(btn => btn.destroy());
+    this.choiceButtons = [];
 
-  // Update SDG Points via eventBus
-  if (choice.sdgImpacts) {
-    if (window.eventBus) {
-      window.eventBus.emit('sdg-update', choice.sdgImpacts);
+    // Update SDG Points via eventBus
+    if (choice.sdgImpacts) {
+      if (window.eventBus) {
+        window.eventBus.emit('sdg-update', choice.sdgImpacts);
+      }
+    }
+
+    // Move to next dialogue branch or end
+    if (choice.next === "close") {
+      this.endDialogue();
+    } else if (choice.next === "end") {
+      this.startDialogue("end");
+      // Automatically close after final message
+      this.time.delayedCall(2500, () => this.endDialogue());
+    } else {
+      this.startDialogue(choice.next);
     }
   }
-
-  // Move to next dialogue branch or end
-  if (choice.next === "close") {
-    this.endDialogue();
-  } else if (choice.next === "end") {
-    this.startDialogue("end");
-    // Automatically close after final message
-    this.time.delayedCall(2500, () => this.endDialogue());
-  } else {
-    this.startDialogue(choice.next);
-  }
-}
 
 
 
