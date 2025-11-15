@@ -22,7 +22,7 @@ export default class DialogueManager {
     this.panelWidth = Math.round(scene.scale.width * 0.9);
     this.panelHeight = 100;
     this.panelX = Math.round(scene.scale.width / 2);
-    this.panelY = scene.scale.height - (this.panelHeight / 2) - 90;
+    this.panelY = scene.scale.height - (this.panelHeight / 2) - 70;
 
     this._createUI();
 
@@ -183,8 +183,8 @@ export default class DialogueManager {
 
     const buttonWidth = 320;
     const buttonHeight = 50;
-    const gap = 50;
-    const y = this.panelHeight / 2 + 60;
+    const gap = 80;
+    const y = this.panelHeight / 2 + 35;
 
     const keyMap = {
       0: { key: "Q", keyCode: this.keyQ },

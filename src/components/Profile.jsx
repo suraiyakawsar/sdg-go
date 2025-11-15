@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardContent, CardTitle } from "./ui/card";
-import { Progress } from "./ui/progress";
+import { SDGProgress } from "./ui/SDGProgress";
 
 export default function Profile() {
     const dummyStats = {
@@ -65,7 +65,7 @@ export default function Profile() {
                         {/* XP Bar */}
                         <div className="w-64 md:w-80">
                             <p className="text-sm mb-1 text-gray-300">XP Progress</p>
-                            <Progress value={dummyStats.xp} />
+                            <SDGProgress value={dummyStats.xp} />
                             <p className="text-xs mt-1 text-gray-400">{dummyStats.xp}%</p>
                         </div>
 

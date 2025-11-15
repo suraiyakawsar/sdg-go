@@ -13,12 +13,21 @@ export default class Chapter1Scene extends Phaser.Scene {
         super("Chapter1Scene");
 
         this.hallway = {
-            topY: 285,    // furthest point (ceiling) - ok
-            bottomY: 480, // closest point (floor)
-            leftTopX: 495,  // left edge at top
-            rightTopX: 710, // right edge at top
-            leftBottomX: -100, // left edge at bottom
-            rightBottomX: 1400 // right edge at bottom - ok
+            // topY: 285,    // furthest point (ceiling)
+            // bottomY: 480, // closest point (floor)
+            // leftTopX: 495,  // left edge at top
+            // rightTopX: 710, // right edge at top
+            // leftBottomX: -100, // left edge at bottom
+            // rightBottomX: 1400 // right edge at bottom
+
+            topY: 570,          // (285 → 570)
+            bottomY: 960,       // (480 → 960)
+
+            leftTopX: 833,      // (495 → 833)
+            rightTopX: 1195,    // (710 → 1195)
+
+            leftBottomX: -80,  // (-100 → -168)
+            rightBottomX: 2000  // (1400 → 2358)
         };
 
     }
@@ -47,7 +56,7 @@ export default class Chapter1Scene extends Phaser.Scene {
         // this.debugGraphics = this.add.graphics();
         // this.debugGraphics.lineStyle(2, 0xff0000, 1); // red border, thickness 2
 
-        const { topY, bottomY, leftTopX, rightTopX, leftBottomX, rightBottomX } = this.hallway;
+        // const { topY, bottomY, leftTopX, rightTopX, leftBottomX, rightBottomX } = this.hallway;
 
         // this.debugGraphics.fillStyle(0x00ff00, 0.2); // green, semi-transparent
         // this.debugGraphics.fillPoints([
@@ -84,11 +93,13 @@ export default class Chapter1Scene extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
         this.cameras.main.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
 
-        this.ladyPlayer = this.physics.add.sprite(300, 450, "lady")
+        // this.ladyPlayer = this.physics.add.sprite(300, 450, "lady")
+
+        this.ladyPlayer = this.physics.add.sprite(505, 900, "lady")
             .setBounce(0.2)
             .setCollideWorldBounds(true)
-            .setDepth(5)
-            .setScale(0.5);
+            .setDepth(5);
+        // .setScale(0.1);
 
         this.playerShadow = this.add.ellipse(
             this.ladyPlayer.x,
@@ -118,8 +129,10 @@ export default class Chapter1Scene extends Phaser.Scene {
         // ============================================================
         // NPC (WORLD)
         // ============================================================
-        this.npc = this.add.image(600, 288, "npc1")
-            .setScale(0.2)
+        // this.npc = this.add.image(600, 288, "npc1")
+
+        this.npc = this.add.image(1010, 576, "npc1")
+            .setScale(0.4)
             .setInteractive({ useHandCursor: true })
             .setDepth(10);
 
@@ -158,17 +171,21 @@ export default class Chapter1Scene extends Phaser.Scene {
         // ============================================================
         // TRASH (WORLD)
         // ============================================================
-        this.trash1 = this.add.image(400, 500, "trash1")
+        this.trash1 = this.add.image(900, 900, "trash1")
             .setInteractive()
-            .setScale(0.15);
+            .setScale(0.3);
 
-        this.trash2 = this.add.image(600, 475, "trash2")
+        this.trash2 = this.add.image(900, 800, "trash2")
             .setInteractive()
-            .setScale(0.15);
+            .setScale(0.2);
 
         this.trash1.on("pointerdown", () => this.handleTrashClick(this.trash1));
         this.trash2.on("pointerdown", () => this.handleTrashClick(this.trash2));
 
+        emit("updateObjective", {
+            collected: this.trashCollected,
+            goal: this.trashGoal
+        });
 
         // ============================================================
         // INPUT
@@ -215,6 +232,42 @@ export default class Chapter1Scene extends Phaser.Scene {
             this.nextZoneVisible = true;
             this.nextZone.setVisible(true);
         });
+
+
+
+
+
+
+
+        // // ============================================================
+        // // RESPONSIVE RESIZE HANDLER
+        // // ============================================================
+        // this.scale.on("resize", (gameSize) => {
+        //     const width = gameSize.width;
+        //     const height = gameSize.height;
+
+        //     // Resize the main camera
+        //     this.cameras.resize(width, height);
+
+        //     // Resize your background to fit
+        //     if (this.bg) {
+        //         this.bg.setDisplaySize(width, height);
+        //     }
+
+        //     // Reposition fixed UI elements (your PLAYERS DO NOT GO HERE)
+        //     if (this.uiLayer) {
+        //         this.uiLayer.setPosition(0, 0);
+        //     }
+        // });
+
+
+
+
+
+
+
+
+
     }
 
 
@@ -273,7 +326,7 @@ export default class Chapter1Scene extends Phaser.Scene {
 
 
         // --- Objective Progress ---
-        emit("updateObjective", 1); // increase by 1 for each trash
+        // emit("updateObjective", 1); // increase by 1 for each trash
 
         this.trashCollected++;
         emit("updateObjective", {
@@ -287,36 +340,63 @@ export default class Chapter1Scene extends Phaser.Scene {
         }
     }
 
-    showBadge(badgeText) {
-        const badge = this.add.text(this.scale.width / 2, this.scale.height / 2, badgeText, {
-            font: "24px Arial",
-            fill: "#FFD700",
-            fontStyle: "bold",
-            stroke: "#000",
-            strokeThickness: 3,
-            align: "center"
-        }).setOrigin(0.5).setScrollFactor(0).setAlpha(0);
+    // showBadge(badgeText) {
+    //     // === Badge container on UI layer ===
+    //     const badgeContainer = this.add.container(
+    //         this.scale.width / 2,
+    //         this.scale.height / 2
+    //     ).setScrollFactor(0).setAlpha(0);
 
-        this.tweens.add({
-            targets: badge,
-            alpha: 1,
-            scale: { from: 0.8, to: 1.2 },
-            duration: 600,
-            ease: "Back.easeOut",
-            yoyo: true,
-            hold: 1000,
-            onComplete: () => {
-                this.tweens.add({
-                    targets: badge,
-                    alpha: 0,
-                    duration: 500,
-                    onComplete: () => badge.destroy()
-                });
-            }
-        });
-        // ✅ Emit event to connect to BadgePage.jsx later
-        emit("badgeEarned", badgeText);
-    }
+    //     this.uiLayer.add(badgeContainer);
+
+    //     // === Soft background pill ===
+    //     const bg = this.add.graphics();
+    //     bg.fillStyle(0x000000, 0.4);  // soft translucent black
+    //     bg.fillRoundedRect(-180, -35, 360, 70, 20); // pill shape
+    //     bg.setScrollFactor(0);
+
+    //     // === Minimal clean text ===
+    //     const text = this.add.text(0, 0, badgeText, {
+    //         fontFamily: "Poppins, sans-serif",
+    //         fontSize: "22px",
+    //         color: "#ffffff",
+    //         fontStyle: "600",
+    //         align: "center"
+    //     }).setOrigin(0.5).setScrollFactor(0);
+
+    //     // Add to container
+    //     badgeContainer.add(bg);
+    //     badgeContainer.add(text);
+
+    //     // === Modern, smooth animation ===
+    //     badgeContainer.setScale(0.85);
+
+    //     this.tweens.add({
+    //         targets: badgeContainer,
+    //         alpha: 1,
+    //         scale: { from: 0.85, to: 1 },
+    //         duration: 500,
+    //         ease: "Cubic.easeOut",
+    //         yoyo: false
+    //     });
+
+    //     // Hold on screen →
+    //     this.time.delayedCall(1500, () => {
+    //         this.tweens.add({
+    //             targets: badgeContainer,
+    //             alpha: 0,
+    //             scale: 0.92,
+    //             duration: 500,
+    //             ease: "Cubic.easeIn",
+    //             onComplete: () => {
+    //                 badgeContainer.destroy();
+    //             }
+    //         });
+    //     });
+
+    //     // Notify React / UI panel
+    //     emit("badgeEarned", badgeText);
+    // }
 
 
     update(time, delta) {
@@ -371,6 +451,8 @@ export default class Chapter1Scene extends Phaser.Scene {
         );
 
         // Scale player
+        // const scaleFactor = Phaser.Math.Linear(2.0, 0.15, t); // bottom = 1, top = 0.15
+
         const scaleFactor = Phaser.Math.Linear(1.0, 0.15, t); // bottom = 1, top = 0.15
         this.ladyPlayer.setScale(scaleFactor);
 

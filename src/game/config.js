@@ -1,26 +1,3 @@
-// import GameScene from '../phaser/xGameScene';
-
-// const config = {
-//     type: Phaser.AUTO,
-//     width: 800,
-//     height: 600,
-//     parent: 'phaser-game',
-//     scene: [GameScene],
-//     physics: {
-//         default: 'arcade',
-//         arcade: {
-//             debug: false,
-//         },
-//     },
-// };
-
-// export default config;
-
-
-// src/game/config.js
-// src/game/config.js
-
-
 import Phaser from 'phaser';
 import BootScene from './scenes/BootScene';
 import PreloadScene from './scenes/PreloadScene';
@@ -33,8 +10,8 @@ import NineSlicePlugin from 'phaser3-nineslice';
 
 const config = {
   type: Phaser.AUTO,
-  width: 1140,
-  height: 540,
+  // width: 1140,
+  // height: 540,
   parent: 'phaser-game',
   physics: {
     default: 'arcade',
@@ -43,7 +20,18 @@ const config = {
       gravity: { y: 0 }
     }
   },
-  pixelArt: true,
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 1280,
+    height: 720,
+    // zoom: window.devicePixelRatio,  // ⭐ important
+  },
+  render: {
+    pixelArt: false,
+    antialias: true,
+    roundPixels: false,
+  },
   scene: [BootScene, PreloadScene, MainMenuScene, Chapter2Scene, UIScene, Chapter1SceneShow],
   plugins: {
     global: [

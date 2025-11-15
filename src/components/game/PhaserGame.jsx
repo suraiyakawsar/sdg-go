@@ -14,24 +14,56 @@ export default function PhaserGame() {
   const containerRef = useRef(null);
   const phaserRef = useRef(null);
 
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
   useEffect(() => {
     if (phaserRef.current) return; // Prevent multiple initializations
 
+    // const config = {
+    //   type: Phaser.AUTO,
+    //   width: 1140,
+    //   height: 540,
+    //   backgroundColor: "#000",
+    //   parent: containerRef.current,
+    //   physics: {
+    //     default: "arcade",
+    //     arcade: { gravity: { y: 0 }, debug: false },
+    //   },
+    //   scene: [BootScene, UIScene, Chapter1Scene, Chapter2Scene],
+    //   scale: {
+    //     mode: Phaser.Scale.FIT,
+    //     autoCenter: Phaser.Scale.CENTER_BOTH,
+    //   },
+    // };
     const config = {
       type: Phaser.AUTO,
-      width: 1140,
-      height: 540,
-      backgroundColor: "#000",
       parent: containerRef.current,
-      physics: {
-        default: "arcade",
-        arcade: { gravity: { y: 0 }, debug: false },
-      },
-      scene: [BootScene, UIScene, Chapter1Scene, Chapter2Scene],
+      backgroundColor: "#000",
+
+      // ⭐ Use ONLY the scale system, not width/height here
       scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 1920,
+        height: 1080,
       },
+
+      physics: {
+        default: "arcade",
+        arcade: {
+          gravity: { y: 0 },
+          debug: false,
+        },
+      },
+
+      render: {
+        antialias: true,
+        pixelArt: false,
+        roundPixels: false,
+      },
+
+      scene: [BootScene, UIScene, Chapter1Scene, Chapter2Scene],
     };
 
     phaserRef.current = new Phaser.Game(config);

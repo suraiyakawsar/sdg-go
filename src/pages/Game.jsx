@@ -1,26 +1,46 @@
 // import GameLayout from '../components/layout/GameLayout';
 // import PhaserGame from '../components/game/PhaserGame';
-// import DialogueBox from '../components/ui/DialogueBox';
+
+// // HUD
+// import HUDWrapper from '../components/ui/HUDWrapper';
 // import SDGBar from '../components/ui/SDGBar';
+// import ObjectiveBar from '../components/ui/ObjectiveBar';
+// import BadgePopup from '../components/ui/BadgePopup';
+// import GameSidebar from '../components/ui/GameSidebar';
+// import RightSidebar from '../components/ui/RightSidebar';
 
 // export default function Game() {
 //   return (
 //     <GameLayout>
-//       {/* Phaser game canvas */}
 //       <div className="relative w-full h-screen bg-gray-900 overflow-hidden">
 //         <PhaserGame />
 
 //         {/* Overlay UI */}
-//         <div className="absolute inset-0 pointer-events-none">
-//           {/* SDG progress bar */}
-//           <div className="absolute top-4 left-1/8 -translate-x-1/2 pointer-events-auto">
-//             <SDGBar />
+//         <div className="absolute inset-0">
+
+//           {/* LEFT SIDEBAR (clickable) */}
+//           <div className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-auto">
+//             <GameSidebar />
 //           </div>
 
-//           {/* Dialogue Box (shown when triggered via eventBus) */}
-//           <div className="absolute bottom-0 w-full pointer-events-auto">
-//             <DialogueBox />
+//           {/* RIGHT SIDEBAR (clickable) */}
+//           <div className="pointer-events-auto">
+//             <RightSidebar />
 //           </div>
+
+//           {/* HUD row (SDG + Objective bars) — visible but not blocking clicks
+//           <div className="pointer-events-none">
+//             <HUDWrapper>
+//               <SDGBar />
+//               <ObjectiveBar />
+//             </HUDWrapper>
+//           </div> */}
+
+//           {/* Badge popup (visual only, no clicks) */}
+//           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+//             <BadgePopup />
+//           </div>
+
 //         </div>
 //       </div>
 //     </GameLayout>
@@ -28,41 +48,50 @@
 // }
 
 
+
 import GameLayout from '../components/layout/GameLayout';
 import PhaserGame from '../components/game/PhaserGame';
-// import DialogueBox from '../components/ui/DialogueBox';
+
+// HUD
+import HUDWrapper from '../components/ui/HUDWrapper';
 import SDGBar from '../components/ui/SDGBar';
-import ObjectiveBar from '../components/ui/ObjectiveBar'; // ✅ new
-import BadgePopup from '../components/ui/BadgePopup';     // ✅ new
+import ObjectiveBar from '../components/ui/ObjectiveBar';
+import BadgePopup from '../components/ui/BadgePopup';
+import GameSidebar from '../components/ui/GameSidebar';
+import RightSidebar from '../components/ui/RightSidebar';
 
 export default function Game() {
   return (
     <GameLayout>
-      {/* Phaser game canvas */}
       <div className="relative w-full h-screen bg-gray-900 overflow-hidden">
         <PhaserGame />
 
         {/* Overlay UI */}
-        <div className="absolute inset-0 pointer-events-none">
-          {/* SDG progress bar */}
-          <div className="absolute top-4 left-1/8 -translate-x-1/2 pointer-events-auto">
-            <SDGBar />
+        <div className="absolute inset-0">
+
+          {/* LEFT SIDEBAR (clickable) */}
+          <div className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-auto">
+            <GameSidebar />
           </div>
 
-          {/* Objective bar */}
-          <div className="absolute top-16 left-1/2 -translate-x-1/2 pointer-events-auto">
-            <ObjectiveBar />
+          {/* RIGHT SIDEBAR (clickable) */}
+          <div className="pointer-events-auto">
+            <RightSidebar />
           </div>
 
-          {/* Dialogue Box
-          <div className="absolute bottom-0 w-full pointer-events-auto">
-            <DialogueBox />
+          {/* HUD row (SDG + Objective bars) — visible but not blocking clicks
+          <div className="pointer-events-none">
+            <HUDWrapper>
+              <SDGBar />
+              <ObjectiveBar />
+            </HUDWrapper>
           </div> */}
 
-          {/* Badge popup */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+          {/* Badge popup (visual only, no clicks) */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <BadgePopup />
           </div>
+
         </div>
       </div>
     </GameLayout>

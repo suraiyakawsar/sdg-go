@@ -1,4 +1,4 @@
-export function Progress({ value = 0 }) {
+export function SDGProgress({ value = 0 }) {
     // Clamp between 0–100
     const clampedValue = Math.min(Math.max(value, 0), 100);
 
