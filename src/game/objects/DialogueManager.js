@@ -3,20 +3,33 @@ import { addSDGPoints } from "../../utils/sdgPoints.js";
 import { emit } from "../../utils/eventBus.js";
 
 export default class DialogueManager {
-  constructor(scene, dialogueData = {}, sdgPointsObj = { points: 0 }, uiLayer) {
+  constructor(scene, dialogueScene = {}, sdgPointsObj = { points: 0 }, uiLayer) {
     this.scene = scene;
-    this.dialogueData = dialogueData;
+    this.sceneConfig = dialogueScene || {};
     this.sdgPointsObj = sdgPointsObj;
     this.uiLayer = uiLayer;
 
+    // --- Graph-style nodes: { id → node }
+    this.nodesById = {};
+    if (Array.isArray(this.sceneConfig.nodes)) {
+      this.sceneConfig.nodes.forEach(n => {
+        if (n && n.id) this.nodesById[n.id] = n;
+      });
+    } else {
+      console.warn("[DialogueManager] Expected dialogueScene.nodes to be an array.");
+    }
+
+    this.startNodeId = this.sceneConfig.startNodeId || null;
+
     // State
-    this.currentDialogue = null;
-    this.currentIndex = 0;
+    this.currentNodeId = null;
+    this.currentNode = null;
     this.dialogueVisible = false;
     this.typeTimer = null;
     this.choices = [];
     this._isTyping = false;
     this._skipRequested = false;
+    this._pendingChoices = null;
 
     // UI layout
     this.panelWidth = Math.round(scene.scale.width * 0.9);
@@ -46,7 +59,13 @@ export default class DialogueManager {
     // Panel BG
     const bg = this.scene.add.graphics();
     bg.fillStyle(0x1A1A1A, 0.9);
-    bg.fillRoundedRect(-this.panelWidth / 2, -this.panelHeight / 2, this.panelWidth, this.panelHeight, 16);
+    bg.fillRoundedRect(
+      -this.panelWidth / 2,
+      -this.panelHeight / 2,
+      this.panelWidth,
+      this.panelHeight,
+      16
+    );
     bg.setScrollFactor(0);
     this.container.add(bg);
 
@@ -97,40 +116,72 @@ export default class DialogueManager {
   }
 
   // ============================================================
-  // START DIALOGUE
+  // HELPERS
   // ============================================================
-  startDialogue(keyOrNode) {
-    const node = typeof keyOrNode === "string"
-      ? this.dialogueData?.[keyOrNode]
-      : keyOrNode;
+  _getDisplayName(speaker) {
+    if (!speaker) return "";
+    if (speaker === "system" || speaker === "narrator") return "";
+    const map = {
+      friend: "Friend",
+      friendA: "Friend A",
+      friendB: "Friend B",
+      professor: "Professor"
+    };
+    return map[speaker] || speaker;
+  }
 
-    if (!node || !Array.isArray(node)) {
-      console.warn("Dialogue node not found:", keyOrNode);
+  _getNode(nodeId) {
+    return this.nodesById[nodeId] || null;
+  }
+
+  // ============================================================
+  // START DIALOGUE (graph-style)
+  // ============================================================
+  /**
+   * startDialogue(nodeId?)
+   * - If nodeId is provided, starts from that node.
+   * - Else, uses the scene's startNodeId (e.g. "h_intro_narration").
+   */
+  startDialogue(nodeId) {
+    const id = nodeId || this.startNodeId;
+
+    if (!id) {
+      console.warn("[DialogueManager] No start node id.");
       return;
     }
 
-    this.currentDialogue = node;
-    this.currentIndex = 0;
-    this.dialogueVisible = true;
-    this.container.setVisible(true).setScrollFactor(0);
+    const node = this._getNode(id);
+    if (!node) {
+      console.warn("[DialogueManager] Node not found:", id);
+      return;
+    }
 
+    this.currentNodeId = id;
+    this.currentNode = node;
+    this.dialogueVisible = true;
+
+    this.container.setVisible(true).setScrollFactor(0);
     this.scene.input.keyboard.on("keydown", this._onKeyDown);
-    this._showCurrent();
+
+    this._showCurrentNode();
   }
 
-  _showCurrent() {
-    const entry = this.currentDialogue?.[this.currentIndex];
-    if (!entry) return this.endDialogue();
+  _showCurrentNode() {
+    const node = this._getNode(this.currentNodeId);
+    if (!node) {
+      this.endDialogue();
+      return;
+    }
 
-    this.nameText.setText(entry.character || "Abang");
+    this.currentNode = node;
+    this._pendingChoices = Array.isArray(node.choices) ? node.choices : null;
+
+    const displayName = this._getDisplayName(node.speaker);
+    this.nameText.setText(displayName);
+
     this.continueIndicator.setVisible(false);
-
     this._clearChoices();
-    this._startTypewriter(entry.text || "");
-
-    this._pendingChoices = Array.isArray(entry.choices)
-      ? entry.choices
-      : null;
+    this._startTypewriter(node.text || "");
   }
 
   // ============================================================
@@ -145,6 +196,11 @@ export default class DialogueManager {
 
     let i = 0;
 
+    if (!fullText.length) {
+      this._onTypeComplete("");
+      return;
+    }
+
     this.typeTimer = this.scene.time.addEvent({
       delay: 30,
       repeat: fullText.length - 1,
@@ -155,6 +211,7 @@ export default class DialogueManager {
           this._onTypeComplete(fullText);
           return;
         }
+
         this.dialogueText.setText(this.dialogueText.text + fullText[i]);
         i++;
 
@@ -168,14 +225,15 @@ export default class DialogueManager {
     this.dialogueText.setText(fullText);
     this._isTyping = false;
 
-    if (this._pendingChoices)
+    if (this._pendingChoices && this._pendingChoices.length > 0) {
       this._createChoices(this._pendingChoices);
-    else
+    } else {
       this.continueIndicator.setVisible(true);
+    }
   }
 
   // ============================================================
-  // CHOICES
+  // CHOICES (Q / E)
   // ============================================================
   _createChoices(choicesData = []) {
     this._clearChoices();
@@ -192,7 +250,7 @@ export default class DialogueManager {
     };
 
     choicesData.forEach((choice, index) => {
-      if (index > 1) return;
+      if (index > 1) return; // you only support 2 choices (Q/E) now
 
       const sign = index === 0 ? -1 : 1;
       const x = sign * (buttonWidth / 2 + gap / 2);
@@ -213,7 +271,13 @@ export default class DialogueManager {
       // Button bg
       const bg = this.scene.add.graphics()
         .fillStyle(0x373737, 1)
-        .fillRoundedRect(x - buttonWidth / 2, y - buttonHeight / 2, buttonWidth, buttonHeight, 12)
+        .fillRoundedRect(
+          x - buttonWidth / 2,
+          y - buttonHeight / 2,
+          buttonWidth,
+          buttonHeight,
+          12
+        )
         .setScrollFactor(0);
 
       const txt = this.scene.add.text(x, y, choice.text, {
@@ -229,25 +293,45 @@ export default class DialogueManager {
       this.container.add([bg, txt, hitArea, keyCircle, keyText]);
 
       hitArea.on("pointerdown", () => this._handleChoice(choice));
-
       keyMap[index].keyCode.on("down", () => this._handleChoice(choice));
 
       this.choices.push({ bg, txt, hitArea, keyCircle, keyText });
     });
   }
 
-  // ============================================================
-  // MISC
-  // ============================================================
   _handleChoice(choice) {
-    if (choice.points || choice.sdgPoints) {
-      const pts = choice.points || choice.sdgPoints;
-      addSDGPoints(pts);
-      emit("updateSDGPoints", this.sdgPointsObj.points + pts);
+    // SDG points from JSON: choice.sdgDelta
+    if (typeof choice.sdgDelta === "number") {
+      const delta = choice.sdgDelta;
+      addSDGPoints(delta);
+      emit("updateSDGPoints", (this.sdgPointsObj.points || 0) + delta);
     }
 
-    if (choice.next) this.startDialogue(choice.next);
-    else this.endDialogue();
+    // Flags from JSON: choice.setFlags
+    if (Array.isArray(choice.setFlags) && choice.setFlags.length > 0) {
+      emit("flagsSet", {
+        flags: choice.setFlags,
+        sceneId: this.sceneConfig.id
+      });
+    }
+
+    // Go to the next node if defined
+    if (choice.nextNodeId) {
+      const nextNode = this._getNode(choice.nextNodeId);
+      if (nextNode) {
+        this.currentNodeId = choice.nextNodeId;
+        this.currentNode = nextNode;
+        this._pendingChoices = null;
+        this._showCurrentNode();
+        return;
+      } else {
+        console.warn("[DialogueManager] choice.nextNodeId not found:", choice.nextNodeId);
+      }
+    }
+
+    // If no nextNodeId, we consider that a dead-end → end dialogue
+    this._runNodeCompletion(this.currentNode);
+    this.endDialogue();
   }
 
   _clearChoices() {
@@ -264,25 +348,88 @@ export default class DialogueManager {
     this.keyE.removeAllListeners("down");
   }
 
+  // ============================================================
+  // NODE COMPLETION / ADVANCE
+  // ============================================================
+  _runNodeCompletion(node) {
+    if (!node || !node.onComplete) return;
+
+    const oc = node.onComplete;
+
+    if (Array.isArray(oc.setFlags) && oc.setFlags.length > 0) {
+      emit("flagsSet", {
+        flags: oc.setFlags,
+        sceneId: this.sceneConfig.id
+      });
+    }
+
+    if (oc.unlockExit) {
+      emit("sceneExitUnlocked", {
+        sceneId: this.sceneConfig.id,
+        exitFlag: this.sceneConfig.exitUnlockedFlag
+      });
+    }
+  }
+
+  _advanceFromCurrentNode() {
+    const node = this.currentNode;
+    if (!node) {
+      this.endDialogue();
+      return;
+    }
+
+    // Run any onComplete handler
+    this._runNodeCompletion(node);
+
+    // If node defines autoNext, jump there
+    if (node.autoNext) {
+      const nextNode = this._getNode(node.autoNext);
+      if (nextNode) {
+        this.currentNodeId = node.autoNext;
+        this.currentNode = nextNode;
+        this._pendingChoices = Array.isArray(nextNode.choices) ? nextNode.choices : null;
+        this._showCurrentNode();
+        return;
+      } else {
+        console.warn("[DialogueManager] autoNext node not found:", node.autoNext);
+      }
+    }
+
+    // No autoNext → this is the end of this dialogue chain
+    this.endDialogue();
+  }
+
+  // ============================================================
+  // INPUT HANDLER
+  // ============================================================
   _onKeyDown(event) {
     if (!this.dialogueVisible) return;
 
     if (event.code === "Space" || event.code === "Enter") {
-      if (this._isTyping) this._skipRequested = true;
-      else if (this.choices.length === 0) {
-        this.currentIndex++;
-        this._showCurrent();
+      if (this._isTyping) {
+        this._skipRequested = true;
+      } else if (this.choices.length === 0) {
+        // No choices → advance along autoNext / end
+        this._advanceFromCurrentNode();
       }
     }
   }
 
+  // ============================================================
+  // END / DESTROY
+  // ============================================================
   endDialogue() {
     this.dialogueVisible = false;
     this.container.setVisible(false);
     this._clearChoices();
     if (this.typeTimer) this.typeTimer.remove();
     this.scene.input.keyboard.off("keydown", this._onKeyDown);
-    this.scene.events.emit("dialogueEnded", this.currentDialogue);
+
+    // Notify scene (Chapter1Scene already listens to this)
+    this.scene.events.emit("dialogueEnded", {
+      sceneId: this.sceneConfig.id,
+      lastNodeId: this.currentNodeId
+    });
   }
 
   _destroy() {

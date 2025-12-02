@@ -14,10 +14,16 @@ export default class BootScene extends Phaser.Scene {
         // });
 
 
-        this.load.spritesheet('lady',
-            'assets/images/characters/lady.png',
-            { frameWidth: 214, frameHeight: 528 }
+        // this.load.spritesheet('lady',
+        //     'assets/images/characters/spritesheet.json',
+        //     { frameWidth: 200, frameHeight: 460 }
+        // );
+        this.load.atlas(
+            "ladyy",
+            "/assets/images/characters/ladyy.png",
+            "/assets/images/characters/spritesheet.json"
         );
+
     }
 
     create() {

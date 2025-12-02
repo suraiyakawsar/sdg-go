@@ -5,15 +5,15 @@ import { FiAward, FiUser, FiHome, FiBookOpen } from "react-icons/fi";
 export default function GameSidebar() {
     return (
         <div className="
-            absolute top-1/2 -translate-y-1/2 
+            absolute -translate-y-1/2 
             bg-black/40 backdrop-blur-md
-            rounded-2xl p-4 
+            rounded-2xl p-3 
             flex flex-col items-center gap-6 
             z-50 shadow-xl
         ">
             {/* Logo */}
             <img
-                src="/assets/images/ui/sdg-logo.png"
+                src="/assets/images/ui/sdg-icon.png"
                 alt="SDG Explorer"
                 className="w-16 h-16 rounded-xl shadow-md"
             />

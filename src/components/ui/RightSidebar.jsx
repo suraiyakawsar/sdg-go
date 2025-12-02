@@ -74,7 +74,7 @@ export default function RightSidebar() {
     }, [sdgPoints]);
 
     /* ============================================================
-       OBJECTIVE UPDATE LISTENER
+    OBJECTIVE UPDATE LISTENER
     ============================================================ */
     useEffect(() => {
         const handleObjectiveUpdate = (data) => {
@@ -128,7 +128,7 @@ export default function RightSidebar() {
 
 
     return (
-        <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 pointer-events-auto">
+        <div className="absolute right-9 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 pointer-events-auto">
 
             {/* ⭐ SDG BUTTON (pulse when SDG updates) */}
             <motion.button
@@ -139,10 +139,17 @@ export default function RightSidebar() {
                     boxShadow: ["0 0 0px #fff0", "0 0 10px #ffe680", "0 0 0px #fff0"]
                 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className="bg-black/60 p-3 rounded-xl text-white hover:bg-black/70 transition"
+                className=" bg-white/10 
+        backdrop-blur-md
+        border border-white/10 
+        shadow-[0px_0px_12px_rgba(255,255,255,0.05)]
+        p-3 rounded-xl text-white 
+        transition-all 
+        hover:bg-white/20
+        active:scale-95"
                 onClick={() => { setOpen(!open); setTab("sdg"); }}
             >
-                <FiStar size={22} />
+                <FiStar size={40} />
             </motion.button>
 
             {/* ⭐ OBJECTIVE BUTTON (pulse when Objective updates) */}
@@ -154,10 +161,17 @@ export default function RightSidebar() {
                     boxShadow: ["0 0 0px #fff0", "0 0 10px #7bf8ff", "0 0 0px #fff0"]
                 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className="bg-black/60 p-3 rounded-xl text-white hover:bg-black/70 transition"
+                className="        bg-white/10 
+        backdrop-blur-md
+        border border-white/10 
+        shadow-[0px_0px_12px_rgba(255,255,255,0.05)]
+        p-3 rounded-xl text-white 
+        transition-all 
+        hover:bg-white/20
+        active:scale-95"
                 onClick={() => { setOpen(!open); setTab("objective"); }}
             >
-                <FiTarget size={22} />
+                <FiTarget size={40} />
             </motion.button>
 
             {/* ⭐ FLOATING +10 TEXT */}
@@ -167,7 +181,7 @@ export default function RightSidebar() {
                     animate={{ opacity: 1, y: -20 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.8 }}
-                    className="absolute right-20 text-yellow-300 font-bold text-lg"
+                    className="absolute right-20 text-yellow-300 font-bold text-xl"
                 >
                     {floatingText}
                 </motion.div>
@@ -202,7 +216,7 @@ export default function RightSidebar() {
                     stiffness: 300,
                     damping: 28,
                 }}
-                className="absolute right-20 top-1/2 -translate-y-1/2 
+                className="absolute right-20 top-18 -translate-y-1/2 
                            bg-black/40 backdrop-blur-xl shadow-2xl 
                            rounded-xl p-4 w-72 pointer-events-auto"
                 style={{ pointerEvents: open ? "auto" : "none" }}

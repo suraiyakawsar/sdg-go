@@ -13,23 +13,13 @@ export default class Chapter1Scene extends Phaser.Scene {
         super("Chapter1Scene");
 
         this.hallway = {
-            // topY: 285,    // furthest point (ceiling)
-            // bottomY: 480, // closest point (floor)
-            // leftTopX: 495,  // left edge at top
-            // rightTopX: 710, // right edge at top
-            // leftBottomX: -100, // left edge at bottom
-            // rightBottomX: 1400 // right edge at bottom
-
-            topY: 570,          // (285 → 570)
-            bottomY: 960,       // (480 → 960)
-
-            leftTopX: 833,      // (495 → 833)
-            rightTopX: 1195,    // (710 → 1195)
-
-            leftBottomX: -80,  // (-100 → -168)
-            rightBottomX: 2000  // (1400 → 2358)
+            topY: 740, //okk
+            bottomY: 1077, //okk
+            leftTopX: 820, //ok, needs to avoid door
+            rightTopX: 1130, //ok, needs to avoid locker
+            leftBottomX: 490, //ok, needs to avoid npc pinky
+            rightBottomX: 1600
         };
-
     }
 
     init(data) {
@@ -41,19 +31,27 @@ export default class Chapter1Scene extends Phaser.Scene {
     }
 
     preload() {
-        // --- Dialogue Data ---
-        this.load.spritesheet('lady',
-            '/assets/images/characters/lady.png',
-            { frameWidth: 214, frameHeight: 528 }
+        this.load.atlas(
+            "ladyy",
+            "/assets/images/characters/ladyy.png",
+            "/assets/images/characters/spritesheet.json"
         );
-        this.load.json("chapter1Data", "/data/dialogues/chapters/chapter1.json");
-        this.load.pack("assets-pack", "public/assets/assets-pack.json");
+
+        // NEW JSON (your final chapter script)
+        this.load.json("chapter1Data", "/data/dialogues/chapters/chapter1_script.json");
+
+        this.load.pack("assets-pack", "/assets/assets-pack.json");
     }
 
     create() {
 
-        // // Create graphics in create()
-        // this.debugGraphics = this.add.graphics();
+        // Create graphics in create()
+        this.debugGraphics = this.add.graphics()
+            .setDepth(9998)
+            .setScrollFactor(1);  // follows world;
+
+        this._drawHallwayPolygon();
+
         // this.debugGraphics.lineStyle(2, 0xff0000, 1); // red border, thickness 2
 
         // const { topY, bottomY, leftTopX, rightTopX, leftBottomX, rightBottomX } = this.hallway;
@@ -66,25 +64,26 @@ export default class Chapter1Scene extends Phaser.Scene {
         //     new Phaser.Geom.Point(leftBottomX, bottomY)
         // ], true);
 
-        // // this.debugGraphics.fillCircle(this.player.x, this.player.y, 5);
+        // // // // this.debugGraphics.fillCircle(this.player.x, this.player.y, 5);
         // this.debugGraphics.setDepth(10); // adjust as needed
 
 
-        // ============================================================
-        // UI LAYER — FIXED TO SCREEN (DO NOT MOVE WITH CAMERA)
-        // ============================================================
+
+
+        // ==============================
+        // UI LAYER — FIXED TO SCREEN
+        // ==============================
         this.uiLayer = this.add.container(0, 0)
             .setScrollFactor(0)
-            .setDepth(9999);     // always on top
+            .setDepth(9999);
 
-
-        // ============================================================
-        // CAMERA + BACKGROUND + PLAYER (WORLD SPACE)
-        // ============================================================
+        // ==============================
+        // CAMERA + BG + PLAYER
+        // ==============================
         this.cameras.main.setBackgroundColor("#000000");
         this.cameras.main.fadeIn(1000, 0, 0, 0);
 
-        this.bg = this.add.image(0, 0, "bg")
+        this.bg = this.add.image(0, 0, "bgHallway")
             .setOrigin(0)
             .setScrollFactor(1)
             .setDepth(-10)
@@ -93,13 +92,17 @@ export default class Chapter1Scene extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
         this.cameras.main.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
 
-        // this.ladyPlayer = this.physics.add.sprite(300, 450, "lady")
-
-        this.ladyPlayer = this.physics.add.sprite(505, 900, "lady")
+        this.ladyPlayer = this.physics.add.sprite(1400, 900, "ladyy", "frame1.png")
             .setBounce(0.2)
             .setCollideWorldBounds(true)
-            .setDepth(5);
-        // .setScale(0.1);
+            .setDepth(1000)
+            .setOrigin(0.5, 1);   // 👈 pivot now at the feet
+
+        // After creating ladyPlayer
+        this.playerDebug = this.add.graphics()
+            .setDepth(9999)
+            .setScrollFactor(1); // world space
+
 
         this.playerShadow = this.add.ellipse(
             this.ladyPlayer.x,
@@ -112,53 +115,71 @@ export default class Chapter1Scene extends Phaser.Scene {
 
         this.anims.create({
             key: "walk",
-            frames: this.anims.generateFrameNumbers("lady", { start: 0, end: 4 }),
+            frames: this.anims.generateFrameNames("ladyy", {
+                start: 1,
+                end: 6,
+                prefix: "frame",
+                suffix: ".png"
+            }),
             frameRate: 10,
-            repeat: -1,
+            repeat: -1
         });
 
         this.anims.create({
             key: "idle",
-            frames: [{ key: "lady", frame: 4 }],
-            frameRate: 20,
+            frames: [{ key: "ladyy", frame: "frame1.png" }],
+            frameRate: 20
         });
 
-        // this.cameras.main.startFollow(this.ladyPlayer, true, 0.1, 0.1);
-
-
-        // ============================================================
-        // NPC (WORLD)
-        // ============================================================
-        // this.npc = this.add.image(600, 288, "npc1")
-
-        this.npc = this.add.image(1010, 576, "npc1")
-            .setScale(0.4)
+        // ==============================
+        // NPC (FRIEND IN HALLWAY)
+        // ==============================
+        this.npc = this.add.image(1650, 742, "npc1")
+            .setScale(1)
             .setInteractive({ useHandCursor: true })
             .setDepth(10);
 
-        this.npc.dialogueId = "npc1";
+        this.npc2 = this.add.image(570, 650, "npc2")
+            .setScale(1.0)
+            .setInteractive({ useHandCursor: true })
+            .setDepth(10);
+
+
+        // IMPORTANT: tie this NPC to the hallway dialogue
+        // We’ll start from "h_intro_narration" (your JSON's startNodeId)
+        this.npc.dialogueId = "h_intro_narration";
+        this.npc2.dialogueId = "h_friend_greeting";
+
 
         this.npcIndicator = new NPCIndicator(this, this.npc);
+        this.npcIndicator2 = new NPCIndicator(this, this.npc2);
 
+        // ==============================
+        // DIALOGUE / TOOLTIP / PANEL
+        // ==============================
+        const chapterData = this.cache.json.get("chapter1Data");
+        console.log("[Chapter1Scene] chapterData:", chapterData);
 
-        // ============================================================
-        // UI SYSTEMS (ALL INSIDE uiLayer FOR FIXED SCREEN POSITION)
-        // ============================================================
-        const dialogueData = this.cache.json.get("chapter1Data");
+        // Pull out the "hallway" scene from your JSON
+        const hallwayScene = chapterData?.scenes?.find(s => s.id === "hallway");
 
+        if (!hallwayScene) {
+            console.error("[Chapter1Scene] hallway scene not found in chapter1Data.json", chapterData);
+        }
+
+        // We pass ONLY the hallway scene to DialogueManager
+        // so this scene is focused on that part of the story.
         this.dialogueManager = new DialogueManager(
             this,
-            dialogueData,
+            hallwayScene || {},      // fail-safe so it doesn't explode if undefined
             this.sdgPointsObj,
             this.uiLayer
         );
 
         this.tooltipManager = new TooltipManager(this, this.uiLayer);
-
         this.interactionPanel = new InteractionPanel(this, this.uiLayer);
 
-
-        // NPC click → show tooltip on screen, not world
+        // NPC click → show tooltip (then your TooltipManager can call startDialogue)
         this.npc.on("pointerdown", () => {
             this.tooltipManager.show(
                 this.npc.x,
@@ -166,11 +187,17 @@ export default class Chapter1Scene extends Phaser.Scene {
                 this.npc
             );
         });
+        this.npc2.on("pointerdown", () => {
+            this.tooltipManager.show(
+                this.npc2.x,
+                this.npc2.y - this.npc2.displayHeight / 2,
+                this.npc2
+            );
+        });
 
-
-        // ============================================================
-        // TRASH (WORLD)
-        // ============================================================
+        // ==============================
+        // TRASH OBJECTIVE (UNCHANGED)
+        // ==============================
         this.trash1 = this.add.image(900, 900, "trash1")
             .setInteractive()
             .setScale(0.3);
@@ -187,9 +214,9 @@ export default class Chapter1Scene extends Phaser.Scene {
             goal: this.trashGoal
         });
 
-        // ============================================================
+        // ==============================
         // INPUT
-        // ============================================================
+        // ==============================
         this.keys = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
             down: Phaser.Input.Keyboard.KeyCodes.S,
@@ -198,11 +225,11 @@ export default class Chapter1Scene extends Phaser.Scene {
         });
 
 
-        // ============================================================
-        // NEXT ZONE (WORLD)
-        // ============================================================
+        // ==============================
+        // NEXT ZONE (EXIT TO CLASSROOM)
+        // ==============================
         this.nextZone = this.add
-            .zone(this.scale.width - 150, this.scale.height / 2)
+            .zone(1000, 800)
             .setSize(100, 100);
 
         this.physics.world.enable(this.nextZone);
@@ -211,106 +238,106 @@ export default class Chapter1Scene extends Phaser.Scene {
         this.nextZone.setVisible(false);
 
         this.nextZoneVisible = false;
+        this.playerInNextZone = false; // 👈 NEW
 
-
-        // Debug highlight
         const zoneIndicator = this.add.graphics()
             .fillStyle(0x00ff00, 0.3)
-            .fillRect(this.nextZone.x - 50, this.nextZone.y - 50, 100, 100);
+            .fillRect(this.nextZone.x - 50, this.nextZone.y - 50, 100, 100)
+            .setVisible(false); // hide until unlocked
 
+        // Make the indicator clickable
+        zoneIndicator.setInteractive(
+            new Phaser.Geom.Rectangle(this.nextZone.x - 50, this.nextZone.y - 50, 100, 100),
+            Phaser.Geom.Rectangle.Contains
+        ).on("pointerdown", () => {
+            // Only go to next scene if:
+            // - zone is unlocked
+            // - player is physically in the zone
+            if (this.nextZoneVisible && this.playerInNextZone) {
+                this.goToNextScene();
+            }
+        });
+
+        this.zoneIndicator = zoneIndicator;
+
+        // Optional pulsing tween (just for visual feedback)
         this.tweens.add({
             targets: zoneIndicator,
             alpha: { from: 0.3, to: 0.7 },
             duration: 1000,
             yoyo: true,
-            repeat: -1,
-            onUpdate: () => zoneIndicator.setVisible(this.nextZone.visible),
+            repeat: -1
         });
 
-        // Dialogue → unlock next zone
+        // When dialogue ends, unlock + show the clickable zone
         this.events.on("dialogueEnded", () => {
             this.nextZoneVisible = true;
             this.nextZone.setVisible(true);
+            this.zoneIndicator.setVisible(true); // 👈 show the clickable highlight
         });
-
-
-
-
-
-
-
-        // // ============================================================
-        // // RESPONSIVE RESIZE HANDLER
-        // // ============================================================
-        // this.scale.on("resize", (gameSize) => {
-        //     const width = gameSize.width;
-        //     const height = gameSize.height;
-
-        //     // Resize the main camera
-        //     this.cameras.resize(width, height);
-
-        //     // Resize your background to fit
-        //     if (this.bg) {
-        //         this.bg.setDisplaySize(width, height);
-        //     }
-
-        //     // Reposition fixed UI elements (your PLAYERS DO NOT GO HERE)
-        //     if (this.uiLayer) {
-        //         this.uiLayer.setPosition(0, 0);
-        //     }
-        // });
-
-
-
-
-
-
-
-
-
     }
 
 
-    onZoneOverlap() {
-        if (this.nextZoneVisible) {
-            this.nextZoneVisible = false; // Prevent multiple triggers
-            this.cameras.main.fadeOut(800);
-            this.cameras.main.once("camerafadeoutcomplete", () => {
-                SceneManager.nextScene(this, getPoints());
-            });
-        }
+    _drawHallwayPolygon() {
+        const g = this.debugGraphics;
+        const { topY, bottomY, leftTopX, rightTopX, leftBottomX, rightBottomX } = this.hallway;
+
+        g.clear();
+
+        // Hallway polygon outline (green)
+        g.lineStyle(2, 0x00ff00, 1);
+        g.strokePoints(
+            [
+                new Phaser.Geom.Point(leftTopX, topY),
+                new Phaser.Geom.Point(rightTopX, topY),
+                new Phaser.Geom.Point(rightBottomX, bottomY),
+                new Phaser.Geom.Point(leftBottomX, bottomY)
+            ],
+            true
+        );
+
+        // Top and bottom lines (optional, for clarity)
+        g.lineStyle(1, 0x00ffff, 0.6);
+        g.strokeLineShape(new Phaser.Geom.Line(leftTopX, topY, rightTopX, topY));
+        g.strokeLineShape(new Phaser.Geom.Line(leftBottomX, bottomY, rightBottomX, bottomY));
     }
+
+
+    goToNextScene() {
+        this.nextZoneVisible = false;
+        this.cameras.main.fadeOut(800);
+        this.cameras.main.once("camerafadeoutcomplete", () => {
+            SceneManager.nextScene(this, getPoints());
+        });
+    }
+
+
 
     showNPCInfo(npc) {
-        // e.g., show a mini info box
         console.log(`${npc.name} is a villager from the forest.`);
     }
 
-    startDialogue(dialogueId = "npc1") {
+    // UPDATED: default start node now matches your hallway JSON
+    startDialogue(startNodeId = "h_intro_narration") {
         if (!this.dialogueManager) {
             console.warn("DialogueManager not initialized!");
             return;
         }
 
-        // Call the existing DialogueManager instance
-        console.log(`Starting dialogue: ${dialogueId}`);
-        this.dialogueManager.startDialogue(dialogueId);
+        console.log(`Starting dialogue from node: ${startNodeId}`);
+        // Assumes your DialogueManager now treats the argument as a nodeId
+        this.dialogueManager.startDialogue(startNodeId);
     }
 
     handleTrashClick(trashItem) {
-        if (!trashItem.scene) return; // Prevent errors if clicked multiple times quickly
+        if (!trashItem.scene) return;
 
         const points = 10;
-
         addSDGPoints(points);
 
-
-        // Feedback
-        // const msg = this.add.text(trashItem.x, trashItem.y - 40, "+10 SDG Points!", {
         const msg = this.add.text(trashItem.x, trashItem.y - 40, `+${points} SDG Points!`, {
             font: "16px Arial",
             fill: "#0f0",
-            // strokeThickness: 2
         }).setOrigin(0.5);
 
         this.tweens.add({
@@ -324,10 +351,6 @@ export default class Chapter1Scene extends Phaser.Scene {
 
         trashItem.destroy();
 
-
-        // --- Objective Progress ---
-        // emit("updateObjective", 1); // increase by 1 for each trash
-
         this.trashCollected++;
         emit("updateObjective", {
             collected: this.trashCollected,
@@ -336,90 +359,45 @@ export default class Chapter1Scene extends Phaser.Scene {
 
         if (!this.objectiveCompleted && this.trashCollected >= this.trashGoal) {
             this.objectiveCompleted = true;
-            emit("badgeEarned", "Eco Warrior! 🏅"); // Badge trigger
+            emit("badgeEarned", "Eco Warrior! 🏅");
         }
     }
 
-    // showBadge(badgeText) {
-    //     // === Badge container on UI layer ===
-    //     const badgeContainer = this.add.container(
-    //         this.scale.width / 2,
-    //         this.scale.height / 2
-    //     ).setScrollFactor(0).setAlpha(0);
-
-    //     this.uiLayer.add(badgeContainer);
-
-    //     // === Soft background pill ===
-    //     const bg = this.add.graphics();
-    //     bg.fillStyle(0x000000, 0.4);  // soft translucent black
-    //     bg.fillRoundedRect(-180, -35, 360, 70, 20); // pill shape
-    //     bg.setScrollFactor(0);
-
-    //     // === Minimal clean text ===
-    //     const text = this.add.text(0, 0, badgeText, {
-    //         fontFamily: "Poppins, sans-serif",
-    //         fontSize: "22px",
-    //         color: "#ffffff",
-    //         fontStyle: "600",
-    //         align: "center"
-    //     }).setOrigin(0.5).setScrollFactor(0);
-
-    //     // Add to container
-    //     badgeContainer.add(bg);
-    //     badgeContainer.add(text);
-
-    //     // === Modern, smooth animation ===
-    //     badgeContainer.setScale(0.85);
-
-    //     this.tweens.add({
-    //         targets: badgeContainer,
-    //         alpha: 1,
-    //         scale: { from: 0.85, to: 1 },
-    //         duration: 500,
-    //         ease: "Cubic.easeOut",
-    //         yoyo: false
-    //     });
-
-    //     // Hold on screen →
-    //     this.time.delayedCall(1500, () => {
-    //         this.tweens.add({
-    //             targets: badgeContainer,
-    //             alpha: 0,
-    //             scale: 0.92,
-    //             duration: 500,
-    //             ease: "Cubic.easeIn",
-    //             onComplete: () => {
-    //                 badgeContainer.destroy();
-    //             }
-    //         });
-    //     });
-
-    //     // Notify React / UI panel
-    //     emit("badgeEarned", badgeText);
-    // }
-
 
     update(time, delta) {
+        // ============================================================
+        // NPC INDICATOR(S)
+        // ============================================================
+        if (this.npc && this.npcIndicator) {
+            const d1 = Phaser.Math.Distance.Between(
+                this.ladyPlayer.x, this.ladyPlayer.y,
+                this.npc.x, this.npc.y
+            );
 
-        const distance = Phaser.Math.Distance.Between(
-            this.ladyPlayer.x,
-            this.ladyPlayer.y,
-            this.npc.x,
-            this.npc.y
-        );
+            if (d1 < 150) this.npcIndicator.show();
+            else this.npcIndicator.hide();
 
-        if (distance < 150) {
-            this.npcIndicator.show();
-        } else {
-            this.npcIndicator.hide();
+            this.npcIndicator.update();
         }
 
+        if (this.npc2 && this.npcIndicator2) {
+            const d1 = Phaser.Math.Distance.Between(
+                this.ladyPlayer.x, this.ladyPlayer.y,
+                this.npc2.x, this.npc2.y
+            );
 
-        // this.tooltipManager.update();
-        this.npcIndicator.update();
+            if (d1 < 150) this.npcIndicator2.show();
+            else this.npcIndicator2.hide();
+
+            this.npcIndicator2.update();
+        }
+
+        // If you have npc2 / npcIndicator2, you can copy the block above.
+
+        // ============================================================
+        // MOVEMENT
+        // ============================================================
         const playerSpeed = 150;
-
-        // --- Player Movement ---
         let velocityX = 0;
         let velocityY = 0;
 
@@ -431,47 +409,76 @@ export default class Chapter1Scene extends Phaser.Scene {
 
         this.ladyPlayer.setVelocity(velocityX, velocityY);
 
-        // Play animation based on movement
+        // Animations
         if (velocityX !== 0 || velocityY !== 0) {
-            this.ladyPlayer.anims.play('walk', true);
-            this.ladyPlayer.setFlipX(velocityX > 0); // Flip for right
+            this.ladyPlayer.anims.play("walk", true);
+            this.ladyPlayer.setFlipX(velocityX > 0);
         } else {
-            this.ladyPlayer.anims.play('idle', true);
+            this.ladyPlayer.anims.play("idle", true);
         }
 
-        // --- Shadow ---
-        this.playerShadow.x = this.ladyPlayer.x;
-        this.playerShadow.y = this.ladyPlayer.y + 50;
-        this.playerShadow.setDepth(this.ladyPlayer.depth - 1);
+        // ============================================================
+        // DEPTH, SCALE, HALLWAY CLAMP
+        // ============================================================
+        const {
+            topY,
+            bottomY,
+            leftTopX,
+            rightTopX,
+            leftBottomX,
+            rightBottomX
+        } = this.hallway;
 
-        // --- Perspective scaling & camera zoom ---
-        const t = Phaser.Math.Clamp(
-            (this.ladyPlayer.y - this.hallway.bottomY) / (this.hallway.topY - this.hallway.bottomY),
-            0, 1
-        );
+        const depthRange = bottomY - topY;
 
-        // Scale player
-        // const scaleFactor = Phaser.Math.Linear(2.0, 0.15, t); // bottom = 1, top = 0.15
+        // Clamp Y first so it's always inside the path
+        this.ladyPlayer.y = Phaser.Math.Clamp(this.ladyPlayer.y, topY, bottomY);
 
-        const scaleFactor = Phaser.Math.Linear(1.0, 0.15, t); // bottom = 1, top = 0.15
+        // 0 at top, 1 at bottom, based on FEET (origin 0.5,1)
+        let t = (this.ladyPlayer.y - topY) / depthRange;
+        t = Phaser.Math.Clamp(t, 0, 1);
+
+        // === SCALE (this is the part you care about) ===
+        const scaleFar = 0.7;  // at topY (740)
+        const scaleNear = 1.4;  // at bottomY (1077)
+        const scaleFactor = Phaser.Math.Linear(scaleFar, scaleNear, t);
         this.ladyPlayer.setScale(scaleFactor);
 
-        // Camera zoom
-        // const targetZoom = Phaser.Math.Linear(1, 1.6, t);
-        // this.cameras.main.zoom = Phaser.Math.Linear(this.cameras.main.zoom, targetZoom, 0.05);
 
-        // Clamp position to hallway boundaries
-        const minX = Phaser.Math.Linear(this.hallway.leftBottomX, this.hallway.leftTopX, t);
-        const maxX = Phaser.Math.Linear(this.hallway.rightBottomX, this.hallway.rightTopX, t);
+        // // === HALLWAY X CLAMP (trapezoid) ===
+        const minX = Phaser.Math.Linear(leftTopX, leftBottomX, t);
+        const maxX = Phaser.Math.Linear(rightTopX, rightBottomX, t);
+
         this.ladyPlayer.x = Phaser.Math.Clamp(this.ladyPlayer.x, minX, maxX);
-        this.ladyPlayer.y = Phaser.Math.Clamp(this.ladyPlayer.y, this.hallway.topY, this.hallway.bottomY);
 
+        // ============================================================
+        // SHADOW
+        // ============================================================
+        this.playerShadow.x = this.ladyPlayer.x;
+        this.playerShadow.y = this.ladyPlayer.y + 10;  // just under feet
+        this.playerShadow.setDepth(this.ladyPlayer.depth - 1);
+        this.playerShadow.scaleX = scaleFactor;
+        this.playerShadow.scaleY = scaleFactor * 0.4;
 
+        // ============================================================
+        // NEXT ZONE OVERLAP
+        // ============================================================
 
-        // --- Next Zone Overlap ---
+        // Track if player is inside the zone, but DON'T auto-transition
+        this.playerInNextZone = false;
+
         if (this.nextZoneVisible) {
-            this.physics.world.overlap(this.ladyPlayer, this.nextZone, this.onZoneOverlap, null, this);
+            this.physics.world.overlap(
+                this.ladyPlayer,
+                this.nextZone,
+                () => {
+                    this.playerInNextZone = true;
+                },
+                null,
+                this
+            );
         }
+
     }
 
 }

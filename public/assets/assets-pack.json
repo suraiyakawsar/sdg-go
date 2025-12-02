@@ -2,57 +2,72 @@
     "section1": {
         "files": [
             {
-                "url": "public/assets/images/environments/bg.png",
+                "url": "/assets/images/environments/bgHallway.png",
                 "type": "image",
-                "key": "bg"
+                "key": "bgHallway"
             },
             {
-                "url": "public/assets/hero-image.png",
+                "url": "/assets/images/environments/bgClassroom.png",
+                "type": "image",
+                "key": "bgClassroom"
+            },
+            {
+                "url": "/assets/images/environments/bgCafeteria.png",
+                "type": "image",
+                "key": "bgCafeteria"
+            },
+            {
+                "url": "/assets/hero-image.png",
                 "type": "image",
                 "key": "hero-image"
             },
             {
-                "url": "public/assets/images/characters/npc1.png",
+                "url": "/assets/images/characters/npcboy.png",
                 "type": "image",
                 "key": "npc1"
             },
             {
-                "url": "public/assets/images/props/trash1.png",
+                "url": "/assets/images/characters/npcgirl.png",
+                "type": "image",
+                "key": "npc2"
+            },
+            {
+                "url": "/assets/images/props/trash1.png",
                 "type": "image",
                 "key": "trash1"
             },
             {
-                "url": "public/assets/images/props/trash2.png",
+                "url": "/assets/images/props/trash2.png",
                 "type": "image",
                 "key": "trash2"
             },
             {
-                "url": "public/assets/images/ui/arrow_down.png",
+                "url": "/assets/images/ui/arrow_down.png",
                 "type": "image",
                 "key": "ui_arrow_down"
             },
             {
-                "url": "public/assets/images/ui/speechBubble.png",
+                "url": "/assets/images/ui/speechBubble.png",
                 "type": "image",
                 "key": "speechBubble"
             },
             {
-                "url": "public/assets/images/ui/icon_eye.png",
+                "url": "/assets/images/ui/icon_eye.png",
                 "type": "image",
                 "key": "icon_eye"
             },
             {
-                "url": "public/assets/images/ui/icon_speech.png",
+                "url": "/assets/images/ui/icon_speech.png",
                 "type": "image",
                 "key": "icon_speech"
             },
             {
-                "url": "public/assets/images/ui/ui_tooltip_bg.png",
+                "url": "/assets/images/ui/ui_tooltip_bg.png",
                 "type": "image",
                 "key": "ui_tooltip_bg"
             },
             {
-                "url": "public/assets/audio/intro-music.mp3",
+                "url": "/assets/audio/intro-music.mp3",
                 "type": "audio",
                 "key": "introMusic"
             }

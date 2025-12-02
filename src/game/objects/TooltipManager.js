@@ -1,163 +1,178 @@
-import Phaser from "phaser";
 export default class TooltipManager {
-	constructor(scene, uiLayer) {
-		this.scene = scene;
-		this.uiLayer = uiLayer;
-		this.currentNPC = null;
+    constructor(scene, uiLayer) {
+        this.scene = scene;
+        this.uiLayer = uiLayer;
+        this.currentNPC = null;
+        this.keyListener = null;
 
-		// ============================================================
-		// Tooltip container (SCREEN SPACE — FIXED TO uiLayer)
-		// ============================================================
-		this.tooltipContainer = this.scene.add.container(0, 0)
-			.setVisible(false)
-			.setAlpha(0)
-			.setScale(0.1)
-			.setScrollFactor(0);
+        // Base scale for tooltip UI
+        this.baseScale = 1.5; // tweak this to make it bigger/smaller
 
-		// IMPORTANT: add tooltip to UI layer
-		this.uiLayer.add(this.tooltipContainer);
+        // ============================================================
+        // Tooltip container (SCREEN SPACE — FIXED TO uiLayer)
+        // ============================================================
+        this.tooltipContainer = this.scene.add.container(0, 0)
+            .setVisible(false)
+            .setAlpha(0)
+            .setScale(this.baseScale)
+            .setScrollFactor(0);
 
-		// === Buttons (Q = Talk, E = Inspect) ===
-		const talkBtn = this.createKeyHint("Q", "Talk");
-		const inspectBtn = this.createKeyHint("E", "Inspect");
+        if (this.uiLayer) {
+            this.uiLayer.add(this.tooltipContainer);
+        }
 
-		talkBtn.y = -40;
-		inspectBtn.y = -70;
+        // === Buttons (Q = Talk, E = Inspect) ===
+        const talkBtn = this._createKeyHint("Q", "Talk");
+        const inspectBtn = this._createKeyHint("E", "Inspect");
 
-		this.tooltipContainer.add([talkBtn, inspectBtn]);
+        talkBtn.y = -60;
+        inspectBtn.y = -90;
 
-		this.talkBtn = talkBtn;
-		this.inspectBtn = inspectBtn;
-	}
+        this.tooltipContainer.add([talkBtn, inspectBtn]);
 
-	// ============================================================
-	// CREATE BUTTON
-	// ============================================================
-	createKeyHint(keyLabel, actionText) {
-		const container = this.scene.add.container(0, 0)
-			.setScrollFactor(0);
+        this.talkBtn = talkBtn;
+        this.inspectBtn = inspectBtn;
+    }
 
-		const circle = this.scene.add.circle(-60, 0, 12, 0x000000, 0.15)
-			.setStrokeStyle(1.2, 0x000000, 0.6)
-			.setScrollFactor(0);
+    // ============================================================
+    // CREATE BUTTON
+    // ============================================================
+    _createKeyHint(keyLabel, actionText) {
+        const container = this.scene.add.container(0, 0)
+            .setScrollFactor(0);
 
-		const key = this.scene.add.text(-60, 0, keyLabel, {
-			fontFamily: "Poppins, sans-serif",
-			fontSize: "13px",
-			color: "#000000",
-			fontStyle: "bold"
-		}).setOrigin(0.5)
-			.setScrollFactor(0);
+        const circle = this.scene.add.circle(-60, 0, 12, 0x000000, 0.15)
+            .setStrokeStyle(1.2, 0x000000, 0.6)
+            .setScrollFactor(0);
 
-		const text = this.scene.add.text(-30, 0, actionText, {
-			fontFamily: "Poppins, sans-serif",
-			fontSize: "15px",
-			color: "#000000",
-			align: "left"
-		}).setOrigin(0, 0.5)
-			.setScrollFactor(0);
+        const key = this.scene.add.text(-60, 0, keyLabel, {
+            fontFamily: "Poppins, sans-serif",
+            fontSize: "13px",
+            color: "#000000",
+            fontStyle: "bold"
+        }).setOrigin(0.5)
+            .setScrollFactor(0);
 
-		const hitRect = this.scene.add.rectangle(0, 0, 120, 26, 0x000000, 0)
-			.setInteractive({ useHandCursor: true })
-			.setScrollFactor(0);
+        const text = this.scene.add.text(-30, 0, actionText, {
+            fontFamily: "Poppins, sans-serif",
+            fontSize: "15px",
+            color: "#000000",
+            align: "left"
+        }).setOrigin(0, 0.5)
+            .setScrollFactor(0);
 
-		hitRect.on("pointerover", () => {
-			circle.setFillStyle(0x000000, 0.35);
-			text.setColor("#ffcc88");
-		});
+        const hitRect = this.scene.add.rectangle(0, 0, 120, 26, 0x000000, 0)
+            .setInteractive({ useHandCursor: true })
+            .setScrollFactor(0);
 
-		hitRect.on("pointerout", () => {
-			circle.setFillStyle(0x000000, 0.15);
-			text.setColor("#000000");
-		});
+        hitRect.on("pointerover", () => {
+            circle.setFillStyle(0x000000, 0.35);
+            text.setColor("#ffcc88");
+        });
 
-		container.add([hitRect, circle, key, text]);
-		container.hitRect = hitRect;
+        hitRect.on("pointerout", () => {
+            circle.setFillStyle(0x000000, 0.15);
+            text.setColor("#000000");
+        });
 
-		return container;
-	}
+        container.add([hitRect, circle, key, text]);
+        container.hitRect = hitRect; // keep a ref for events
 
-	// ============================================================
-	// SHOW TOOLTIP (POSITION STILL BASED ON NPC)
-	// ============================================================
-	show(worldX, worldY, npc) {
-		this.currentNPC = npc;
+        return container;
+    }
 
-		// Convert world coordinates → screen coordinates
-		const screenPos = this.scene.cameras.main.worldView;
-		const cam = this.scene.cameras.main;
+    // ============================================================
+    // SHOW TOOLTIP (uses NPC + Q/E)
+    // ============================================================
+    show(worldX, worldY, npc) {
+        this.currentNPC = npc;
 
-		// world → screen conversion
-		const screenX = (worldX - cam.worldView.x) * cam.zoom;
-		const screenY = (worldY - cam.worldView.y) * cam.zoom;
+        const cam = this.scene.cameras.main;
 
-		this.tooltipContainer.setPosition(screenX + 90, screenY + 60);
+        // world → screen (because tooltip is in screen-space)
+        const screenX = (worldX - cam.worldView.x) * cam.zoom;
+        const screenY = (worldY - cam.worldView.y) * cam.zoom;
 
-		this.tooltipContainer.setVisible(true);
-		this.tooltipContainer.setAlpha(0);
-		this.tooltipContainer.setScale(0.01);
+        // Position a bit offset from NPC
+        this.tooltipContainer.setPosition(screenX + 90, screenY + 60);
 
-		// Keyboard listener cleanup
-		if (this.keyListener) window.removeEventListener("keydown", this.keyListener);
+        this.tooltipContainer.setVisible(true);
+        this.tooltipContainer.setAlpha(0);
+        this.tooltipContainer.setScale(this.baseScale * 0.8); // small pop-in
 
-		this.keyListener = (event) => {
-			if (!this.tooltipContainer.visible) return;
+        // --- Keyboard listener cleanup ---
+        if (this.keyListener) {
+            window.removeEventListener("keydown", this.keyListener);
+            this.keyListener = null;
+        }
 
-			const key = event.key.toLowerCase();
-			if (key === "q") {
-				this.hide();
-				this.scene.startDialogue(this.currentNPC.dialogueId || "npc1");
-			} else if (key === "e") {
-				this.scene.showNPCInfo(this.currentNPC);
-				this.hide();
-			}
-		};
+        // --- Keyboard: Q = Talk, E = Inspect ---
+        this.keyListener = (event) => {
+            if (!this.tooltipContainer.visible) return;
 
-		window.addEventListener("keydown", this.keyListener);
+            const key = event.key.toLowerCase();
 
-		// Mouse handlers
-		this.talkBtn.hitRect.removeAllListeners();
-		this.inspectBtn.hitRect.removeAllListeners();
+            if (key === "q") {
+                // Talk
+                this.hide();
+                console.log("[Tooltip] Q pressed, starting dialogue:", this.currentNPC?.dialogueId);
+                this.scene.startDialogue(this.currentNPC?.dialogueId || "h_intro_narration");
+            } else if (key === "e") {
+                // Inspect
+                console.log("[Tooltip] E pressed, show info for NPC");
+                this.scene.showNPCInfo(this.currentNPC);
+                this.hide();
+            }
+        };
 
-		this.talkBtn.hitRect.on("pointerdown", () => {
-			this.hide();
-			this.scene.startDialogue(this.currentNPC.dialogueId || "npc1");
-		});
+        window.addEventListener("keydown", this.keyListener);
 
-		this.inspectBtn.hitRect.on("pointerdown", () => {
-			this.scene.showNPCInfo(this.currentNPC);
-			this.hide();
-		});
+        // --- Mouse handlers ---
+        this.talkBtn.hitRect.removeAllListeners();
+        this.inspectBtn.hitRect.removeAllListeners();
 
-		this.scene.tweens.add({
-			targets: this.tooltipContainer,
-			alpha: 1,
-			scale: 1,
-			duration: 200,
-			ease: "Back.Out"
-		});
-	}
+        this.talkBtn.hitRect.on("pointerdown", () => {
+            this.hide();
+            console.log("[Tooltip] Talk clicked, starting dialogue:", this.currentNPC?.dialogueId);
+            this.scene.startDialogue(this.currentNPC?.dialogueId || "h_intro_narration");
+        });
 
-	// ============================================================
-	// HIDE TOOLTIP
-	// ============================================================
-	hide() {
-		if (!this.tooltipContainer.visible) return;
+        this.inspectBtn.hitRect.on("pointerdown", () => {
+            console.log("[Tooltip] Inspect clicked");
+            this.scene.showNPCInfo(this.currentNPC);
+            this.hide();
+        });
 
-		if (this.keyListener) {
-			window.removeEventListener("keydown", this.keyListener);
-			this.keyListener = null;
-		}
+        // --- Pop-in animation ---
+        this.scene.tweens.add({
+            targets: this.tooltipContainer,
+            alpha: 1,
+            scale: this.baseScale,
+            duration: 200,
+            ease: "Back.Out"
+        });
+    }
 
-		this.scene.tweens.add({
-			targets: this.tooltipContainer,
-			alpha: 0,
-			scale: 0.8,
-			duration: 150,
-			ease: "Sine.easeIn",
-			onComplete: () => {
-				this.tooltipContainer.setVisible(false);
-			}
-		});
-	}
+    // ============================================================
+    // HIDE TOOLTIP
+    // ============================================================
+    hide() {
+        if (!this.tooltipContainer.visible) return;
+
+        if (this.keyListener) {
+            window.removeEventListener("keydown", this.keyListener);
+            this.keyListener = null;
+        }
+
+        this.scene.tweens.add({
+            targets: this.tooltipContainer,
+            alpha: 0,
+            scale: this.baseScale * 0.8,
+            duration: 150,
+            ease: "Sine.easeIn",
+            onComplete: () => {
+                this.tooltipContainer.setVisible(false);
+            }
+        });
+    }
 }
