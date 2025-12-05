@@ -1,6 +1,6 @@
 // src/utils/sceneManager.js
 export const SceneManager = {
-    scenes: ["Chapter1Scene", "Chapter2Scene", "Chapter3Scene"], // add as you go
+    scenes: ["Chapter1Scene", "Chapter2Scene", "Chapter3Scene", "Chapter4Scene", "Chapter5Scene"], // add as you go
     currentIndex: 0,
 
     nextScene(scene, sdgPoints = 0) {

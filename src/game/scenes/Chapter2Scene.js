@@ -1,413 +1,619 @@
-// import Phaser from "phaser";
-// import Player from "../objects/Player";
-// import DialogueManager from "../objects/DialogueManager";
-
-// export default class Chapter2Scene extends Phaser.Scene {
-//     constructor() {
-//         super("Chapter2Scene");
-//     }
-
-//     init(data) {
-//         // 👇 Receive SDG points from previous scene
-//         this.sdgPointsObj = { points: data?.sdgPoints || 0 };
-//     }
-
-//     preload() {
-//         this.load.image("bg2", "/assets/images/environments/bg2.webp");
-//         this.load.image("player", "assets/player.png");
-//         this.load.json("chapter2Data", "/data/dialogues/chapters/chapter2.json");
-//     }
-
-//     create() {
-//         // --- Background ---
-//         this.bg = this.add.image(0, 0, "bg2").setOrigin(0);
-//         this.bg.displayWidth = this.scale.width;
-//         this.bg.displayHeight = this.scale.height;
-//         this.physics.world.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
-
-//         // --- Player ---
-//         this.player = new Player(this, 200, this.scale.height / 2, "player");
-//         this.player.setCollideWorldBounds(true);
-
-//         // --- Camera ---
-//         this.cameras.main.startFollow(this.player);
-//         this.cameras.main.fadeIn(800, 0, 0, 0);
-//         this.cameras.main.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
-
-//         // --- SDG points display ---
-//         // this.sdgText = this.add.text(20, 20, `SDG Points: ${this.sdgPointsObj.points}`, {
-//         //     fontSize: "20px",
-//         //     color: "#00ff99",
-//         //     fontFamily: "Arial",
-//         //     fontStyle: "bold",
-//         // }).setScrollFactor(0);
-
-//         // --- Dialogue manager ---
-//         const dialogueData = this.cache.json.get("chapter2Data");
-//         this.dialogueManager = new DialogueManager(this, dialogueData, this.sdgPointsObj);
-
-//         // --- Keyboard and click-to-move reuse ---
-//         this.keys = this.input.keyboard.addKeys({
-//             up: Phaser.Input.Keyboard.KeyCodes.W,
-//             down: Phaser.Input.Keyboard.KeyCodes.S,
-//             left: Phaser.Input.Keyboard.KeyCodes.A,
-//             right: Phaser.Input.Keyboard.KeyCodes.D,
-//         });
-//         this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
-
-//         this.target = null;
-//         this.speed = 200;
-//         this.input.on("pointerdown", pointer => {
-//             if (this.dialogueManager?.dialogueVisible) return;
-//             this.target = { x: pointer.worldX, y: pointer.worldY };
-//         });
-//     }
-
-//     update() {
-//         // --- Player control ---
-//         this.player.update();
-
-//         // Cancel click-to-move if keyboard pressed
-//         if (
-//             this.keys.left.isDown ||
-//             this.keys.right.isDown ||
-//             this.keys.up.isDown ||
-//             this.keys.down.isDown
-//         ) {
-//             this.target = null;
-//         }
-
-//         // --- Dialogue trigger (E) ---
-//         if (Phaser.Input.Keyboard.JustDown(this.keyE)) {
-//             if (!this.dialogueManager.dialogueVisible && !this.dialogueManager.dialogueFinished) {
-//                 this.dialogueManager.startDialogue("intro");
-//             } else if (this.dialogueManager.dialogueVisible) {
-//                 this.dialogueManager.nextDialogue();
-//             }
-//         }
-
-//         // --- Click-to-move motion ---
-//         if (!this.dialogueManager.dialogueVisible && this.target) {
-//             const dist = Phaser.Math.Distance.Between(
-//                 this.player.x,
-//                 this.player.y,
-//                 this.target.x,
-//                 this.target.y
-//             );
-//             if (dist < 8) {
-//                 this.player.body.setVelocity(0, 0);
-//                 this.target = null;
-//             } else {
-//                 const angle = Phaser.Math.Angle.Between(
-//                     this.player.x,
-//                     this.player.y,
-//                     this.target.x,
-//                     this.target.y
-//                 );
-//                 this.physics.velocityFromRotation(angle, this.speed, this.player.body.velocity);
-//             }
-//         }
-//     }
-// }
-
-
-// src/phaser/scenes/Chapter2Scene.js
-
-
-
-import Phaser from 'phaser';
+import Phaser from "phaser";
+import Player from "../objects/Player";
+import DialogueManager from "../objects/DialogueManager";
+import { SceneManager } from "../../utils/sceneManager";
+import { emit } from "../../utils/eventBus";
+import { addSDGPoints, getPoints } from "../../utils/sdgPoints";
+import TooltipManager from "../objects/TooltipManager";
+import NPCIndicator from "../objects/NPCIndicator";
+import InteractionPanel from "../objects/InteractionPanel";
 
 export default class Chapter2Scene extends Phaser.Scene {
     constructor() {
-        super({ key: 'Chapter2Scene' });
-        
-        // Scene variables
-        this.player = null;
-        this.npcs = [];
-        this.backgrounds = {};
-        this.cursors = null;
-        this.ambientSound = null;
-        this.lights = [];
+        super("Chapter2Scene");
+        this._currentScaleFactor = 1; // default
+        this.classroom = {
+            topY: 780, //okk
+            bottomY: 1077, //okk
+            leftTopX: 500, //ok, needs to avoid door
+            rightTopX: 1230, //ok, needs to avoid locker
+            leftBottomX: 200, //ok, needs to avoid npc pinky
+            rightBottomX: 1600
+        };
+    }
+
+    init(data) {
+        this.sdgPointsObj = { points: data?.sdgPoints || getPoints() || 0 };
+        // Objective tracking
+        this.trashCollected = 0;
+        this.trashGoal = 2; // Number of trash items needed
+        this.objectiveCompleted = false;
     }
 
     preload() {
-        // Load parallax background layers
-        this.load.image('bg_sky', 'assets/images/environments/bg_sky.png');
-        this.load.image('bg_buildings', 'assets/images/environments/bg_buildings.png');
-        this.load.image('bg_mid', 'assets/images/environments/bg_mid.png');
-        
-        // Load main layer assets
-        this.load.image('player', 'assets/images/environments/player.png');
-        this.load.image('npc', 'assets/images/environments/npc.png');
-        
-        // Load foreground layer
-        this.load.image('fg_fog', 'assets/images/environments/fg_fog.png');
-        
-        // Load ambient sound
-        // this.load.audio('ambient', '/assets/ambient.mp3');
+        this.load.atlas(
+            "ladyy",
+            "/assets/images/characters/ladyy.png",
+            "/assets/images/characters/spritesheet.json"
+        );
+
+        // NEW JSON (your final chapter script)
+        this.load.json("chapter1Data", "/data/dialogues/chapters/chapter1_script.json");
+
+        this.load.pack("assets-pack", "/assets/assets-pack.json");
     }
 
     create() {
-        // Initialize camera and world bounds
-        this.setupWorld();
-        
-        // Create parallax background layers
-        this.createBackgrounds();
-        
-        // Create player and setup controls
-        this.createPlayer();
-        
-        // Create ambient NPCs
-        this.createNPCs();
-        
-        // Setup lighting system
-        this.setupLighting();
-        
-        // Setup ambient sound
-        // this.setupAudio();
-        
-        // Setup camera with smooth follow
-        this.setupCamera();
+        this._createDebug();
+        this._createUILayer();
+        this._createCameraAndBackground();
+        this._createPlayer();
+        this._createNPCsAndProps();
+        this._createDialogueAndUI();
+        this._createTrashObjective();
+        this._createInput();
+        // this._createNextZone();
+        this._createDoorExit();
+        this._startIntroDialogue();    // 👈 new helper, see below
+    }
+    _startIntroDialogue() {
+        if (!this.dialogueManager) {
+            console.warn("[Scene] dialogueManager not ready, cannot start intro dialogue.");
+            return;
+        }
+
+        // If you want to use the JSON's startNodeId:
+        this.time.delayedCall(400, () => {
+            this.dialogueManager.startDialogue();
+        });
+
+        // OR if you want a specific node:
+        // this.dialogueManager.startDialogue("h_intro_narration");  // hallway
+        // this.dialogueManager.startDialogue("c_intro_prof");       // classroom
+    }
+
+    _createDebug() {
+        // Create graphics in create()
+        this.debugGraphics = this.add.graphics()
+            .setDepth(9998)
+            .setScrollFactor(1);  // follows world;
+
+        this._drawClassroomPolygon();
+
+        // this.debugGraphics.lineStyle(2, 0xff0000, 1); // red border, thickness 2
+
+        // const { topY, bottomY, leftTopX, rightTopX, leftBottomX, rightBottomX } = this.classroom;
+
+        // this.debugGraphics.fillStyle(0x00ff00, 0.2); // green, semi-transparent
+        // this.debugGraphics.fillPoints([
+        //     new Phaser.Geom.Point(leftTopX, topY),
+        //     new Phaser.Geom.Point(rightTopX, topY),
+        //     new Phaser.Geom.Point(rightBottomX, bottomY),
+        //     new Phaser.Geom.Point(leftBottomX, bottomY)
+        // ], true);
+
+        // // // // this.debugGraphics.fillCircle(this.player.x, this.player.y, 5);
+        // this.debugGraphics.setDepth(10); // adjust as needed
+
+        // After creating ladyPlayer
+        this.playerDebug = this.add.graphics()
+            .setDepth(9999)
+            .setScrollFactor(1); // world space
+
+
+
+    }
+
+    _createUILayer() {
+        // ==============================
+        // UI LAYER — FIXED TO SCREEN
+        // ==============================
+        this.uiLayer = this.add.container(0, 0)
+            .setScrollFactor(0)
+            .setDepth(9999);
+    }
+
+    _createCameraAndBackground() {
+        // ==============================
+        // CAMERA + BG + PLAYER
+        // ==============================
+        this.cameras.main.setBackgroundColor("#000000");
+        this.cameras.main.fadeIn(1000, 0, 0, 0);
+
+        this.bg = this.add.image(0, 0, "bgClassroom")
+            .setOrigin(0)
+            .setScrollFactor(1)
+            .setDepth(-10)
+            .setDisplaySize(this.scale.width, this.scale.height);
+
+        this.physics.world.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
+        this.cameras.main.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
+    }
+
+    _createPlayer() {
+        this.ladyPlayer = this.physics.add.sprite(1400, 900, "ladyy", "frame1.png")
+            .setBounce(0.2)
+            .setCollideWorldBounds(true)
+            .setDepth(10000)
+            .setOrigin(0.5, 1);   // 👈 pivot now at the feet
+
+        this.playerShadow = this.add.ellipse(
+            this.ladyPlayer.x,
+            this.ladyPlayer.y + 50,
+            40,
+            15,
+            0x000000,
+            0.2
+        ).setDepth(4);
+
+        this.anims.create({
+            key: "walk",
+            frames: this.anims.generateFrameNames("ladyy", {
+                start: 1,
+                end: 6,
+                prefix: "frame",
+                suffix: ".png"
+            }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: "idle",
+            frames: [{ key: "ladyy", frame: "frame1.png" }],
+            frameRate: 20
+        });
+    }
+
+    _createNPCsAndProps() {
+        // ==============================
+        //     NPC(FRIEND IN CLASSROOM)
+        //     ==============================
+        this.npcstudents = this.add.image(950, 772, "students")
+            .setScale(1)
+            .setInteractive({ useHandCursor: true })
+            .setDepth(10);
+
+
+        // IMPORTANT: tie this NPC to the classroom dialogue
+        // We’ll start from "c_friend_whisper"(your JSON's startNodeId)
+        this.npcstudents.dialogueId = "c_friend_whisper";
+
+
+        this.npcIndicator = new NPCIndicator(this, this.npcstudents);
+
+
+
+        this.npcteacher = this.add.image(950, 630, "teacher")
+            .setScale(0.3)
+            .setInteractive({ useHandCursor: true })
+            .setDepth(10);
+
+
+        // IMPORTANT: tie this NPC to the classroom dialogue
+        // We’ll start from "c_friend_whisper"(your JSON's startNodeId)
+        this.npcteacher.dialogueId = "c_intro_prof";
+
+        this.npcIndicator2 = new NPCIndicator(this, this.npcteacher);
+    }
+
+    _createDialogueAndUI() {
+        // ==============================
+        // DIALOGUE / TOOLTIP / PANEL
+        // ==============================
+        const chapterData = this.cache.json.get("chapter1Data");
+        console.log("[Chapter2Scene] chapterData:", chapterData);
+
+        // Pull out the "classroom" scene from your JSON
+        const classroomScene = chapterData?.scenes?.find(s => s.id === "classroom");
+
+        if (!classroomScene) {
+            console.error("[Chapter2Scene] classroom scene not found in chapter1Data.json", chapterData);
+        }
+
+        // We pass ONLY the classroom scene to DialogueManager
+        // so this scene is focused on that part of the story.
+        this.dialogueManager = new DialogueManager(
+            this,
+            classroomScene || {},      // fail-safe so it doesn't explode if undefined
+            this.sdgPointsObj,
+            this.uiLayer
+        );
+
+        this.tooltipManager = new TooltipManager(this, this.uiLayer);
+        this.interactionPanel = new InteractionPanel(this, this.uiLayer);
+
+        // NPC click → show tooltip (then your TooltipManager can call startDialogue)
+        this.npcstudents.on("pointerdown", () => {
+            console.log("[Scene] NoticeBoard clicked");
+            this.tooltipManager.show(
+                this.npcstudents.x,
+                this.npcstudents.y - this.npcstudents.displayHeight / 2,
+                this.npcstudents
+            );
+        });
+
+        this.npcteacher.on("pointerdown", () => {
+            console.log("[Scene] NoticeBoard clicked");
+            this.tooltipManager.show(
+                this.npcteacher.x,
+                this.npcteacher.y - this.npcteacher.displayHeight / 2,
+                this.npcteacher
+            );
+        });
+    }
+
+    _createTrashObjective() {
+        // ==============================
+        // TRASH OBJECTIVE (UNCHANGED)
+        // ==============================
+        this.trash1 = this.add.image(900, 900, "trash1")
+            .setInteractive()
+            .setScale(0.3);
+
+        this.trash2 = this.add.image(900, 800, "trash2")
+            .setInteractive()
+            .setScale(0.2);
+
+        this.trash1.on("pointerdown", () => this.handleTrashClick(this.trash1));
+        this.trash2.on("pointerdown", () => this.handleTrashClick(this.trash2));
+
+        emit("updateObjective", {
+            collected: this.trashCollected,
+            goal: this.trashGoal
+        });
+    }
+
+    _createInput() {
+        // ==============================
+        // INPUT
+        // ==============================
+        this.keys = this.input.keyboard.addKeys({
+            up: Phaser.Input.Keyboard.KeyCodes.W,
+            down: Phaser.Input.Keyboard.KeyCodes.S,
+            left: Phaser.Input.Keyboard.KeyCodes.A,
+            right: Phaser.Input.Keyboard.KeyCodes.D,
+        });
+    }
+
+    // _createNextZone() {
+    //     // ==============================
+    //     // NEXT ZONE (EXIT TO CLASSROOM)
+    //     // ==============================
+
+    //     // Door zone settings (tweak these to line up with your door)
+    //     const DOOR_X = 600;      // center X of the door in world space
+    //     const DOOR_Y = 580;      // center Y of the door in world space
+    //     const DOOR_WIDTH = 70;  // width of the door zone
+    //     const DOOR_HEIGHT = 380; // height of the door zone
+
+    //     this.nextZone = this.add.zone(DOOR_X, DOOR_Y, DOOR_WIDTH, DOOR_HEIGHT);
+    //     // this.nextZone = this.add
+    //     //     .zone(1000, 700)
+    //     //     .setSize(200, 150);  // width 200, height 150
+    //     this.physics.world.enable(this.nextZone);
+    //     this.nextZone.body.setAllowGravity(false);
+    //     this.nextZone.body.setImmovable(true);
+    //     // this.nextZone.setVisible(false);
+    //     this.nextZoneVisible = false;
+    //     this.playerInNextZone = false; // 👈 NEW
+
+    //     // Debug red box for the zone
+    //     this.nextZoneDebug = this.add.graphics()
+    //         .setDepth(9998);
+
+    //     this.nextZoneDebug.lineStyle(2, 0xff0000, 1);
+    //     this.nextZoneDebug.strokeRect(
+    //         DOOR_X - DOOR_WIDTH / 2,
+    //         DOOR_Y - DOOR_HEIGHT / 2,
+    //         DOOR_WIDTH,
+    //         DOOR_HEIGHT
+    //     );
+
+
+    //     const zoneIndicator = this.add.graphics()
+    //         .fillStyle(0x00ff00, 0.3)
+    //         .fillRect(this.nextZone.x - 450, this.nextZone.y - 250, 100, 100)
+    //         .setVisible(true); // hide until unlocked
+
+    //     // Make the indicator clickable
+    //     zoneIndicator.setInteractive(
+    //         new Phaser.Geom.Rectangle(this.nextZone.x - 50, this.nextZone.y - 50, 100, 100),
+    //         Phaser.Geom.Rectangle.Contains
+    //     ).on("pointerdown", () => {
+    //         // Only go to next scene if:
+    //         // - zone is unlocked
+    //         // - player is physically in the zone
+    //         if (this.nextZoneVisible && this.playerInNextZone) {
+    //             this.goToNextScene();
+    //         }
+    //     });
+
+
+    //     this.zoneIndicator = zoneIndicator;
+
+    //     // Optional pulsing tween (just for visual feedback)
+    //     this.tweens.add({
+    //         targets: this.nextZone,
+    //         alpha: { from: 0.3, to: 0.7 },
+    //         duration: 1000,
+    //         yoyo: true,
+    //         repeat: -1
+    //     });
+
+    //     // When dialogue ends, unlock + show the clickable zone
+    //     this.events.on("dialogueEnded", () => {
+    //         this.nextZoneVisible = true;
+    //         this.nextZone.setVisible(true);
+    //         this.zoneIndicator.setVisible(true); // 👈 show the clickable highlight
+    //     });
+    // }
+    _createDoorExit() {
+        // 1) Door visual
+        const DOOR_X = 288;
+        const DOOR_Y = 480;
+        const DOOR_WIDTH = 120;
+        const DOOR_HEIGHT = 220;
+
+        this.door = this.add.image(DOOR_X, DOOR_Y, "classroomDoor")
+            .setInteractive({ useHandCursor: true })
+            .setDepth(10);
+
+        // 2) Physics zone around door (exit area)
+        this.exitZone = this.add.zone(DOOR_X, DOOR_Y, DOOR_WIDTH, DOOR_HEIGHT);
+        this.physics.world.enable(this.exitZone);
+        this.exitZone.body.setAllowGravity(false);
+        this.exitZone.body.setImmovable(true);
+
+        // 3) Debug box so you SEE the invisible zone
+        this.exitZoneDebug = this.add.graphics().setDepth(9998);
+        this.exitZoneDebug.lineStyle(2, 0xff0000, 1);
+        this.exitZoneDebug.strokeRect(
+            DOOR_X - DOOR_WIDTH / 2,
+            DOOR_Y - DOOR_HEIGHT / 2,
+            DOOR_WIDTH,
+            DOOR_HEIGHT
+        );
+
+        // 4) Flag to know if player is inside the zone
+        this.playerInExitZone = false;
+
+        // 5) Door click → only go next if player is inside zone
+        this.door.on("pointerdown", () => {
+            if (this.playerInExitZone) {
+                this.goToNextScene();
+            } else {
+                console.log("Too far from the door.");
+                // you can later show a small UI message instead
+            }
+        });
+    }
+
+    _drawClassroomPolygon() {
+        const g = this.debugGraphics;
+        const { topY, bottomY, leftTopX, rightTopX, leftBottomX, rightBottomX } = this.classroom;
+
+        g.clear();
+
+        // Classroom polygon outline (green)
+        g.lineStyle(2, 0x00ff00, 1);
+        g.strokePoints(
+            [
+                new Phaser.Geom.Point(leftTopX, topY),
+                new Phaser.Geom.Point(rightTopX, topY),
+                new Phaser.Geom.Point(rightBottomX, bottomY),
+                new Phaser.Geom.Point(leftBottomX, bottomY)
+            ],
+            true
+        );
+
+        // Top and bottom lines (optional, for clarity)
+        g.lineStyle(1, 0x00ffff, 0.6);
+        g.strokeLineShape(new Phaser.Geom.Line(leftTopX, topY, rightTopX, topY));
+        g.strokeLineShape(new Phaser.Geom.Line(leftBottomX, bottomY, rightBottomX, bottomY));
+    }
+
+
+    goToNextScene() {
+        this.nextZoneVisible = false;
+        this.cameras.main.fadeOut(800);
+        this.cameras.main.once("camerafadeoutcomplete", () => {
+            SceneManager.nextScene(this, getPoints());
+        });
+    }
+
+
+    showNPCInfo(npcstudents) {
+        console.log(`${npcstudents.name} is a villager from the forest.`);
+    }
+
+    // UPDATED: default start node now matches your classroom JSON
+    startDialogue(startNodeId = "c_intro_prof") {
+        if (!this.dialogueManager) {
+            console.warn("DialogueManager not initialized!");
+            return;
+        }
+
+        console.log(`Starting dialogue from node: ${startNodeId}`);
+        // Assumes your DialogueManager now treats the argument as a nodeId
+        this.dialogueManager.startDialogue(startNodeId);
+    }
+
+    handleTrashClick(trashItem) {
+        if (!trashItem.scene) return;
+
+        const points = 10;
+        addSDGPoints(points);
+
+        const msg = this.add.text(trashItem.x, trashItem.y - 40, `+${points} SDG Points!`, {
+            font: "16px Arial",
+            fill: "#0f0",
+        }).setOrigin(0.5);
+
+        this.tweens.add({
+            targets: msg,
+            y: msg.y - 50,
+            alpha: 0,
+            duration: 1000,
+            ease: "Power2",
+            onComplete: () => msg.destroy()
+        });
+
+        trashItem.destroy();
+
+        this.trashCollected++;
+        emit("updateObjective", {
+            collected: this.trashCollected,
+            goal: this.trashGoal
+        });
+
+        if (!this.objectiveCompleted && this.trashCollected >= this.trashGoal) {
+            this.objectiveCompleted = true;
+            emit("badgeEarned", "Eco Warrior! 🏅");
+        }
     }
 
     update(time, delta) {
-        // Handle player movement
-        this.handlePlayerMovement();
-        
-        // Update parallax scrolling based on camera position
-        this.updateParallax();
-        
-        // Update NPC animations and movements
-        this.updateNPCs(time);
-        
-        // Update player idle animation
-        this.updatePlayerIdle(time);
+        this._updateNPCIndicators();
+        this._updateMovement();
+        this._updateDepthScaleAndClamp();
+        this._updateShadow();
+        // this._updateNextZoneOverlap();
+        this._updateExitZoneOverlap();  // 👈 just one clean call
+
     }
 
-    setupWorld() {
-        // Set world bounds (adjust based on your level size)
-        this.physics.world.setBounds(0, 0, 2000, 600);
-        
-        // Enable lighting system
-        this.lights.enable();
-        this.lights.setAmbientColor(0x333333); // Soft ambient light
+    _updateNPCIndicators() {
+        // ============================================================
+        // NPC INDICATOR(S)
+        // ============================================================
+        if (this.npcstudents && this.npcIndicator) {
+            const d1 = Phaser.Math.Distance.Between(
+                this.ladyPlayer.x, this.ladyPlayer.y,
+                this.npcstudents.x, this.npcstudents.y
+            );
+
+            if (d1 < 150) this.npcIndicator.show();
+            else this.npcIndicator.hide();
+
+            this.npcIndicator.update();
+        }
+
+        // If you have npcgirl / npcIndicator2, you can copy the block above.
     }
 
-    createBackgrounds() {
-        const { width, height } = this.scale;
-        
-        // Sky layer (farthest, moves slowest)
-        this.backgrounds.sky = this.add.tileSprite(0, 0, width * 2, height * 2, 'bg_sky')
-            .setOrigin(0, 0)
-            .setScrollFactor(0.1, 0);
-        
-        // Buildings layer (middle distance)
-        this.backgrounds.buildings = this.add.tileSprite(0, 0, width * 2, height, 'bg_buildings')
-            .setOrigin(0, 0)
-            .setScrollFactor(0.3, 0);
-        
-        // Midground details (closer background)
-        this.backgrounds.mid = this.add.tileSprite(0, 0, width * 2, height, 'bg_mid')
-            .setOrigin(0, 0)
-            .setScrollFactor(0.6, 0);
-        
-        // Foreground layer (closest, moves with camera but slightly slower)
-        this.backgrounds.foreground = this.add.tileSprite(0, 0, width * 2, height, 'fg_fog')
-            .setOrigin(0, 0)
-            .setScrollFactor(1.1, 0)
-            .setAlpha(0.3); // Semi-transparent for depth effect
-    }
+    _updateMovement() {
+        // ============================================================
+        // MOVEMENT
+        // ============================================================
+        const playerSpeed = 150;
+        let velocityX = 0;
+        let velocityY = 0;
 
-    createPlayer() {
-        // Create player sprite with physics
-        this.player = this.physics.add.sprite(200, 400, 'player')
-            .setCollideWorldBounds(true)
-            .setScale(0.5);
-        
-        // Enable lighting on player
-        this.player.setPipeline('Light2D');
-        
-        // Setup keyboard input
-        this.cursors = this.input.keyboard.createCursorKeys();
-        
-        // Additional keys (A/D for movement)
-        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        
-        // Player animation variables
-        this.player.idleTime = 0;
-        this.player.isIdle = true;
-    }
+        if (this.keys.left.isDown) velocityX = -playerSpeed;
+        else if (this.keys.right.isDown) velocityX = playerSpeed;
 
-    createNPCs() {
-        // Create multiple NPCs at different positions
-        const npcCount = 2;
-        const npcPositions = [
-            { x: 300, y: 350 },
-            { x: 600, y: 380 },
-            { x: 900, y: 350 },
-            { x: 1200, y: 380 }
-        ];
-        
-        for (let i = 0; i < npcCount; i++) {
-            const npc = this.add.sprite(npcPositions[i].x, npcPositions[i].y, 'npc')
-                .setScale(0.65)
-                .setPipeline('Light2D');
-            
-            // Store NPC data for movement
-            this.npcs.push({
-                sprite: npc,
-                startX: npcPositions[i].x,
-                direction: Phaser.Math.Between(0, 1) === 0 ? -1 : 1,
-                speed: Phaser.Math.FloatBetween(0.3, 0.8),
-                walkDistance: Phaser.Math.Between(100, 200)
-            });
-            
-            // Start NPC walking animation
-            this.startNPCWalk(this.npcs[i]);
+        if (this.keys.up.isDown) velocityY = -playerSpeed;
+        else if (this.keys.down.isDown) velocityY = playerSpeed;
+
+        this.ladyPlayer.setVelocity(velocityX, velocityY);
+
+        // Animations
+        if (velocityX !== 0 || velocityY !== 0) {
+            this.ladyPlayer.anims.play("walk", true);
+            this.ladyPlayer.setFlipX(velocityX > 0);
+        } else {
+            this.ladyPlayer.anims.play("idle", true);
         }
     }
 
-   setupLighting() {
-  // Initialize our own array to store created light objects
-  this.lightObjects = [];
+    _updateDepthScaleAndClamp() {
+        // ============================================================
+        // DEPTH, SCALE, CLASSROOM CLAMP
+        // ============================================================
+        const {
+            topY,
+            bottomY,
+            leftTopX,
+            rightTopX,
+            leftBottomX,
+            rightBottomX
+        } = this.classroom;
 
-  const lightPositions = [
-    { x: 250, y: 300, radius: 120, intensity: 0.6 },
-    { x: 650, y: 320, radius: 100, intensity: 0.5 },
-    { x: 1050, y: 300, radius: 120, intensity: 0.6 },
-    { x: 1450, y: 320, radius: 100, intensity: 0.5 }
-  ];
+        const depthRange = bottomY - topY;
 
-  lightPositions.forEach(pos => {
-    const light = this.lights.addLight(pos.x, pos.y, pos.radius, 0xffeedd, pos.intensity);
-    this.lightObjects.push(light); // ✅ use lightObjects, not this.lights
+        // Clamp Y first so it's always inside the path
+        this.ladyPlayer.y = Phaser.Math.Clamp(this.ladyPlayer.y, topY, bottomY);
 
-    // Flicker effect
-    this.tweens.add({
-      targets: light,
-      intensity: pos.intensity * 0.9,
-      duration: Phaser.Math.Between(2000, 4000),
-      yoyo: true,
-      repeat: -1,
-      ease: 'Sine.easeInOut'
-    });
-  });
-}
+        // 0 at top, 1 at bottom, based on FEET (origin 0.5,1)
+        let t = (this.ladyPlayer.y - topY) / depthRange;
+        t = Phaser.Math.Clamp(t, 0, 1);
 
-    // setupAudio() {
-    //     // Create and configure ambient sound
-    //     this.ambientSound = this.sound.add('ambient', {
-    //         volume: 0.3,
-    //         loop: true
-    //     });
-        
-    //     // Start ambient sound (you might want to trigger this on user interaction)
-    //     // this.ambientSound.play();
+        // === SCALE (this is the part you care about) ===
+        const scaleFar = 0.7;  // at topY (740)
+        const scaleNear = 1.4;  // at bottomY (1077)
+        const scaleFactor = Phaser.Math.Linear(scaleFar, scaleNear, t);
+
+        this.ladyPlayer.setScale(scaleFactor);
+
+        // 👇 stash it on "this" so other methods can use it
+        this._currentScaleFactor = scaleFactor;
+
+        // // === CLASSROOM X CLAMP (trapezoid) ===
+        const minX = Phaser.Math.Linear(leftTopX, leftBottomX, t);
+        const maxX = Phaser.Math.Linear(rightTopX, rightBottomX, t);
+        this.ladyPlayer.x = Phaser.Math.Clamp(this.ladyPlayer.x, minX, maxX);
+    }
+
+    _updateShadow() {
+        const scale = this._currentScaleFactor ?? 1; // fallback to 1 if not set
+        // ============================================================
+        // SHADOW
+        // ============================================================
+        this.playerShadow.x = this.ladyPlayer.x;
+        this.playerShadow.y = this.ladyPlayer.y + 10;  // just under feet
+        this.playerShadow.setDepth(this.ladyPlayer.depth - 1);
+
+        this.playerShadow.scaleX = scale;
+        this.playerShadow.scaleY = scale * 0.4;
+    }
+
+    // _updateNextZoneOverlap() {
+    //     // ============================================================
+    //     // NEXT ZONE OVERLAP
+    //     // ============================================================
+
+    //     // Track if player is inside the zone, but DON'T auto-transition
+    //     this.playerInNextZone = false;
+
+    //     if (this.nextZoneVisible) {
+    //         this.physics.world.overlap(
+    //             this.ladyPlayer,
+    //             this.nextZone,
+    //             () => {
+    //                 this.playerInNextZone = true;
+    //             },
+    //             null,
+    //             this
+    //         );
+    //     }
+
     // }
+    _updateExitZoneOverlap() {
+        this.playerInExitZone = false;
 
-    setupCamera() {
-        // Setup camera to follow player with smooth movement
-        this.cameras.main.setBounds(0, 0, 2000, 600);
-        this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
-        
-        // Set zoom level if needed
-        this.cameras.main.setZoom(1);
-    }
+        if (!this.exitZone) return;
 
-    handlePlayerMovement() {
-        const speed = 160;
-        
-        // Reset velocity
-        this.player.setVelocityX(0);
-        
-        // Handle left movement (A or left arrow)
-        if (this.cursors.left.isDown || this.keyA.isDown) {
-            this.player.setVelocityX(-speed);
-            this.player.isIdle = false;
-        }
-        // Handle right movement (D or right arrow)
-        else if (this.cursors.right.isDown || this.keyD.isDown) {
-            this.player.setVelocityX(speed);
-            this.player.isIdle = false;
-        } else {
-            this.player.isIdle = true;
-        }
-        
-        // Flip player sprite based on movement direction
-        if (this.player.body.velocity.x < 0) {
-            this.player.setFlipX(true);
-        } else if (this.player.body.velocity.x > 0) {
-            this.player.setFlipX(false);
-        }
-    }
-
-    updateParallax() {
-        const cameraX = this.cameras.main.scrollX;
-        
-        // Update tile positions for parallax effect
-        this.backgrounds.sky.tilePositionX = cameraX * 0.1;
-        this.backgrounds.buildings.tilePositionX = cameraX * 0.3;
-        this.backgrounds.mid.tilePositionX = cameraX * 0.6;
-        this.backgrounds.foreground.tilePositionX = cameraX * 1.1;
-    }
-
-    updateNPCs(time) {
-        this.npcs.forEach(npcData => {
-            const npc = npcData.sprite;
-            
-            // Simple NPC movement logic
-            const targetX = npcData.startX + (Math.sin(time * 0.001 * npcData.speed) * npcData.walkDistance);
-            npc.x = targetX;
-            
-            // Flip NPC based on movement direction
-            const direction = Math.sin(time * 0.001 * npcData.speed + npcData.startX);
-            npc.setFlipX(direction < 0);
-        });
-    }
-
-    updatePlayerIdle(time) {
-        if (this.player.isIdle) {
-            this.player.idleTime += 0.016; // Approximate delta time
-            
-            // Subtle breathing animation every 2 seconds
-            if (this.player.idleTime >= 2) {
-                this.tweens.add({
-                    targets: this.player,
-                    scaleY: 0.53,
-                    duration: 800,
-                    yoyo: true,
-                    ease: 'Sine.easeInOut',
-                    onComplete: () => {
-                        this.player.idleTime = 0;
-                    }
-                });
-            }
-        } else {
-            this.player.idleTime = 0;
-        }
-    }
-
-    startNPCWalk(npcData) {
-        const npc = npcData.sprite;
-        
-        // Create walking tween for NPC
-        this.tweens.add({
-            targets: npc,
-            x: npcData.startX + (npcData.direction * npcData.walkDistance),
-            duration: 2000 / npcData.speed,
-            yoyo: true,
-            repeat: -1,
-            ease: 'Linear',
-            onUpdate: () => {
-                // Flip sprite based on movement direction
-                const velocity = npcData.direction * npcData.speed;
-                npc.setFlipX(velocity < 0);
+        this.physics.world.overlap(
+            this.ladyPlayer,
+            this.exitZone,
+            () => {
+                this.playerInExitZone = true;
             },
-            onRepeat: () => {
-                // Change direction for variety
-                npcData.direction *= -1;
-            }
-        });
+            null,
+            this
+        );
     }
+
+
 }

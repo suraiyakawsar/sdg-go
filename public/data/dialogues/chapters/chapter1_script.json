@@ -10,56 +10,72 @@
                 {
                     "id": "h_intro_narration",
                     "speaker": "narrator",
-                    "text": "First day of the new semester. The hallway feels a little louder, a little brighter... and full of posters you never noticed before.",
-                    "autoNext": "h_friend_greeting"
+                    "text": "First day of the new semester. The hallway feels a little louder, a little brighter... and full of posters you never noticed before."
                 },
                 {
-                    "id": "h_friend_greeting",
-                    "speaker": "friend",
-                    "text": "Hey! You’re early. Have you seen all the new posters around campus?",
+                    "id": "h_noticeboard",
+                    "speaker": "system",
+                    "text": "SUSTAINABILITY WEEK – Talks, clean-up events, food bank volunteering. Sign up at the cafeteria."
+                },
+                {
+                    "id": "h_friends_start",
+                    "speaker": "friendA",
+                    "text": "Oi, over here! You saw all the new posters around campus?",
                     "choices": [
                         {
                             "id": "h_choice_seen_posters",
                             "text": "Yeah, something about SDGs, right?",
                             "sdgDelta": 5,
-                            "nextNodeId": "h_friend_explain_positive"
+                            "nextNodeId": "h_explain_positive"
                         },
                         {
                             "id": "h_choice_not_sure",
-                            "text": "Not really... what’s SDG?",
+                            "text": "Not really… what’s SDG?",
                             "sdgDelta": 3,
-                            "nextNodeId": "h_friend_explain_neutral"
+                            "nextNodeId": "h_explain_neutral"
                         },
                         {
                             "id": "h_choice_extra_work",
                             "text": "Looks like extra work to me.",
                             "sdgDelta": 0,
-                            "nextNodeId": "h_friend_explain_pushback"
+                            "nextNodeId": "h_explain_pushback"
                         }
                     ]
                 },
                 {
-                    "id": "h_friend_explain_positive",
-                    "speaker": "friend",
-                    "text": "Yeah! Sustainable Development Goals. The uni is doing a whole week about it. I think it’s kind of cool.",
-                    "autoNext": "h_friend_wrapup"
+                    "id": "h_explain_positive",
+                    "speaker": "friendA",
+                    "text": "Yeah! Sustainable Development Goals. The uni is doing a whole week about it.",
+                    "autoNext": "h_explain_positive_b"
                 },
                 {
-                    "id": "h_friend_explain_neutral",
-                    "speaker": "friend",
-                    "text": "Sustainable Development Goals. Things like quality education, less poverty, climate action. Big topics, but they’re trying to get students involved.",
-                    "autoNext": "h_friend_wrapup"
+                    "id": "h_explain_positive_b",
+                    "speaker": "friendB",
+                    "text": "They’re doing talks, clean-ups, even something with the campus food bank.",
+                    "autoNext": "h_friends_wrapup"
                 },
                 {
-                    "id": "h_friend_explain_pushback",
-                    "speaker": "friend",
-                    "text": "Maybe. But if we’re already here studying, might as well make it mean something, right?",
-                    "autoNext": "h_friend_wrapup"
+                    "id": "h_explain_neutral",
+                    "speaker": "friendB",
+                    "text": "SDG stands for Sustainable Development Goals. Stuff like education, equality, climate…",
+                    "autoNext": "h_explain_neutral_b"
                 },
                 {
-                    "id": "h_friend_wrapup",
-                    "speaker": "friend",
-                    "text": "Anyway, the lecturer said today’s class is about it. You don’t want to be late.",
+                    "id": "h_explain_pushback",
+                    "speaker": "friendA",
+                    "text": "Maybe. But if we’re already stuck here studying, might as well make it mean something.",
+                    "autoNext": "h_explain_pushback_b"
+                },
+                {
+                    "id": "h_explain_pushback_b",
+                    "speaker": "friendB",
+                    "text": "You don’t have to save the whole world lah, just do something small.",
+                    "autoNext": "h_friends_wrapup"
+                },
+                {
+                    "id": "h_friends_wrapup",
+                    "speaker": "friendA",
+                    "text": "Anyway, the lecturer said today’s class is about it. If we’re late, that one is on you.",
                     "autoNext": "h_objective_update"
                 },
                 {

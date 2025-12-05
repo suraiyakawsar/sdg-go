@@ -24,12 +24,12 @@
             {
                 "url": "/assets/images/characters/npcboy.png",
                 "type": "image",
-                "key": "npc1"
+                "key": "npcboy"
             },
             {
                 "url": "/assets/images/characters/npcgirl.png",
                 "type": "image",
-                "key": "npc2"
+                "key": "npcgirl"
             },
             {
                 "url": "/assets/images/props/trash1.png",
@@ -42,34 +42,24 @@
                 "key": "trash2"
             },
             {
-                "url": "/assets/images/ui/arrow_down.png",
+                "url": "/assets/images/props/classroomDoor.png",
                 "type": "image",
-                "key": "ui_arrow_down"
+                "key": "classroomDoor"
             },
             {
-                "url": "/assets/images/ui/speechBubble.png",
+                "url": "/assets/images/props/noticeboard.png",
                 "type": "image",
-                "key": "speechBubble"
+                "key": "noticeboard"
             },
             {
-                "url": "/assets/images/ui/icon_eye.png",
+                "url": "/assets/images/props/students.png",
                 "type": "image",
-                "key": "icon_eye"
+                "key": "students"
             },
             {
-                "url": "/assets/images/ui/icon_speech.png",
+                "url": "/assets/images/characters/teacher.png",
                 "type": "image",
-                "key": "icon_speech"
-            },
-            {
-                "url": "/assets/images/ui/ui_tooltip_bg.png",
-                "type": "image",
-                "key": "ui_tooltip_bg"
-            },
-            {
-                "url": "/assets/audio/intro-music.mp3",
-                "type": "audio",
-                "key": "introMusic"
+                "key": "teacher"
             }
         ]
     },

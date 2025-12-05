@@ -11,11 +11,11 @@ import InteractionPanel from "../objects/InteractionPanel";
 export default class Chapter1Scene extends Phaser.Scene {
     constructor() {
         super("Chapter1Scene");
-
+        this._currentScaleFactor = 1; // default
         this.hallway = {
             topY: 740, //okk
             bottomY: 1077, //okk
-            leftTopX: 820, //ok, needs to avoid door
+            leftTopX: 720, //ok, needs to avoid door
             rightTopX: 1130, //ok, needs to avoid locker
             leftBottomX: 490, //ok, needs to avoid npc pinky
             rightBottomX: 1600
@@ -44,7 +44,35 @@ export default class Chapter1Scene extends Phaser.Scene {
     }
 
     create() {
+        this._createDebug();
+        this._createUILayer();
+        this._createCameraAndBackground();
+        this._createPlayer();
+        this._createNPCsAndProps();
+        this._createDialogueAndUI();
+        this._createTrashObjective();
+        this._createInput();
+        // this._createNextZone();
+        this._createDoorExit();
+        this._startIntroDialogue();    // 👈 new helper, see below
 
+    }
+    _startIntroDialogue() {
+        if (!this.dialogueManager) {
+            console.warn("[Scene] dialogueManager not ready, cannot start intro dialogue.");
+            return;
+        }
+
+        // If you want to use the JSON's startNodeId:
+        this.time.delayedCall(400, () => {
+            this.dialogueManager.startDialogue();
+        });
+
+        // OR if you want a specific node:
+        // this.dialogueManager.startDialogue("h_intro_narration");  // hallway
+        // this.dialogueManager.startDialogue("c_intro_prof");       // classroom
+    }
+    _createDebug() {
         // Create graphics in create()
         this.debugGraphics = this.add.graphics()
             .setDepth(9998)
@@ -67,16 +95,25 @@ export default class Chapter1Scene extends Phaser.Scene {
         // // // // this.debugGraphics.fillCircle(this.player.x, this.player.y, 5);
         // this.debugGraphics.setDepth(10); // adjust as needed
 
+        // After creating ladyPlayer
+        this.playerDebug = this.add.graphics()
+            .setDepth(9999)
+            .setScrollFactor(1); // world space
 
 
 
+    }
+
+    _createUILayer() {
         // ==============================
         // UI LAYER — FIXED TO SCREEN
         // ==============================
         this.uiLayer = this.add.container(0, 0)
             .setScrollFactor(0)
             .setDepth(9999);
+    }
 
+    _createCameraAndBackground() {
         // ==============================
         // CAMERA + BG + PLAYER
         // ==============================
@@ -91,18 +128,14 @@ export default class Chapter1Scene extends Phaser.Scene {
 
         this.physics.world.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
         this.cameras.main.setBounds(0, 0, this.bg.displayWidth, this.bg.displayHeight);
+    }
 
+    _createPlayer() {
         this.ladyPlayer = this.physics.add.sprite(1400, 900, "ladyy", "frame1.png")
             .setBounce(0.2)
             .setCollideWorldBounds(true)
             .setDepth(1000)
             .setOrigin(0.5, 1);   // 👈 pivot now at the feet
-
-        // After creating ladyPlayer
-        this.playerDebug = this.add.graphics()
-            .setDepth(9999)
-            .setScrollFactor(1); // world space
-
 
         this.playerShadow = this.add.ellipse(
             this.ladyPlayer.x,
@@ -130,30 +163,45 @@ export default class Chapter1Scene extends Phaser.Scene {
             frames: [{ key: "ladyy", frame: "frame1.png" }],
             frameRate: 20
         });
+    }
 
+    _createNPCsAndProps() {
         // ==============================
         // NPC (FRIEND IN HALLWAY)
         // ==============================
-        this.npc = this.add.image(1650, 742, "npc1")
-            .setScale(1)
+        this.npcboy = this.add.image(480, 762, "npcboy")
+            .setScale(0.4)
             .setInteractive({ useHandCursor: true })
             .setDepth(10);
 
-        this.npc2 = this.add.image(570, 650, "npc2")
-            .setScale(1.0)
+        this.npcgirl = this.add.image(1700, 740, "npcgirl")
+            .setScale(0.3)
             .setInteractive({ useHandCursor: true })
             .setDepth(10);
 
 
         // IMPORTANT: tie this NPC to the hallway dialogue
         // We’ll start from "h_intro_narration" (your JSON's startNodeId)
-        this.npc.dialogueId = "h_intro_narration";
-        this.npc2.dialogueId = "h_friend_greeting";
+        this.npcboy.dialogueId = "h_intro_narration";
+        this.npcgirl.dialogueId = "h_friends_start";
 
 
-        this.npcIndicator = new NPCIndicator(this, this.npc);
-        this.npcIndicator2 = new NPCIndicator(this, this.npc2);
+        this.npcIndicator = new NPCIndicator(this, this.npcboy);
+        this.npcIndicator2 = new NPCIndicator(this, this.npcgirl);
 
+        // ==============================
+        // NOTICE BOARD PROP
+        // ==============================
+        this.noticeBoard = this.add.image(330, 355, "noticeboard") // 👈 pick your x,y
+            .setScale(1.0)
+            .setInteractive({ useHandCursor: true })
+            .setDepth(9); // a bit behind NPCs if you want
+
+        // This id MUST match a node id in your JSON later.
+        this.noticeBoard.dialogueId = "h_noticeboard";
+    }
+
+    _createDialogueAndUI() {
         // ==============================
         // DIALOGUE / TOOLTIP / PANEL
         // ==============================
@@ -180,21 +228,31 @@ export default class Chapter1Scene extends Phaser.Scene {
         this.interactionPanel = new InteractionPanel(this, this.uiLayer);
 
         // NPC click → show tooltip (then your TooltipManager can call startDialogue)
-        this.npc.on("pointerdown", () => {
+        this.npcboy.on("pointerdown", () => {
             this.tooltipManager.show(
-                this.npc.x,
-                this.npc.y - this.npc.displayHeight / 2,
-                this.npc
+                this.npcboy.x,
+                this.npcboy.y - this.npcboy.displayHeight / 2,
+                this.npcboy
             );
         });
-        this.npc2.on("pointerdown", () => {
+        this.npcgirl.on("pointerdown", () => {
             this.tooltipManager.show(
-                this.npc2.x,
-                this.npc2.y - this.npc2.displayHeight / 2,
-                this.npc2
+                this.npcgirl.x,
+                this.npcgirl.y - this.npcgirl.displayHeight / 2,
+                this.npcgirl
             );
         });
+        // NOTICE BOARD click → show tooltip
+        this.noticeBoard.on("pointerdown", () => {
+            this.tooltipManager.show(
+                this.noticeBoard.x,
+                this.noticeBoard.y - this.noticeBoard.displayHeight / 2,
+                this.noticeBoard
+            );
+        });
+    }
 
+    _createTrashObjective() {
         // ==============================
         // TRASH OBJECTIVE (UNCHANGED)
         // ==============================
@@ -213,7 +271,9 @@ export default class Chapter1Scene extends Phaser.Scene {
             collected: this.trashCollected,
             goal: this.trashGoal
         });
+    }
 
+    _createInput() {
         // ==============================
         // INPUT
         // ==============================
@@ -223,60 +283,120 @@ export default class Chapter1Scene extends Phaser.Scene {
             left: Phaser.Input.Keyboard.KeyCodes.A,
             right: Phaser.Input.Keyboard.KeyCodes.D,
         });
-
-
-        // ==============================
-        // NEXT ZONE (EXIT TO CLASSROOM)
-        // ==============================
-        this.nextZone = this.add
-            .zone(1000, 800)
-            .setSize(100, 100);
-
-        this.physics.world.enable(this.nextZone);
-        this.nextZone.body.setAllowGravity(false);
-        this.nextZone.body.setImmovable(true);
-        this.nextZone.setVisible(false);
-
-        this.nextZoneVisible = false;
-        this.playerInNextZone = false; // 👈 NEW
-
-        const zoneIndicator = this.add.graphics()
-            .fillStyle(0x00ff00, 0.3)
-            .fillRect(this.nextZone.x - 50, this.nextZone.y - 50, 100, 100)
-            .setVisible(false); // hide until unlocked
-
-        // Make the indicator clickable
-        zoneIndicator.setInteractive(
-            new Phaser.Geom.Rectangle(this.nextZone.x - 50, this.nextZone.y - 50, 100, 100),
-            Phaser.Geom.Rectangle.Contains
-        ).on("pointerdown", () => {
-            // Only go to next scene if:
-            // - zone is unlocked
-            // - player is physically in the zone
-            if (this.nextZoneVisible && this.playerInNextZone) {
-                this.goToNextScene();
-            }
-        });
-
-        this.zoneIndicator = zoneIndicator;
-
-        // Optional pulsing tween (just for visual feedback)
-        this.tweens.add({
-            targets: zoneIndicator,
-            alpha: { from: 0.3, to: 0.7 },
-            duration: 1000,
-            yoyo: true,
-            repeat: -1
-        });
-
-        // When dialogue ends, unlock + show the clickable zone
-        this.events.on("dialogueEnded", () => {
-            this.nextZoneVisible = true;
-            this.nextZone.setVisible(true);
-            this.zoneIndicator.setVisible(true); // 👈 show the clickable highlight
-        });
     }
 
+    // _createNextZone() {
+    //     // ==============================
+    //     // NEXT ZONE (EXIT TO CLASSROOM)
+    //     // ==============================
+
+    //     // Door zone settings (tweak these to line up with your door)
+    //     const DOOR_X = 600;      // center X of the door in world space
+    //     const DOOR_Y = 580;      // center Y of the door in world space
+    //     const DOOR_WIDTH = 70;  // width of the door zone
+    //     const DOOR_HEIGHT = 380; // height of the door zone
+
+    //     this.nextZone = this.add.zone(DOOR_X, DOOR_Y, DOOR_WIDTH, DOOR_HEIGHT);
+    //     // this.nextZone = this.add
+    //     //     .zone(1000, 700)
+    //     //     .setSize(200, 150);  // width 200, height 150
+    //     this.physics.world.enable(this.nextZone);
+    //     this.nextZone.body.setAllowGravity(false);
+    //     this.nextZone.body.setImmovable(true);
+    //     // this.nextZone.setVisible(false);
+    //     this.nextZoneVisible = false;
+    //     this.playerInNextZone = false; // 👈 NEW
+
+    //     // Debug red box for the zone
+    //     this.nextZoneDebug = this.add.graphics()
+    //         .setDepth(9998);
+
+    //     this.nextZoneDebug.lineStyle(2, 0xff0000, 1);
+    //     this.nextZoneDebug.strokeRect(
+    //         DOOR_X - DOOR_WIDTH / 2,
+    //         DOOR_Y - DOOR_HEIGHT / 2,
+    //         DOOR_WIDTH,
+    //         DOOR_HEIGHT
+    //     );
+
+
+    //     const zoneIndicator = this.add.graphics()
+    //         .fillStyle(0x00ff00, 0.3)
+    //         .fillRect(this.nextZone.x - 450, this.nextZone.y - 250, 100, 100)
+    //         .setVisible(true); // hide until unlocked
+
+    //     // Make the indicator clickable
+    //     zoneIndicator.setInteractive(
+    //         new Phaser.Geom.Rectangle(this.nextZone.x - 50, this.nextZone.y - 50, 100, 100),
+    //         Phaser.Geom.Rectangle.Contains
+    //     ).on("pointerdown", () => {
+    //         // Only go to next scene if:
+    //         // - zone is unlocked
+    //         // - player is physically in the zone
+    //         if (this.nextZoneVisible && this.playerInNextZone) {
+    //             this.goToNextScene();
+    //         }
+    //     });
+
+
+    //     this.zoneIndicator = zoneIndicator;
+
+    //     // Optional pulsing tween (just for visual feedback)
+    //     this.tweens.add({
+    //         targets: this.nextZone,
+    //         alpha: { from: 0.3, to: 0.7 },
+    //         duration: 1000,
+    //         yoyo: true,
+    //         repeat: -1
+    //     });
+
+    //     // When dialogue ends, unlock + show the clickable zone
+    //     this.events.on("dialogueEnded", () => {
+    //         this.nextZoneVisible = true;
+    //         this.nextZone.setVisible(true);
+    //         this.zoneIndicator.setVisible(true); // 👈 show the clickable highlight
+    //     });
+    // }
+    _createDoorExit() {
+        // 1) Door visual
+        const DOOR_X = 610;
+        const DOOR_Y = 587;
+        const DOOR_WIDTH = 120;
+        const DOOR_HEIGHT = 220;
+
+        this.door = this.add.image(DOOR_X, DOOR_Y, "classroomDoor")
+            .setInteractive({ useHandCursor: true })
+            .setDepth(10);
+
+        // 2) Physics zone around door (exit area)
+        this.exitZone = this.add.zone(DOOR_X, DOOR_Y, DOOR_WIDTH, DOOR_HEIGHT);
+        this.physics.world.enable(this.exitZone);
+        this.exitZone.body.setAllowGravity(false);
+        this.exitZone.body.setImmovable(true);
+
+        // 3) Debug box so you SEE the invisible zone
+        this.exitZoneDebug = this.add.graphics().setDepth(9998);
+        this.exitZoneDebug.lineStyle(2, 0xff0000, 1);
+        this.exitZoneDebug.strokeRect(
+            DOOR_X - DOOR_WIDTH / 2,
+            DOOR_Y - DOOR_HEIGHT / 2,
+            DOOR_WIDTH,
+            DOOR_HEIGHT
+        );
+
+        // 4) Flag to know if player is inside the zone
+        this.playerInExitZone = false;
+
+        // 5) Door click → only go next if player is inside zone
+        this.door.on("pointerdown", () => {
+            if (this.playerInExitZone) {
+                this.goToNextScene();
+            } else {
+                console.log("Too far from the door.");
+                // you can later show a small UI message instead
+            }
+        });
+    }
 
     _drawHallwayPolygon() {
         const g = this.debugGraphics;
@@ -312,9 +432,8 @@ export default class Chapter1Scene extends Phaser.Scene {
     }
 
 
-
-    showNPCInfo(npc) {
-        console.log(`${npc.name} is a villager from the forest.`);
+    showNPCInfo(npcboy) {
+        console.log(`${npcboy.name} is a villager from the forest.`);
     }
 
     // UPDATED: default start node now matches your hallway JSON
@@ -363,15 +482,24 @@ export default class Chapter1Scene extends Phaser.Scene {
         }
     }
 
-
     update(time, delta) {
+        this._updateNPCIndicators();
+        this._updateMovement();
+        this._updateDepthScaleAndClamp();
+        this._updateShadow();
+        // this._updateNextZoneOverlap();
+        this._updateExitZoneOverlap();  // 👈 just one clean call
+
+    }
+
+    _updateNPCIndicators() {
         // ============================================================
         // NPC INDICATOR(S)
         // ============================================================
-        if (this.npc && this.npcIndicator) {
+        if (this.npcboy && this.npcIndicator) {
             const d1 = Phaser.Math.Distance.Between(
                 this.ladyPlayer.x, this.ladyPlayer.y,
-                this.npc.x, this.npc.y
+                this.npcboy.x, this.npcboy.y
             );
 
             if (d1 < 150) this.npcIndicator.show();
@@ -380,10 +508,10 @@ export default class Chapter1Scene extends Phaser.Scene {
             this.npcIndicator.update();
         }
 
-        if (this.npc2 && this.npcIndicator2) {
+        if (this.npcgirl && this.npcIndicator2) {
             const d1 = Phaser.Math.Distance.Between(
                 this.ladyPlayer.x, this.ladyPlayer.y,
-                this.npc2.x, this.npc2.y
+                this.npcgirl.x, this.npcgirl.y
             );
 
             if (d1 < 150) this.npcIndicator2.show();
@@ -391,9 +519,10 @@ export default class Chapter1Scene extends Phaser.Scene {
 
             this.npcIndicator2.update();
         }
+        // If you have npcgirl / npcIndicator2, you can copy the block above.
+    }
 
-        // If you have npc2 / npcIndicator2, you can copy the block above.
-
+    _updateMovement() {
         // ============================================================
         // MOVEMENT
         // ============================================================
@@ -416,7 +545,9 @@ export default class Chapter1Scene extends Phaser.Scene {
         } else {
             this.ladyPlayer.anims.play("idle", true);
         }
+    }
 
+    _updateDepthScaleAndClamp() {
         // ============================================================
         // DEPTH, SCALE, HALLWAY CLAMP
         // ============================================================
@@ -442,43 +573,67 @@ export default class Chapter1Scene extends Phaser.Scene {
         const scaleFar = 0.7;  // at topY (740)
         const scaleNear = 1.4;  // at bottomY (1077)
         const scaleFactor = Phaser.Math.Linear(scaleFar, scaleNear, t);
+
         this.ladyPlayer.setScale(scaleFactor);
 
+        // 👇 stash it on "this" so other methods can use it
+        this._currentScaleFactor = scaleFactor;
 
         // // === HALLWAY X CLAMP (trapezoid) ===
         const minX = Phaser.Math.Linear(leftTopX, leftBottomX, t);
         const maxX = Phaser.Math.Linear(rightTopX, rightBottomX, t);
-
         this.ladyPlayer.x = Phaser.Math.Clamp(this.ladyPlayer.x, minX, maxX);
+    }
 
+    _updateShadow() {
+        const scale = this._currentScaleFactor ?? 1; // fallback to 1 if not set
         // ============================================================
         // SHADOW
         // ============================================================
         this.playerShadow.x = this.ladyPlayer.x;
         this.playerShadow.y = this.ladyPlayer.y + 10;  // just under feet
         this.playerShadow.setDepth(this.ladyPlayer.depth - 1);
-        this.playerShadow.scaleX = scaleFactor;
-        this.playerShadow.scaleY = scaleFactor * 0.4;
 
-        // ============================================================
-        // NEXT ZONE OVERLAP
-        // ============================================================
-
-        // Track if player is inside the zone, but DON'T auto-transition
-        this.playerInNextZone = false;
-
-        if (this.nextZoneVisible) {
-            this.physics.world.overlap(
-                this.ladyPlayer,
-                this.nextZone,
-                () => {
-                    this.playerInNextZone = true;
-                },
-                null,
-                this
-            );
-        }
-
+        this.playerShadow.scaleX = scale;
+        this.playerShadow.scaleY = scale * 0.4;
     }
+
+    // _updateNextZoneOverlap() {
+    //     // ============================================================
+    //     // NEXT ZONE OVERLAP
+    //     // ============================================================
+
+    //     // Track if player is inside the zone, but DON'T auto-transition
+    //     this.playerInNextZone = false;
+
+    //     if (this.nextZoneVisible) {
+    //         this.physics.world.overlap(
+    //             this.ladyPlayer,
+    //             this.nextZone,
+    //             () => {
+    //                 this.playerInNextZone = true;
+    //             },
+    //             null,
+    //             this
+    //         );
+    //     }
+
+    // }
+    _updateExitZoneOverlap() {
+        this.playerInExitZone = false;
+
+        if (!this.exitZone) return;
+
+        this.physics.world.overlap(
+            this.ladyPlayer,
+            this.exitZone,
+            () => {
+                this.playerInExitZone = true;
+            },
+            null,
+            this
+        );
+    }
+
 
 }
