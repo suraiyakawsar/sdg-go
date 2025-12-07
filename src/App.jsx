@@ -50,7 +50,7 @@ export default function App() {
       {/* Navbar stays inside pages (Home already includes it), so leave it commented out here */}
       {/* <Navbar /> */}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="sdg-go/" element={<Home />} />
         <Route path="/badges" element={<BadgePage />} />
         <Route path="/game" element={<Game />} />
         <Route path="/profile" element={<Profile />} />
