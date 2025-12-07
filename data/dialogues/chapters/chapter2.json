@@ -1,0 +1,121 @@
+{
+    "intro": [
+        {
+            "text": "You’ve reached the local park 🌳 — a place full of life and potential."
+        },
+        {
+            "text": "You notice a community group planting trees. They wave and ask if you’d like to join!",
+            "choices": [
+                {
+                    "text": "Of course! Let’s plant together 🌱",
+                    "next": "volunteer",
+                    "points": 10
+                },
+                {
+                    "text": "Maybe I’ll just watch for now 👀",
+                    "next": "observe",
+                    "points": 0
+                }
+            ]
+        }
+    ],
+
+    "volunteer": [
+        {
+            "text": "You grab a shovel and start planting saplings with the team."
+        },
+        {
+            "text": "Everyone’s smiling — small steps, big change 💚"
+        },
+        {
+            "text": "After a while, you notice a child throwing a plastic bottle on the ground.",
+            "choices": [
+                {
+                    "text": "Pick it up and throw it away properly ♻️",
+                    "next": "cleanup",
+                    "points": 5
+                },
+                {
+                    "text": "Ignore it, not your problem 😐",
+                    "next": "penalty",
+                    "points": -5
+                }
+            ]
+        }
+    ],
+
+    "observe": [
+        {
+            "text": "You watch the volunteers work hard — they seem to be enjoying it!"
+        },
+        {
+            "text": "You start to realize how teamwork can really make an impact.",
+            "choices": [
+                {
+                    "text": "Join in after all 🌿",
+                    "next": "volunteer",
+                    "points": 5
+                },
+                {
+                    "text": "Leave the park and continue exploring 🏙️",
+                    "next": "nextChapter",
+                    "points": 0
+                }
+            ]
+        }
+    ],
+
+    "cleanup": [
+        {
+            "text": "You quietly pick up the bottle and dispose of it properly."
+        },
+        {
+            "text": "The child notices and does the same with another bottle. You inspired someone today ✨"
+        },
+        {
+            "text": "Time to continue your journey?",
+            "choices": [
+                {
+                    "text": "Yes, move on ➡️",
+                    "next": "nextChapter",
+                    "points": 0
+                },
+                {
+                    "text": "Stay a bit longer",
+                    "next": "end",
+                    "points": 0
+                }
+            ]
+        }
+    ],
+
+    "penalty": [
+        {
+            "text": "You walk away, but something feels off…"
+        },
+        {
+            "text": "Even small actions can change the world — maybe next time you’ll make a better choice 🌍",
+            "choices": [
+                {
+                    "text": "You’re right, I’ll do better next time 💪",
+                    "next": "nextChapter",
+                    "points": 5
+                },
+                {
+                    "text": "Nah, still not my thing",
+                    "next": "end",
+                    "points": -3
+                }
+            ]
+        }
+    ],
+
+    "end": [
+        {
+            "text": "You take a moment to rest under a tree, reflecting on what you’ve seen 🍃"
+        },
+        {
+            "text": "Thanks for playing this chapter — every good choice counts!"
+        }
+    ]
+}

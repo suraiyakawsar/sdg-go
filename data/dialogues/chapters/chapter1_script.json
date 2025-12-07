@@ -1,0 +1,290 @@
+{
+    "chapterId": "chapter1",
+    "scenes": [
+        {
+            "id": "hallway",
+            "backgroundKey": "bgHallway",
+            "startNodeId": "h_intro_narration",
+            "exitUnlockedFlag": "chapter1_scene1_exit_unlocked",
+            "nodes": [
+                {
+                    "id": "h_intro_narration",
+                    "speaker": "narrator",
+                    "text": "First day of the new semester. The hallway feels a little louder, a little brighter... and full of posters you never noticed before."
+                },
+                {
+                    "id": "h_noticeboard",
+                    "speaker": "system",
+                    "text": "SUSTAINABILITY WEEK – Talks, clean-up events, food bank volunteering. Sign up at the cafeteria."
+                },
+                {
+                    "id": "h_friends_start",
+                    "speaker": "friendA",
+                    "text": "Oi, over here! You saw all the new posters around campus?",
+                    "choices": [
+                        {
+                            "id": "h_choice_seen_posters",
+                            "text": "Yeah, something about SDGs, right?",
+                            "sdgDelta": 5,
+                            "nextNodeId": "h_explain_positive"
+                        },
+                        {
+                            "id": "h_choice_not_sure",
+                            "text": "Not really… what’s SDG?",
+                            "sdgDelta": 3,
+                            "nextNodeId": "h_explain_neutral"
+                        },
+                        {
+                            "id": "h_choice_extra_work",
+                            "text": "Looks like extra work to me.",
+                            "sdgDelta": 0,
+                            "nextNodeId": "h_explain_pushback"
+                        }
+                    ]
+                },
+                {
+                    "id": "h_explain_positive",
+                    "speaker": "friendA",
+                    "text": "Yeah! Sustainable Development Goals. The uni is doing a whole week about it.",
+                    "autoNext": "h_explain_positive_b"
+                },
+                {
+                    "id": "h_explain_positive_b",
+                    "speaker": "friendB",
+                    "text": "They’re doing talks, clean-ups, even something with the campus food bank.",
+                    "autoNext": "h_friends_wrapup"
+                },
+                {
+                    "id": "h_explain_neutral",
+                    "speaker": "friendB",
+                    "text": "SDG stands for Sustainable Development Goals. Stuff like education, equality, climate…",
+                    "autoNext": "h_explain_neutral_b"
+                },
+                {
+                    "id": "h_explain_pushback",
+                    "speaker": "friendA",
+                    "text": "Maybe. But if we’re already stuck here studying, might as well make it mean something.",
+                    "autoNext": "h_explain_pushback_b"
+                },
+                {
+                    "id": "h_explain_pushback_b",
+                    "speaker": "friendB",
+                    "text": "You don’t have to save the whole world lah, just do something small.",
+                    "autoNext": "h_friends_wrapup"
+                },
+                {
+                    "id": "h_friends_wrapup",
+                    "speaker": "friendA",
+                    "text": "Anyway, the lecturer said today’s class is about it. If we’re late, that one is on you.",
+                    "autoNext": "h_objective_update"
+                },
+                {
+                    "id": "h_objective_update",
+                    "speaker": "system",
+                    "text": "New objective: Go to class.",
+                    "onComplete": {
+                        "setFlags": [
+                            "chapter1_scene1_dialogue_done"
+                        ],
+                        "unlockExit": true
+                    }
+                }
+            ]
+        },
+        {
+            "id": "classroom",
+            "backgroundKey": "bgClassroom",
+            "startNodeId": "c_intro_prof",
+            "exitUnlockedFlag": "chapter1_scene2_exit_unlocked",
+            "nodes": [
+                {
+                    "id": "c_intro_prof",
+                    "speaker": "professor",
+                    "text": "Good morning, everyone. Today we’re going to talk about something bigger than grades: the Sustainable Development Goals.",
+                    "autoNext": "c_prof_explain"
+                },
+                {
+                    "id": "c_prof_explain",
+                    "speaker": "professor",
+                    "text": "There are 17 SDGs. They cover things like poverty, education, climate, equality… and we’re going to connect them to your lives here on campus.",
+                    "autoNext": "c_prof_question"
+                },
+                {
+                    "id": "c_prof_question",
+                    "speaker": "professor",
+                    "text": "So, be honest. How many of you actually think students like you can make a difference?",
+                    "choices": [
+                        {
+                            "id": "c_choice_confident",
+                            "text": "If we work together, yeah.",
+                            "sdgDelta": 5,
+                            "nextNodeId": "c_prof_answer_confident"
+                        },
+                        {
+                            "id": "c_choice_unsure",
+                            "text": "Maybe? But it feels far from us.",
+                            "sdgDelta": 3,
+                            "nextNodeId": "c_prof_answer_unsure"
+                        },
+                        {
+                            "id": "c_choice_dismissive",
+                            "text": "I don’t think we can do much.",
+                            "sdgDelta": -1,
+                            "nextNodeId": "c_prof_answer_dismissive"
+                        }
+                    ]
+                },
+                {
+                    "id": "c_prof_answer_confident",
+                    "speaker": "professor",
+                    "text": "Exactly. Change usually starts with small groups who take things seriously. Campus is a perfect place to experiment.",
+                    "autoNext": "c_prof_foodbank"
+                },
+                {
+                    "id": "c_prof_answer_unsure",
+                    "speaker": "professor",
+                    "text": "That’s fair. It can feel distant. That’s why your projects this semester will focus on real issues around you.",
+                    "autoNext": "c_prof_foodbank"
+                },
+                {
+                    "id": "c_prof_answer_dismissive",
+                    "speaker": "professor",
+                    "text": "I get that reaction a lot. But by the end of this semester, I hope you’ll prove yourself wrong.",
+                    "autoNext": "c_prof_foodbank"
+                },
+                {
+                    "id": "c_prof_foodbank",
+                    "speaker": "professor",
+                    "text": "For example, some of your seniors worked with the campus food bank last year. They helped redistribute surplus food to students who needed it.",
+                    "autoNext": "c_friend_whisper"
+                },
+                {
+                    "id": "c_friend_whisper",
+                    "speaker": "friend",
+                    "text": "(whispers) Food bank actually sounds kind of interesting, doesn’t it?",
+                    "autoNext": "c_system_idea"
+                },
+                {
+                    "id": "c_system_idea",
+                    "speaker": "system",
+                    "text": "New idea unlocked: Campus Food Bank.",
+                    "onComplete": {
+                        "setFlags": [
+                            "chapter1_scene2_dialogue_done"
+                        ],
+                        "unlockExit": true
+                    }
+                }
+            ]
+        },
+        {
+            "id": "cafeteria",
+            "backgroundKey": "bgCafeteria",
+            "startNodeId": "f_intro_friends",
+            "exitUnlockedFlag": "chapter1_scene3_exit_unlocked",
+            "nodes": [
+                {
+                    "id": "f_intro_friends",
+                    "speaker": "friendA",
+                    "text": "Over here! How was class?",
+                    "choices": [
+                        {
+                            "id": "f_choice_interesting",
+                            "text": "Interesting, actually.",
+                            "sdgDelta": 2,
+                            "nextNodeId": "f_friend_react_interesting"
+                        },
+                        {
+                            "id": "f_choice_intense",
+                            "text": "Kind of intense, but okay.",
+                            "sdgDelta": 1,
+                            "nextNodeId": "f_friend_react_intense"
+                        }
+                    ]
+                },
+                {
+                    "id": "f_friend_react_interesting",
+                    "speaker": "friendB",
+                    "text": "Same. The SDG stuff makes everything feel… bigger than just assignments.",
+                    "autoNext": "f_friend_foodbank_intro"
+                },
+                {
+                    "id": "f_friend_react_intense",
+                    "speaker": "friendB",
+                    "text": "Yeah, but at least it’s about something real. Not just theory.",
+                    "autoNext": "f_friend_foodbank_intro"
+                },
+                {
+                    "id": "f_friend_foodbank_intro",
+                    "speaker": "friendA",
+                    "text": "We were just talking about that food bank the lecturer mentioned. They’re asking for student helpers this week.",
+                    "autoNext": "f_friend_question"
+                },
+                {
+                    "id": "f_friend_question",
+                    "speaker": "friendA",
+                    "text": "They need people to help sort and pack food after classes. What do you think? Want to join?",
+                    "choices": [
+                        {
+                            "id": "f_choice_join_yes",
+                            "text": "Yes. I want to help.",
+                            "sdgDelta": 5,
+                            "setFlags": [
+                                "chapter2_joinedFoodBank"
+                            ],
+                            "nextNodeId": "f_friend_join_yes"
+                        },
+                        {
+                            "id": "f_choice_join_maybe",
+                            "text": "Maybe… I’ll see how my schedule is.",
+                            "sdgDelta": 2,
+                            "nextNodeId": "f_friend_join_maybe"
+                        },
+                        {
+                            "id": "f_choice_join_no",
+                            "text": "I don’t know if I’m the right person for that.",
+                            "sdgDelta": 0,
+                            "nextNodeId": "f_friend_join_no"
+                        }
+                    ]
+                },
+                {
+                    "id": "f_friend_join_yes",
+                    "speaker": "friendB",
+                    "text": "Nice! We’ll go together. I’ll send you the details later.",
+                    "autoNext": "f_friend_closing"
+                },
+                {
+                    "id": "f_friend_join_maybe",
+                    "speaker": "friendB",
+                    "text": "That’s okay. Even one day helps. Just let us know when you’re free.",
+                    "autoNext": "f_friend_closing"
+                },
+                {
+                    "id": "f_friend_join_no",
+                    "speaker": "friendA",
+                    "text": "You don’t have to be perfect for this. You just have to care a little. Think about it, okay?",
+                    "autoNext": "f_friend_closing"
+                },
+                {
+                    "id": "f_friend_closing",
+                    "speaker": "friendA",
+                    "text": "Anyway, drinks first, saving the world later.",
+                    "autoNext": "f_system_end"
+                },
+                {
+                    "id": "f_system_end",
+                    "speaker": "system",
+                    "text": "End of Chapter 1: Awareness Begins.",
+                    "onComplete": {
+                        "setFlags": [
+                            "chapter1_completed",
+                            "chapter1_scene3_decision_done"
+                        ],
+                        "unlockExit": true
+                    }
+                }
+            ]
+        }
+    ]
+}

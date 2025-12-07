@@ -1,0 +1,28 @@
+{
+    "chapter1Scenes": [
+        {
+            "id": "scene1",
+            "title": "Campus Hallway",
+            "setting": "Campus hallway",
+            "background": "campus_hallway",
+            "dialogueId": "scene1Intro",
+            "prompt": "Storyboard frame, Malaysian university hallway, students walking and chatting, posters about sustainability, warm daylight, slight pixelated 2.5D art style."
+        },
+        {
+            "id": "scene2",
+            "title": "Classroom",
+            "setting": "Classroom",
+            "background": "classroom",
+            "dialogueId": "scene2Intro",
+            "prompt": "Storyboard frame, classroom interior, university students listening to lecturer showing SDG presentation on projector, realistic Malaysian setting, 2.5D style."
+        },
+        {
+            "id": "scene3",
+            "title": "Courtyard",
+            "setting": "Courtyard or cafeteria",
+            "background": "courtyard",
+            "dialogueId": "scene3Intro",
+            "prompt": "Storyboard frame, outdoor campus cafeteria with greenery, students sitting and talking about SDGs, warm tone, hopeful vibe, slight pixel art texture."
+        }
+    ]
+}

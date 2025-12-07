@@ -1,0 +1,74 @@
+{
+    "section1": {
+        "files": [
+            {
+                "url": "/assets/images/environments/bgHallway.png",
+                "type": "image",
+                "key": "bgHallway"
+            },
+            {
+                "url": "/assets/images/environments/bgClassroom.png",
+                "type": "image",
+                "key": "bgClassroom"
+            },
+            {
+                "url": "/assets/images/environments/bgCafeteria.png",
+                "type": "image",
+                "key": "bgCafeteria"
+            },
+            {
+                "url": "/assets/hero-image.png",
+                "type": "image",
+                "key": "hero-image"
+            },
+            {
+                "url": "/assets/images/characters/npcboy.png",
+                "type": "image",
+                "key": "npcboy"
+            },
+            {
+                "url": "/assets/images/characters/npcgirl.png",
+                "type": "image",
+                "key": "npcgirl"
+            },
+            {
+                "url": "/assets/images/props/trash1.png",
+                "type": "image",
+                "key": "trash1"
+            },
+            {
+                "url": "/assets/images/props/trash2.png",
+                "type": "image",
+                "key": "trash2"
+            },
+            {
+                "url": "/assets/images/props/classroomDoor.png",
+                "type": "image",
+                "key": "classroomDoor"
+            },
+            {
+                "url": "/assets/images/props/noticeboard.png",
+                "type": "image",
+                "key": "noticeboard"
+            },
+            {
+                "url": "/assets/images/props/students.png",
+                "type": "image",
+                "key": "students"
+            },
+            {
+                "url": "/assets/images/characters/teacher.png",
+                "type": "image",
+                "key": "teacher"
+            }
+        ]
+    },
+    "meta": {
+        "app": "Phaser Editor 2D - Asset Pack Editor",
+        "contentType": "phasereditor2d.pack.core.AssetContentType",
+        "url": "https://phasereditor2d.com",
+        "version": 2,
+        "showAllFilesInBlocks": false,
+        "visible": true
+    }
+}
