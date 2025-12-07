@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import Player from "../objects/Player";
 import DialogueManager from "../objects/DialogueManager";
 import { SceneManager } from "../../utils/sceneManager";
-import { emit } from "../../utils/eventBus";
+import { emit, on } from "../../utils/eventBus";
 import { addSDGPoints, getPoints } from "../../utils/sdgPoints";
 import TooltipManager from "../objects/TooltipManager";
 import NPCIndicator from "../objects/NPCIndicator";
@@ -26,8 +26,11 @@ export default class Chapter1Scene extends Phaser.Scene {
         this.sdgPointsObj = { points: data?.sdgPoints || getPoints() || 0 };
         // Objective tracking
         this.trashCollected = 0;
-        this.trashGoal = 2; // Number of trash items needed
+        this.trashGoal = 2;
         this.objectiveCompleted = false;
+        this.objectiveStep = 1;      // 1 = NPC/door, 2 = trash
+        this.activeConversation = null; // "npcgirl", "npcboy", "noticeboard", etc.
+
     }
 
     preload() {
@@ -44,7 +47,7 @@ export default class Chapter1Scene extends Phaser.Scene {
     }
 
     create() {
-        this._createDebug();
+        // this._createDebug();
         this._createUILayer();
         this._createCameraAndBackground();
         this._createPlayer();
@@ -56,7 +59,51 @@ export default class Chapter1Scene extends Phaser.Scene {
         this._createDoorExit();
         this._startIntroDialogue();    // 👈 new helper, see below
 
+        // ✅ PRIMARY: talk to friend, unlock next area
+        emit("updateObjective", {
+            slot: "primary",
+            collected: 0,
+            goal: 1,
+            description: "Talk to your friend and unlock the next area.",
+            complete: false,
+        });
+
+        // ✅ SECONDARY PREVIEW: trash (locked until primary done)
+        emit("updateObjective", {
+            slot: "secondary",
+            preview: true,
+            active: false,
+            collected: 0,
+            goal: 2,
+            description: "Collect 2 pieces of trash around the hallway.",
+        });
+
+
+        // 🔗 OLD: you can keep this, but it clearly isn't firing for npcgirl
+        // on("dialogueEnded", () => this._handleDialogueEnded());
+
+        // 🔗 Listen for the specific system line that changes the objective
+        // 🔗 Listen for DialogueManager's unlock event from JSON onComplete
+        on("sceneExitUnlocked", (payload) => {
+            const { sceneId, exitFlag } = payload || {};
+
+            console.log("[Chapter1Scene] sceneExitUnlocked:", sceneId, exitFlag);
+
+            // This matches your JSON for the hallway scene
+            if (
+                sceneId === "hallway" &&
+                exitFlag === "chapter1_scene1_exit_unlocked" &&
+                this.objectiveStep === 1 &&
+                !this.objectiveCompleted
+            ) {
+                console.log("[Chapter1Scene] Completing Objective 1 + unlocking door from sceneExitUnlocked.");
+
+                this._handleNPCObjectiveComplete(); // updates RightSidebar, sets Step 2 (trash)
+                this._unlockDoorGlow();             // door tint + glow
+            }
+        });
     }
+
     _startIntroDialogue() {
         if (!this.dialogueManager) {
             console.warn("[Scene] dialogueManager not ready, cannot start intro dialogue.");
@@ -229,6 +276,7 @@ export default class Chapter1Scene extends Phaser.Scene {
 
         // NPC click → show tooltip (then your TooltipManager can call startDialogue)
         this.npcboy.on("pointerdown", () => {
+            this.activeConversation = "npcboy";   // 👈 add this
             this.tooltipManager.show(
                 this.npcboy.x,
                 this.npcboy.y - this.npcboy.displayHeight / 2,
@@ -236,6 +284,7 @@ export default class Chapter1Scene extends Phaser.Scene {
             );
         });
         this.npcgirl.on("pointerdown", () => {
+            this.activeConversation = "npcgirl";  // 👈 add this
             this.tooltipManager.show(
                 this.npcgirl.x,
                 this.npcgirl.y - this.npcgirl.displayHeight / 2,
@@ -252,9 +301,91 @@ export default class Chapter1Scene extends Phaser.Scene {
         });
     }
 
+    // _handleNPCObjectiveComplete() {
+    //     // Only if we are actually on step 1 and not already done
+    //     if (this.objectiveStep !== 1 || this.objectiveCompleted) return;
+
+    //     this.objectiveCompleted = true;
+
+    //     // ✅ Mark Objective 1 as done in the RightSidebar (0/1 -> 1/1)
+    //     emit("updateObjective", 1);
+
+    //     // Optional reward for finishing the convo + unlocking door
+    //     emit("updateSDGPoints", 10);
+    //     emit("badgeEarned", "Hallway Unlocked! 🔓");
+
+    //     // 👉 Move to Objective 2: trash
+    //     this.objectiveStep = 2;
+    //     this.objectiveCompleted = false;
+    //     this.trashCollected = 0;
+    //     this.trashGoal = 2;
+
+    //     // Set the new objective in the RightSidebar
+    //     emit("updateObjective", {
+    //         collected: 0,
+    //         goal: this.trashGoal,
+    //         description: "Collect 2 pieces of trash around the hallway.",
+    //     });
+    // }
+
+    _handleNPCObjectiveComplete() {
+        if (this.objectiveStep !== 1 || this.objectiveCompleted) return;
+
+        this.objectiveCompleted = true;
+
+        // ✅ Mark primary as done (1/1, complete)
+        emit("updateObjective", {
+            slot: "primary",
+            delta: 1,      // move 0/1 → 1/1
+            complete: true
+        });
+
+        // Optional reward
+        emit("updateSDGPoints", 10);
+        emit("badgeEarned", "Hallway Unlocked! 🔓");
+
+        // 👉 Move to Step 2: trash
+        this.objectiveStep = 2;
+        this.objectiveCompleted = false;
+        this.trashCollected = 0;
+        this.trashGoal = 2;
+
+        // 🔓 Promote secondary: from 'preview' to active
+        emit("updateObjective", {
+            slot: "secondary",
+            active: true,
+            preview: false,
+            collected: 0,
+            goal: this.trashGoal,
+            description: "Collect 2 pieces of trash around the hallway.",
+        });
+    }
+
+
+    // _createTrashObjective() {
+    //     // ==============================
+    //     // TRASH OBJECTIVE (UNCHANGED)
+    //     // ==============================
+    //     this.trash1 = this.add.image(900, 900, "trash1")
+    //         .setInteractive()
+    //         .setScale(0.3);
+
+    //     this.trash2 = this.add.image(900, 800, "trash2")
+    //         .setInteractive()
+    //         .setScale(0.2);
+
+    //     this.trash1.on("pointerdown", () => this.handleTrashClick(this.trash1));
+    //     this.trash2.on("pointerdown", () => this.handleTrashClick(this.trash2));
+
+    //     emit("updateObjective", {
+    //         collected: this.trashCollected,
+    //         goal: this.trashGoal
+    //     });
+    // }
+
     _createTrashObjective() {
         // ==============================
-        // TRASH OBJECTIVE (UNCHANGED)
+        // TRASH OBJECTIVE
         // ==============================
         this.trash1 = this.add.image(900, 900, "trash1")
             .setInteractive()
@@ -267,11 +398,13 @@ export default class Chapter1Scene extends Phaser.Scene {
         this.trash1.on("pointerdown", () => this.handleTrashClick(this.trash1));
         this.trash2.on("pointerdown", () => this.handleTrashClick(this.trash2));
 
-        emit("updateObjective", {
-            collected: this.trashCollected,
-            goal: this.trashGoal
-        });
+        // ❌ REMOVE this, it was overwriting Objective 1:
+        // emit("updateObjective", {
+        //     collected: this.trashCollected,
+        //     goal: this.trashGoal
+        // });
     }
+
 
     _createInput() {
         // ==============================
@@ -357,6 +490,7 @@ export default class Chapter1Scene extends Phaser.Scene {
     //         this.zoneIndicator.setVisible(true); // 👈 show the clickable highlight
     //     });
     // }
+
     _createDoorExit() {
         // 1) Door visual
         const DOOR_X = 610;
@@ -368,6 +502,10 @@ export default class Chapter1Scene extends Phaser.Scene {
             .setInteractive({ useHandCursor: true })
             .setDepth(10);
 
+        // 🚫 Door starts locked
+        this.doorUnlocked = false;
+        this.doorGlowTween = null;
+
         // 2) Physics zone around door (exit area)
         this.exitZone = this.add.zone(DOOR_X, DOOR_Y, DOOR_WIDTH, DOOR_HEIGHT);
         this.physics.world.enable(this.exitZone);
@@ -375,26 +513,50 @@ export default class Chapter1Scene extends Phaser.Scene {
         this.exitZone.body.setImmovable(true);
 
         // 3) Debug box so you SEE the invisible zone
-        this.exitZoneDebug = this.add.graphics().setDepth(9998);
-        this.exitZoneDebug.lineStyle(2, 0xff0000, 1);
-        this.exitZoneDebug.strokeRect(
-            DOOR_X - DOOR_WIDTH / 2,
-            DOOR_Y - DOOR_HEIGHT / 2,
-            DOOR_WIDTH,
-            DOOR_HEIGHT
-        );
+        // this.exitZoneDebug = this.add.graphics().setDepth(9998);
+        // this.exitZoneDebug.lineStyle(2, 0xff0000, 1);
+        // this.exitZoneDebug.strokeRect(
+        //     DOOR_X - DOOR_WIDTH / 2,
+        //     DOOR_Y - DOOR_HEIGHT / 2,
+        //     DOOR_WIDTH,
+        //     DOOR_HEIGHT
+        // );
+
 
         // 4) Flag to know if player is inside the zone
         this.playerInExitZone = false;
 
         // 5) Door click → only go next if player is inside zone
         this.door.on("pointerdown", () => {
+            if (!this.doorUnlocked) {
+                console.log("The door is locked. Talk to your friend first.");
+                return;
+            }
+
             if (this.playerInExitZone) {
                 this.goToNextScene();
             } else {
                 console.log("Too far from the door.");
-                // you can later show a small UI message instead
             }
+        });
+
+    }
+
+    _unlockDoorGlow() {
+        if (this.doorUnlocked || !this.door) return;
+
+        this.doorUnlocked = true;
+
+        // Visual feedback
+        this.door.setTint(0x88ffcc);
+
+        this.doorGlowTween = this.tweens.add({
+            targets: this.door,
+            alpha: { from: 0.6, to: 1 },
+            duration: 800,
+            yoyo: true,
+            repeat: 1,
+            ease: "Sine.easeInOut",
         });
     }
 
@@ -425,10 +587,64 @@ export default class Chapter1Scene extends Phaser.Scene {
 
     goToNextScene() {
         this.nextZoneVisible = false;
+
+        // ✅ Tell React UI that Chapter 1 is completed; put this in scene 3. Cafeteria
+        emit("updateChapterProgress", 1);
+
         this.cameras.main.fadeOut(800);
         this.cameras.main.once("camerafadeoutcomplete", () => {
             SceneManager.nextScene(this, getPoints());
         });
+    }
+
+    // _handleDialogueEnded() {
+    //     console.log("[Chapter1Scene] dialogueEnded fired. step:", this.objectiveStep, "activeConversation:", this.activeConversation);
+
+
+    //     if (
+    //         this.objectiveStep === 1 &&
+    //         !this.objectiveCompleted &&
+    //         this.activeConversation === "npcgirl"
+    //     ) {
+    //         console.log("[Chapter1Scene] Completing NPC objective for npcgirl.");
+    //         this._handleNPCObjectiveComplete();
+    //         this._unlockDoorGlow();
+    //     }
+
+    //     this.activeConversation = null;
+    // }
+    _handleDialogueEnded(payload) {
+        const { sceneId, lastNodeId } = payload || {};
+
+        console.log(
+            "[Chapter1Scene] dialogueEnded fired.",
+            "sceneId:", sceneId,
+            "lastNodeId:", lastNodeId,
+            "step:", this.objectiveStep,
+            "activeConversation:", this.activeConversation
+        );
+
+        // Only react when:
+        // - we’re in the hallway scene from JSON
+        // - we just finished the h_objective_update node
+        // - we’re still on Objective Step 1
+        if (
+            sceneId === "hallway" &&
+            lastNodeId === "h_objective_update" &&
+            this.objectiveStep === 1 &&
+            !this.objectiveCompleted
+        ) {
+            console.log("[Chapter1Scene] Completing NPC objective after hallway dialogue.");
+
+            // In case activeConversation got lost, we can force it:
+            this.activeConversation = "npcgirl";
+
+            this._handleNPCObjectiveComplete();
+            this._unlockDoorGlow();
+        }
+
+        // Reset so next convo starts clean
+        this.activeConversation = null;
     }
 
 
@@ -451,9 +667,21 @@ export default class Chapter1Scene extends Phaser.Scene {
     handleTrashClick(trashItem) {
         if (!trashItem.scene) return;
 
-        const points = 10;
+        // Ignore trash until Objective 2 is active
+        if (this.objectiveStep !== 2) {
+            console.log("Trash collection is not active yet.");
+            return;
+        }
+
+        const points = 3; // points per trash
+
+        // 1) Update your core SDG system
         addSDGPoints(points);
 
+        // 2) Also push it to the React sidebar (RightSidebar listens to this)
+        emit("updateSDGPoints", points);
+
+        // 3) Floating +points text in the scene
         const msg = this.add.text(trashItem.x, trashItem.y - 40, `+${points} SDG Points!`, {
             font: "16px Arial",
             fill: "#0f0",
@@ -470,15 +698,31 @@ export default class Chapter1Scene extends Phaser.Scene {
 
         trashItem.destroy();
 
+        // 4) Update local count + objective bar (SECONDARY)
         this.trashCollected++;
         emit("updateObjective", {
-            collected: this.trashCollected,
-            goal: this.trashGoal
+            slot: "secondary",
+            delta: 1,
         });
 
-        if (!this.objectiveCompleted && this.trashCollected >= this.trashGoal) {
+        // 5) Check if trash objective (Step 2) is done
+        if (!this.objectiveCompleted &&
+            this.objectiveStep === 2 &&
+            this.trashCollected >= this.trashGoal) {
+
             this.objectiveCompleted = true;
+
+            // Badge for finishing trash objective
             emit("badgeEarned", "Eco Warrior! 🏅");
+
+
+            // If you want a Step 3 later:
+            // this.objectiveStep = 3;
+            // emit("updateObjective", {
+            //   collected: 0,
+            //   goal: 1,
+            //   description: "Go to the classroom door to continue.",
+            // });
         }
     }
 
@@ -489,7 +733,6 @@ export default class Chapter1Scene extends Phaser.Scene {
         this._updateShadow();
         // this._updateNextZoneOverlap();
         this._updateExitZoneOverlap();  // 👈 just one clean call
-
     }
 
     _updateNPCIndicators() {
@@ -631,9 +874,7 @@ export default class Chapter1Scene extends Phaser.Scene {
                 this.playerInExitZone = true;
             },
             null,
-            this
+            this,
         );
     }
-
-
 }
