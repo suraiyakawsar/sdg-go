@@ -46,16 +46,12 @@ export default function App() {
   }
 
   return (
-    <Router>
-      {/* Navbar stays inside pages (Home already includes it), so leave it commented out here */}
-      {/* <Navbar /> */}
-      <Routes>
-        <Route path="sdg-go/" element={<Home />} />
-        <Route path="/badges" element={<BadgePage />} />
-        <Route path="/game" element={<Game />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/onboarding" element={<OnboardingPage />} /> {/* ✅ */}
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/badges" element={<BadgePage />} />
+      <Route path="/game" element={<Game />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/onboarding" element={<OnboardingPage />} /> {/* ✅ */}
+    </Routes>
   );
 }
