@@ -57,7 +57,7 @@ export default function ObjectiveBar({ sidebarMode = false }) {
     return (
         <div className="fixed top-3 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-3 bg-black/60 backdrop-blur-md rounded-full shadow-lg pointer-events-auto">
             <img
-                src="/assets/images/ui/obj-icon.png"
+                src="assets/images/ui/obj-icon.png"
                 alt="Objective Icon"
                 className="w-6 h-6"
             />

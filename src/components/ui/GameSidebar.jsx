@@ -566,7 +566,7 @@ export default function GameSidebar({ currentChapter = 1 }) {
             <div className="flex flex-col items-center gap-2 mb-1">
                 <div className="relative">
                     <img
-                        src="/assets/images/ui/sdg-icon.png"
+                        src="assets/images/ui/sdg-icon.png"
                         alt="SDG Explorer"
                         className="w-14 h-14 rounded-2xl shadow-lg border border-white/20 object-cover"
                     />

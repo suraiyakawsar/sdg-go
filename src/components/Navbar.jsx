@@ -136,7 +136,7 @@ export default function Navbar() {
                     onClick={() => setOpen((prev) => !prev)}
                 >
                     <img
-                        src="assets/images/characters/lady.png"
+                        src="assets/images/characters/ladyy.png"
                         alt="profile"
                         className="w-10 h-10 rounded-full"
                     />
