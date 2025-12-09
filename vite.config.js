@@ -5,7 +5,7 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // base: '/sdg-go/',
+  base: '/sdg-go/',
   plugins: [react(), tailwindcss()],
   build: {
     chunkSizeWarningLimit: 2000,
