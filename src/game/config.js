@@ -62,7 +62,6 @@ import MainMenuScene from "./scenes/MainMenuScene";
 import Chapter1SceneShow from "./scenes/Chapter1SceneShow";
 import UIScene from "./scenes/UIScene";
 import Chapter2Scene from "./scenes/Chapter2Scene";
-import NineSlicePlugin from "phaser3-nineslice";
 
 import { GAME_LAYOUT } from "../config/gameLayoutConfig"; // ← adjust path if needed
 
@@ -102,13 +101,6 @@ const config = {
   ],
 
   plugins: {
-    global: [
-      {
-        key: "NineSlicePlugin",
-        plugin: window.rexNinePatchPlugin || Phaser.Plugins.NineSlicePlugin,
-        start: true,
-      },
-    ],
   },
 };
 

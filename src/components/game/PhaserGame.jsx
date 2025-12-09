@@ -1,7 +1,6 @@
 // src/components/game/PhaserGame.jsx
 import { useEffect, useRef } from "react";
 import Phaser from "phaser";
-import "phaser3-nineslice";
 import { emit } from "../../utils/eventBus";
 
 // Import Phaser scenes
