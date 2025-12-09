@@ -33,14 +33,14 @@ export default class Chapter2Scene extends Phaser.Scene {
     preload() {
         this.load.atlas(
             "ladyy",
-            "/assets/images/characters/ladyy.png",
-            "/assets/images/characters/spritesheet.json"
+            "assets/images/characters/ladyy.png",
+            "assets/images/characters/spritesheet.json"
         );
 
         // NEW JSON (your final chapter script)
-        this.load.json("chapter1Data", "/data/dialogues/chapters/chapter1_script.json");
+        this.load.json("chapter1Data", "data/dialogues/chapters/chapter1_script.json");
 
-        this.load.pack("assets-pack", "/assets/assets-pack.json");
+        this.load.pack("assets-pack", "assets/assets-pack.json");
     }
 
     create() {

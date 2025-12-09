@@ -20,8 +20,8 @@ export default class BootScene extends Phaser.Scene {
         // );
         this.load.atlas(
             "ladyy",
-            "/assets/images/characters/ladyy.png",
-            "/assets/images/characters/spritesheet.json"
+            "assets/images/characters/ladyy.png",
+            "assets/images/characters/spritesheet.json"
         );
 
     }
