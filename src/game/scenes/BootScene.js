@@ -4,20 +4,6 @@ export default class BootScene extends Phaser.Scene {
     }
 
     preload() {
-        // this.load.image('loading', '/assets/images/ui/loading.png');
-        // this.load.image('bg', '/assets/images/environments/bg.png');
-        // this.load.spritesheet('lady', '/assets/images/characters/lady.png', {
-        //     frameWidth: 32,
-        //     frameHeight: 48,
-        // });
-        // this.load.spritesheet('lady', 'assets/images/characters/lady.png', {
-        // });
-
-
-        // this.load.spritesheet('lady',
-        //     'assets/images/characters/spritesheet.json',
-        //     { frameWidth: 200, frameHeight: 460 }
-        // );
         this.load.atlas(
             "ladyy",
             "assets/images/characters/ladyy.png",
@@ -27,6 +13,44 @@ export default class BootScene extends Phaser.Scene {
     }
 
     create() {
-        this.scene.start('Chapter1Scene');
+        //Hallway Scene
+        // this.scene.start('Chapter1Scene');
+
+        //Classroom Scene
+        // this.scene.start('Chapter1Scene2');
+
+        //Cafeteria Scene
+        // this.scene.start('Chapter1Scene3');
+
+        //Food Bank Scene
+        // this.scene.start('Chapter2Scene1');
+
+        //Community Center STREET Scene
+        // this.scene.start('Chapter2Scene2');
+
+        //Park Scene SEATED FRIENDLY NPC
+        // this.scene.start('Chapter2Scene3');
+
+        //Garden Scene
+        this.scene.start('Chapter3Scene1');
+
+        //Classroom Scene 2
+        // this.scene.start('Chapter3Scene2');
+
+        //Nighttime Courtyard Scene
+        // this.scene.start('Chapter3Scene3');
+
+
+        // this.scene.start('Chapter4Scene1');
+
+        // this.scene.start('Chapter4Scene2');
+
+        // this.scene.start('Chapter4Scene3');
+
+        // this.scene.start('Chapter5Scene1');
+
+        // this.scene.start('Chapter5Scene2');
+
+        // this.scene.start('Chapter5Scene3');
     }
 }

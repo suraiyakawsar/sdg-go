@@ -595,4 +595,70 @@ export default class DialogueManager {
     if (this.container) this.container.destroy();
     this.scene.input.keyboard.off("keydown", this._onKeyDown);
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // helper
+  _applyFlags(flags) {
+    if (!Array.isArray(flags) || flags.length === 0) return;
+
+    // If you have a real Flags store, call it here instead.
+    // For now: use registry so it persists within the game session.
+    flags.forEach((f) => this.scene.registry.set(f, true));
+
+    emit("flagsUpdated", flags);
+  }
+
+  // inside your CHOICE handler (where you already do sdgDelta + nextNodeId)
+  handleChoice(choice) {
+    if (!choice) return;
+
+    // sdg points
+    if (typeof choice.sdgDelta === "number") {
+      emit("updateSDGPoints", choice.sdgDelta);
+    }
+
+    // ✅ choice flags (you use this in f_choice_join_yes)
+    if (Array.isArray(choice.setFlags)) {
+      this._applyFlags(choice.setFlags);
+    }
+
+    // go next
+    if (choice.nextNodeId) {
+      this.startDialogue(choice.nextNodeId);
+    } else {
+      this.endDialogue?.();
+    }
+  }
+
+  // inside your NODE COMPLETE logic (when node finishes & no autoNext / end)
+  _handleNodeComplete(node) {
+    const oc = node?.onComplete;
+    if (!oc) return;
+
+    // ✅ node flags
+    if (Array.isArray(oc.setFlags)) {
+      this._applyFlags(oc.setFlags);
+    }
+
+    // ✅ unlock exit
+    if (oc.unlockExit) {
+      emit("sceneExitUnlocked", {
+        sceneId: this.sceneConfig?.id,                 // "cafeteria"
+        exitFlag: this.sceneConfig?.exitUnlockedFlag,  // "chapter1_scene3_exit_unlocked"
+      });
+    }
+  }
+
 }

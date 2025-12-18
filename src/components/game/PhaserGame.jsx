@@ -6,8 +6,21 @@ import { emit } from "../../utils/eventBus";
 // Import Phaser scenes
 import BootScene from "../../game/scenes/BootScene";
 import UIScene from "../../game/scenes/UIScene";
-import Chapter1Scene from "../../game/scenes/Chapter1Scene";
-import Chapter2Scene from "../../game/scenes/Chapter2Scene";
+import Chapter1Scene from "../../game/scenes/Chapter1/Chapter1Scene";
+import Chapter1Scene2 from "../../game/scenes/Chapter1/Chapter1Scene2";
+import Chapter1Scene3 from "../../game/scenes/Chapter1/Chapter1Scene3";
+import Chapter2Scene1 from "../../game/scenes/Chapter2/Chapter2Scene1";
+import Chapter2Scene2 from "../../game/scenes/Chapter2/Chapter2Scene2";
+import Chapter2Scene3 from "../../game/scenes/Chapter2/Chapter2Scene3";
+import Chapter3Scene1 from "../../game/scenes/Chapter3/Chapter3Scene1";
+import Chapter3Scene2 from "../../game/scenes/Chapter3/Chapter3Scene2";
+import Chapter3Scene3 from "../../game/scenes/Chapter3/Chapter3Scene3";
+import Chapter4Scene1 from "../../game/scenes/Chapter4/Chapter4Scene1";
+import Chapter4Scene2 from "../../game/scenes/Chapter4/Chapter4Scene2";
+import Chapter4Scene3 from "../../game/scenes/Chapter4/Chapter4Scene3";
+import Chapter5Scene1 from "../../game/scenes/Chapter5/Chapter5Scene1";
+import Chapter5Scene2 from "../../game/scenes/Chapter5/Chapter5Scene2";
+import Chapter5Scene3 from "../../game/scenes/Chapter5/Chapter5Scene3";
 
 export default function PhaserGame() {
   const containerRef = useRef(null);
@@ -29,7 +42,7 @@ export default function PhaserGame() {
     //     default: "arcade",
     //     arcade: { gravity: { y: 0 }, debug: false },
     //   },
-    //   scene: [BootScene, UIScene, Chapter1Scene, Chapter2Scene],
+    //   scene: [BootScene, UIScene, Chapter1Scene, Chapter1Scene2],
     //   scale: {
     //     mode: Phaser.Scale.FIT,
     //     autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -62,7 +75,7 @@ export default function PhaserGame() {
         roundPixels: false,
       },
 
-      scene: [BootScene, UIScene, Chapter1Scene, Chapter2Scene],
+      scene: [BootScene, UIScene, Chapter1Scene, Chapter1Scene2, Chapter1Scene3, Chapter2Scene1, Chapter2Scene2, Chapter2Scene3, Chapter3Scene1, Chapter3Scene2, Chapter3Scene3, Chapter4Scene1, Chapter4Scene2, Chapter4Scene3, Chapter5Scene1, Chapter5Scene2, Chapter5Scene3],
     };
 
     phaserRef.current = new Phaser.Game(config);

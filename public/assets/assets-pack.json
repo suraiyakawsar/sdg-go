@@ -2,24 +2,9 @@
     "section1": {
         "files": [
             {
-                "url": "assets/images/environments/bgHallway.png",
+                "url": "assets/images/environments/bgClassroom - door.png",
                 "type": "image",
-                "key": "bgHallway"
-            },
-            {
-                "url": "assets/images/environments/bgClassroom.png",
-                "type": "image",
-                "key": "bgClassroom"
-            },
-            {
-                "url": "assets/images/environments/bgCafeteria.png",
-                "type": "image",
-                "key": "bgCafeteria"
-            },
-            {
-                "url": "assets/hero-image.png",
-                "type": "image",
-                "key": "hero-image"
+                "key": "bgClassroomDoor"
             },
             {
                 "url": "assets/images/characters/npcboy.png",
@@ -47,6 +32,11 @@
                 "key": "classroomDoor"
             },
             {
+                "url": "assets/images/props/bgCafeteriaDoor.png",
+                "type": "image",
+                "key": "bgCafeteriaDoor"
+            },
+            {
                 "url": "assets/images/props/noticeboard.png",
                 "type": "image",
                 "key": "noticeboard"
@@ -60,6 +50,86 @@
                 "url": "assets/images/characters/teacher.png",
                 "type": "image",
                 "key": "teacher"
+            },
+            {
+                "url": "assets/images/characters/brandon_npc.png",
+                "type": "image",
+                "key": "brandon_npc"
+            },
+            {
+                "url": "assets/images/characters/crystal_npc.png",
+                "type": "image",
+                "key": "crystal_npc"
+            },
+            {
+                "url": "assets/images/characters/elvis_npc.png",
+                "type": "image",
+                "key": "elvis_npc"
+            },
+            {
+                "url": "assets/images/characters/zahir_npc.png",
+                "type": "image",
+                "key": "zahir_npc"
+            },
+            {
+                "url": "assets/images/environments/bgHallway.png",
+                "type": "image",
+                "key": "bgHallway"
+            },
+            {
+                "url": "assets/images/environments/bgClassroom.png",
+                "type": "image",
+                "key": "bgClassroom"
+            },
+            {
+                "url": "assets/images/environments/bgCafeteria.png",
+                "type": "image",
+                "key": "bgCafeteria"
+            },
+            {
+                "url": "assets/images/environments/bgFoodBank.png",
+                "type": "image",
+                "key": "bgFoodBank"
+            },
+            {
+                "url": "assets/images/environments/bgStreet.png",
+                "type": "image",
+                "key": "bgStreet"
+            },
+            {
+                "url": "assets/images/environments/bgMeeting.png",
+                "type": "image",
+                "key": "bgMeeting"
+            },
+            {
+                "url": "assets/images/environments/bgCampusGarden.png",
+                "type": "image",
+                "key": "bgCampusGarden"
+            },
+            {
+                "url": "assets/images/environments/bgClassroom2.png",
+                "type": "image",
+                "key": "bgClassroom2"
+            },
+            {
+                "url": "assets/images/environments/bgNightCourtyard.png",
+                "type": "image",
+                "key": "bgNightCourtyard"
+            },
+            {
+                "url": "assets/images/environments/bgPond.png",
+                "type": "image",
+                "key": "bgPond"
+            },
+            {
+                "url": "assets/images/environments/bgWaitingRoom.png",
+                "type": "image",
+                "key": "bgWaitingRoom"
+            },
+            {
+                "url": "assets/images/environments/bgRoadside.png",
+                "type": "image",
+                "key": "bgRoadside"
             }
         ]
     },

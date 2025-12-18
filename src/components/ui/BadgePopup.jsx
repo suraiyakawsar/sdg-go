@@ -55,7 +55,7 @@ export default function BadgePopup({ badgeName = "Achievement", badgeIcon = "üè
                 <div className="absolute -bottom-2 left-6 text-yellow-200 animate-spark2">‚úß</div>
 
                 {/* Animation keyframes */}
-                <style jsx>{`
+                <style>{`
                     /* Entrance slide + pop */
                     @keyframes achievementIn {
                         0% { 
