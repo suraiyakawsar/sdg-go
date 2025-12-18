@@ -1,7 +1,8 @@
 // src/components/ui/GameSidebar.jsx
 import { useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { emit } from "../../utils/eventBus";
+import { emit } from "../../utils/eventBus"; // React
+import { on, off } from "../../utils/eventBus"; // Phaser
 import { FiAward, FiUser, FiHome, FiBookOpen } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePlayer } from "../../pages/PlayerContext";
@@ -34,16 +35,29 @@ export default function GameSidebar({ currentChapter = 1 }) {
         []
     );
 
+    // function handleClick(btn) {
+    //     if (btn.id === "howto") {
+    //         emit("openHowToPlay", { source: "GameSidebar" });
+    //         return; // ⛔️ do not setActive
+    //     }
+
+    //     setActive(btn.id);
+    //     emit(btn.event, { source: "GameSidebar" });
+    // }
+
+
+
     function handleClick(btn) {
-        if (btn.id === "howto") {
+        if (btn.type === "overlay") {
             emit("openHowToPlay", { source: "GameSidebar" });
-            return; // ⛔️ do not setActive
+            return;
         }
 
-        setActive(btn.id);
-        emit(btn.event, { source: "GameSidebar" });
+        if (btn.type === "route") {
+            navigate(btn.to);
+            setActive(btn.id);
+        }
     }
-
 
 
     // Optional: auto-highlight based on current route

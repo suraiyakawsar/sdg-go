@@ -14,7 +14,7 @@ export default class BootScene extends Phaser.Scene {
 
     create() {
         //Hallway Scene
-        // this.scene.start('Chapter1Scene');
+        this.scene.start('Chapter1Scene');
 
         //Classroom Scene
         // this.scene.start('Chapter1Scene2');
@@ -32,10 +32,10 @@ export default class BootScene extends Phaser.Scene {
         // this.scene.start('Chapter2Scene3');
 
         //Garden Scene
-        this.scene.start('Chapter3Scene1');
+        // this.scene.start('Chapter3Scene1');
 
         //Classroom Scene 2
-        // this.scene.start('Chapter3Scene2');
+        // this.scene.start('Chapter3Scene2'); //come back to it to fix walk area
 
         //Nighttime Courtyard Scene
         // this.scene.start('Chapter3Scene3');

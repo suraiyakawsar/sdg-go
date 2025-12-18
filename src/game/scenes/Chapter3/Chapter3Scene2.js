@@ -10,6 +10,53 @@ export default class Chapter3Scene2 extends BaseStoryScene {
             startNodeId: "r_intro_prof",
             nextSceneKey: "Chapter3Scene3",
             exitFlag: "chapter3_scene2_exit_unlocked",
+
+
+            walkArea: {
+                topY: 844,
+                bottomY: 1077,
+                leftTopX: 893,
+                rightTopX: 1125,
+                leftBottomX: 400,
+                rightBottomX: 1125,
+            },
+
+            // perfect scaling values found via tracker:
+            scaleFar: 0.75,
+            scaleNear: 1.45,
+            // Add this if you use Option 1:
+            scaleTopOffset: 20,
+
+            player: {
+                x: 1125,        // Change this to your desired horizontal start
+                y: 1077,        // Change this to your desired vertical start
+                key: "ladyy",  // Your sprite texture key
+                frame: "frame1.png"
+            },
+
+
+            // ✅ door (swap texture/x/y to match your artwork)
+            door: {
+                x: 300,
+                y: 600,
+                w: 120,
+                h: 220,
+                texture: "doorFoodBank", // <-- replace (or reuse a generic door)
+            },
+
+
+            npcs: [
+                {
+                    name: "organizer",
+                    texture: "npc_organizer",   // <-- replace
+                    x: 900,
+                    y: 650,
+                    scale: 0.35,
+                    dialogueId: "ch2_scene2_organizer", // <-- replace
+                }
+            ],
+
+
         });
     }
 

@@ -6,7 +6,7 @@ import { getPoints } from "../../utils/sdgPoints";
 import TooltipManager from "../objects/TooltipManager";
 import NPCIndicator from "../objects/NPCIndicator";
 import InteractionPanel from "../objects/InteractionPanel";
-
+import HowToPlayScene from "./HowToPlayScene";
 export default class BaseStoryScene extends Phaser.Scene {
     constructor(key, config = {}) {
         super(key);
@@ -118,7 +118,11 @@ export default class BaseStoryScene extends Phaser.Scene {
                 return;
             }
 
-            this.scene.pause(currentKey);
+            if (this.scene.isActive(currentKey)) {
+                this.scene.pause(currentKey);
+            }
+
+
             this.scene.launch("HowToPlayScene", {
                 returnSceneKey: currentKey,
                 isBoot: false,

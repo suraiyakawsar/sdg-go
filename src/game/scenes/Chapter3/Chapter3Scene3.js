@@ -10,6 +10,48 @@ export default class Chapter3Scene3 extends BaseStoryScene {
             startNodeId: "n_intro_reflection",
             nextSceneKey: "Chapter4Scene1",
             exitFlag: "chapter3_completed",
+
+
+
+            // ✅ walk polygon — replace with your new scene’s values
+            walkArea: {
+                topY: 790,
+                bottomY: 1077,
+                leftTopX: 534,
+                rightTopX: 1500,
+                leftBottomX: 200,
+                rightBottomX: 1600,
+            },
+
+            // perfect scaling values found via tracker:
+            scaleFar: 0.75,
+            scaleNear: 1.45,
+            // Add this if you use Option 1:
+            scaleTopOffset: 20,
+
+
+            // ✅ door (swap texture/x/y to match your artwork)
+            door: {
+                x: 300,
+                y: 600,
+                w: 120,
+                h: 220,
+                texture: "doorFoodBank", // <-- replace (or reuse a generic door)
+            },
+
+
+            npcs: [
+                {
+                    name: "organizer",
+                    texture: "npc_organizer",   // <-- replace
+                    x: 900,
+                    y: 650,
+                    scale: 0.35,
+                    dialogueId: "ch2_scene2_organizer", // <-- replace
+                }
+            ],
+
+
         });
     }
 

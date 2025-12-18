@@ -21,6 +21,7 @@ import Chapter4Scene3 from "../../game/scenes/Chapter4/Chapter4Scene3";
 import Chapter5Scene1 from "../../game/scenes/Chapter5/Chapter5Scene1";
 import Chapter5Scene2 from "../../game/scenes/Chapter5/Chapter5Scene2";
 import Chapter5Scene3 from "../../game/scenes/Chapter5/Chapter5Scene3";
+import HowToPlayScene from "../../game/scenes/HowToPlayScene";
 
 export default function PhaserGame() {
   const containerRef = useRef(null);
@@ -75,7 +76,7 @@ export default function PhaserGame() {
         roundPixels: false,
       },
 
-      scene: [BootScene, UIScene, Chapter1Scene, Chapter1Scene2, Chapter1Scene3, Chapter2Scene1, Chapter2Scene2, Chapter2Scene3, Chapter3Scene1, Chapter3Scene2, Chapter3Scene3, Chapter4Scene1, Chapter4Scene2, Chapter4Scene3, Chapter5Scene1, Chapter5Scene2, Chapter5Scene3],
+      scene: [BootScene, UIScene, HowToPlayScene, Chapter1Scene, Chapter1Scene2, Chapter1Scene3, Chapter2Scene1, Chapter2Scene2, Chapter2Scene3, Chapter3Scene1, Chapter3Scene2, Chapter3Scene3, Chapter4Scene1, Chapter4Scene2, Chapter4Scene3, Chapter5Scene1, Chapter5Scene2, Chapter5Scene3],
     };
 
     phaserRef.current = new Phaser.Game(config);
