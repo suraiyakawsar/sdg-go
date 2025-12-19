@@ -916,12 +916,19 @@ export default class Chapter1Scene extends BaseStoryScene {
                 rightBottomX: 1600,
             },
 
+            // perfect scaling values found via tracker:
+            scaleFar: 0.70,
+            scaleNear: 1.3,
+            // Add this if you use Option 1:
+            scaleTopOffset: 20,
+
+
             door: { x: 610, y: 587, w: 120, h: 220, texture: "classroomDoor" },
 
             npcs: [
                 { name: "npcboy", texture: "npcboy", x: 480, y: 762, scale: 0.4, dialogueId: "h_intro_narration" },
                 { name: "npcgirl", texture: "npcgirl", x: 1700, y: 740, scale: 0.3, dialogueId: "h_friends_start" },
-                { name: "noticeBoard", texture: "noticeboard", x: 330, y: 355, scale: 1.0, dialogueId: "h_noticeboard" },
+                { name: "noticeBoard", texture: "noticeboard", x: 320, y: 355, scale: 1.0, dialogueId: "h_noticeboard", tooltip: { offsetX: 120, offsetY: 0 } },
             ],
         });
 

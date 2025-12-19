@@ -489,12 +489,18 @@ export default class Chapter1Scene2 extends BaseStoryScene {
                 rightBottomX: 1600,
             },
 
+            // perfect scaling values found via tracker:
+            scaleFar: 0.80,
+            scaleNear: 1.4,
+            // Add this if you use Option 1:
+            scaleTopOffset: 20,
+
             // door (same logic everywhere)
             door: { x: 317, y: 588, w: 120, h: 220, texture: "bgClassroomDoor" },
 
             // NPC list (BaseStoryScene will create + tooltip + indicator automatically)
             npcs: [
-                { name: "teacher", texture: "teacher", x: 950, y: 630, scale: 0.3, dialogueId: "c_intro_prof" },
+                { name: "teacher", texture: "teacher", x: 950, y: 630, scale: 0.37, dialogueId: "c_intro_prof" },
                 { name: "bench1", texture: "brandon_npc", x: 684, y: 835, scale: 0.19, dialogueId: "c_bench_1" },
                 { name: "bench2", texture: "crystal_npc", x: 1210, y: 825, scale: 1.35, dialogueId: "c_bench_2" },
                 { name: "bench3", texture: "elvis_npc", x: 740, y: 725, scale: 1.3, dialogueId: "c_bench_3" },

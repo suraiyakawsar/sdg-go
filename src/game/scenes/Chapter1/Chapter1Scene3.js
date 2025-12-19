@@ -435,6 +435,13 @@ export default class Chapter1Scene3 extends BaseStoryScene {
         bottomY: 1080
       },
 
+
+      // perfect scaling values found via tracker:
+      scaleFar: 0.80,
+      scaleNear: 1.55,
+      // Add this if you use Option 1:
+      scaleTopOffset: 20,
+
       door: { x: 200, y: 493, w: 120, h: 220, texture: "bgCafeteriaDoor" },
 
       npcs: [

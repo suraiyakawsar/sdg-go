@@ -21,6 +21,11 @@ export default class Chapter2Scene3 extends BaseStoryScene {
                 rightBottomX: 1670,
             },
 
+            // perfect scaling values found via tracker:
+            scaleFar: 0.7,
+            scaleNear: 1.6,
+            // Add this if you use Option 1:
+            scaleTopOffset: 20,
 
             // ✅ door (swap texture/x/y to match your artwork)
             door: {

@@ -29,7 +29,7 @@ export default class Chapter2Scene2 extends BaseStoryScene {
             },
 
             // perfect scaling values found via tracker:
-            scaleFar: 0.75,
+            scaleFar: 0.8,
             scaleNear: 1.45,
             // Add this if you use Option 1:
             scaleTopOffset: 20,

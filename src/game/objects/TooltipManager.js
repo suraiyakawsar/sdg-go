@@ -180,7 +180,16 @@ export default class TooltipManager {
         const screenY = (worldY - cam.worldView.y) * cam.zoom;
 
         // Position a bit offset from NPC
-        this.tooltipContainer.setPosition(screenX + 90, screenY - 65);
+        // this.tooltipContainer.setPosition(screenX + 90, screenY - 65);
+        const offsetX = npc?.tooltipConfig?.offsetX ?? 90;
+        const offsetY = npc?.tooltipConfig?.offsetY ?? -65;
+
+        this.tooltipContainer.setPosition(
+            screenX + offsetX,
+            screenY + offsetY
+        );
+
+
 
         this.tooltipContainer.setVisible(true);
         this.tooltipContainer.setAlpha(0);

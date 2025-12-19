@@ -57,7 +57,7 @@ export default class BaseStoryScene extends Phaser.Scene {
 
         this._registerGlobalUIListeners();
 
-        this._debugWalkArea();
+        // this._debugWalkArea();
 
         // this._createDebugGraphics();
 
@@ -324,6 +324,7 @@ export default class BaseStoryScene extends Phaser.Scene {
 
             npc.dialogueId = cfg.dialogueId;
             npc.name = cfg.name;
+            npc.tooltipConfig = cfg.tooltip || null;
 
             npc._indicator = new NPCIndicator(this, npc);
             bindTooltip(npc);

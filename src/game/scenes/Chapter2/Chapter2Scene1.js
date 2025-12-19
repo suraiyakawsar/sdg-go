@@ -50,6 +50,14 @@ export default class Chapter2Scene1 extends BaseStoryScene {
                 playerSpeed: 200
             },
 
+
+            // perfect scaling values found via tracker:
+            scaleFar: 1,
+            scaleNear: 1.4,
+            // Add this if you use Option 1:
+            scaleTopOffset: 20,
+
+
             // ✅ door (swap texture/x/y to match your artwork)
             door: {
                 x: 300,

@@ -40,6 +40,13 @@ export default class Chapter3Scene3 extends BaseStoryScene {
             },
 
 
+            // perfect scaling values found via tracker:
+            scaleFar: 0.,
+            scaleNear: 1.45,
+            // Add this if you use Option 1:
+            scaleTopOffset: 20,
+
+
             npcs: [
                 {
                     name: "organizer",
