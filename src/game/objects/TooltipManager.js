@@ -169,7 +169,11 @@ export default class TooltipManager {
     }
 
     show(worldX, worldY, npc) {
-        console.log("[TooltipManager] show() called for npc:", npc?.dialogueId);
+        console.log("[TooltipManager] currentNPC:", npc);
+        console.log("[TooltipManager] inspectDialogueId:", npc?.inspectDialogueId);
+
+
+        // console.log("[TooltipManager] show() called for npc:", npc?.dialogueId);
 
         this.currentNPC = npc;
 
@@ -210,18 +214,17 @@ export default class TooltipManager {
             if (key === "q") {
                 // Talk
                 this.hide();
-                console.log(
-                    "[Tooltip] Q pressed, starting dialogue:",
-                    this.currentNPC?.dialogueId
-                );
+                // console.log(
+                //     "[Tooltip] Q pressed, starting dialogue:",
+                //     this.currentNPC?.dialogueId
+                // );
                 this.scene.startDialogue(
                     this.currentNPC?.dialogueId || "h_intro_narration"
                 );
             } else if (key === "e") {
-                // Inspect
-                console.log("[Tooltip] E pressed, show info for NPC");
-                this.scene.showNPCInfo(this.currentNPC);
                 this.hide();
+                this.scene.dialogueManager.startInspectDialogue(this.currentNPC?.inspectDialogueId);
+
             }
         };
 
@@ -247,15 +250,18 @@ export default class TooltipManager {
             this.scene.showNPCInfo(this.currentNPC);
             this.hide();
         });
+        this.tooltipContainer.y -= 10;
 
         // --- Pop-in animation ---
         this.scene.tweens.add({
             targets: this.tooltipContainer,
+            y: this.tooltipContainer.y + 10,
             alpha: 1,
             scale: this.baseScale,
             duration: 200,
             ease: "Back.Out"
         });
+
     }
 
     // ============================================================

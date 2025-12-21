@@ -2,7 +2,7 @@
     "chapterId": "chapter2",
     "scenes": [
         {
-            "id": "chapter2_scene1",
+            "id": "foodbank",
             "backgroundKey": "bgFoodBank",
             "startNodeId": "ch2_s1_intro",
             "exitUnlockedFlag": "chapter2_scene1_exit_unlocked",

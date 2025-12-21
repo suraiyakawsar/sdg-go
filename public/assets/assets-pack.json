@@ -2,104 +2,9 @@
     "section1": {
         "files": [
             {
-                "url": "assets/images/environments/bgClassroom - door.png",
-                "type": "image",
-                "key": "bgClassroomDoor"
-            },
-            {
-                "url": "assets/images/characters/npcboy.png",
-                "type": "image",
-                "key": "npcboy"
-            },
-            {
-                "url": "assets/images/characters/npcgirl.png",
-                "type": "image",
-                "key": "npcgirl"
-            },
-            {
-                "url": "assets/images/props/trash1.png",
-                "type": "image",
-                "key": "trash1"
-            },
-            {
-                "url": "assets/images/props/trash2.png",
-                "type": "image",
-                "key": "trash2"
-            },
-            {
-                "url": "assets/images/props/classroomDoor.png",
-                "type": "image",
-                "key": "classroomDoor"
-            },
-            {
-                "url": "assets/images/props/bgCafeteriaDoor.png",
-                "type": "image",
-                "key": "bgCafeteriaDoor"
-            },
-            {
-                "url": "assets/images/props/noticeboard.png",
-                "type": "image",
-                "key": "noticeboard"
-            },
-            {
-                "url": "assets/images/props/students.png",
-                "type": "image",
-                "key": "students"
-            },
-            {
-                "url": "assets/images/characters/teacher.png",
-                "type": "image",
-                "key": "teacher"
-            },
-            {
-                "url": "assets/images/characters/brandon_npc.png",
-                "type": "image",
-                "key": "brandon_npc"
-            },
-            {
-                "url": "assets/images/characters/crystal_npc.png",
-                "type": "image",
-                "key": "crystal_npc"
-            },
-            {
-                "url": "assets/images/characters/elvis_npc.png",
-                "type": "image",
-                "key": "elvis_npc"
-            },
-            {
-                "url": "assets/images/characters/zahir_npc.png",
-                "type": "image",
-                "key": "zahir_npc"
-            },
-            {
-                "url": "assets/images/environments/bgHallway.png",
-                "type": "image",
-                "key": "bgHallway"
-            },
-            {
-                "url": "assets/images/environments/bgClassroom.png",
-                "type": "image",
-                "key": "bgClassroom"
-            },
-            {
                 "url": "assets/images/environments/bgCafeteria.png",
                 "type": "image",
                 "key": "bgCafeteria"
-            },
-            {
-                "url": "assets/images/environments/bgFoodBank.png",
-                "type": "image",
-                "key": "bgFoodBank"
-            },
-            {
-                "url": "assets/images/environments/bgStreet.png",
-                "type": "image",
-                "key": "bgStreet"
-            },
-            {
-                "url": "assets/images/environments/bgMeeting.png",
-                "type": "image",
-                "key": "bgMeeting"
             },
             {
                 "url": "assets/images/environments/bgCampusGarden.png",
@@ -107,9 +12,24 @@
                 "key": "bgCampusGarden"
             },
             {
+                "url": "assets/images/environments/bgClassroom.png",
+                "type": "image",
+                "key": "bgClassroom"
+            },
+            {
                 "url": "assets/images/environments/bgClassroom2.png",
                 "type": "image",
                 "key": "bgClassroom2"
+            },
+            {
+                "url": "assets/images/environments/bgFoodBank.png",
+                "type": "image",
+                "key": "bgFoodBank"
+            },
+            {
+                "url": "assets/images/environments/bgMeeting.png",
+                "type": "image",
+                "key": "bgMeeting"
             },
             {
                 "url": "assets/images/environments/bgNightCourtyard.png",
@@ -122,14 +42,179 @@
                 "key": "bgPond"
             },
             {
+                "url": "assets/images/environments/bgRoadside.png",
+                "type": "image",
+                "key": "bgRoadside"
+            },
+            {
+                "url": "assets/images/environments/bgStreet.png",
+                "type": "image",
+                "key": "bgStreet"
+            },
+            {
                 "url": "assets/images/environments/bgWaitingRoom.png",
                 "type": "image",
                 "key": "bgWaitingRoom"
             },
             {
-                "url": "assets/images/environments/bgRoadside.png",
+                "url": "assets/images/environments/bgHallway.png",
                 "type": "image",
-                "key": "bgRoadside"
+                "key": "bgHallway"
+            },
+            {
+                "url": "assets/images/props/cafeteriaPoster1.png",
+                "type": "image",
+                "key": "cafeteriaPoster1"
+            },
+            {
+                "url": "assets/images/props/cafeteriaPoster2.png",
+                "type": "image",
+                "key": "cafeteriaPoster2"
+            },
+            {
+                "url": "assets/images/props/cafeteriaPoster3.png",
+                "type": "image",
+                "key": "cafeteriaPoster3"
+            },
+            {
+                "url": "assets/images/props/squirrel.png",
+                "type": "image",
+                "key": "squirrel"
+            },
+            {
+                "url": "assets/images/props/streetDoor.png",
+                "type": "image",
+                "key": "streetDoor"
+            },
+            {
+                "url": "assets/images/props/bgFoodBankDoor.png",
+                "type": "image",
+                "key": "doorFoodBank"
+            },
+            {
+                "url": "assets/images/props/bgCafeteriaDoor.png",
+                "type": "image",
+                "key": "bgCafeteriaDoor"
+            },
+            {
+                "url": "assets/images/props/bgClassroomDoor.png",
+                "type": "image",
+                "key": "bgClassroomDoor"
+            },
+            {
+                "url": "assets/images/props/bgMeeting - girl.png",
+                "type": "image",
+                "key": "bgMeetingGirl"
+            },
+            {
+                "url": "assets/images/props/bgMeeting - tree.png",
+                "type": "image",
+                "key": "bgMeetingTree"
+            },
+            {
+                "url": "assets/images/props/bgNight - Fountain.png",
+                "type": "image",
+                "key": "bgNightFountain"
+            },
+            {
+                "url": "assets/images/props/bgNight - Lamps.png",
+                "type": "image",
+                "key": "bgNightLamps"
+            },
+            {
+                "url": "assets/images/props/box.png",
+                "type": "image",
+                "key": "box"
+            },
+            {
+                "url": "assets/images/props/bag.png",
+                "type": "image",
+                "key": "bag"
+            },
+            {
+                "url": "assets/images/props/classroomDoor.png",
+                "type": "image",
+                "key": "classroomDoor"
+            },
+            {
+                "url": "assets/images/props/clock.png",
+                "type": "image",
+                "key": "clock"
+            },
+            {
+                "url": "assets/images/props/noticeboard.png",
+                "type": "image",
+                "key": "noticeboard"
+            },
+            {
+                "url": "assets/images/props/poster_sdg4.png",
+                "type": "image",
+                "key": "poster_sdg4"
+            },
+            {
+                "url": "assets/images/props/poster_sdg13.png",
+                "type": "image",
+                "key": "poster_sdg13"
+            },
+            {
+                "url": "assets/images/props/students.png",
+                "type": "image",
+                "key": "students"
+            },
+            {
+                "url": "assets/images/props/trash1.png",
+                "type": "image",
+                "key": "trash1"
+            },
+            {
+                "url": "assets/images/props/trash2.png",
+                "type": "image",
+                "key": "trash2"
+            },
+            {
+                "url": "assets/images/characters/brosNPCs.png",
+                "type": "image",
+                "key": "brosNPCs"
+            },
+            {
+                "url": "assets/images/characters/matthewNPC.png",
+                "type": "image",
+                "key": "matthewNPC"
+            },
+            {
+                "url": "assets/images/characters/aprilNPC.png",
+                "type": "image",
+                "key": "aprilNPC"
+            },
+            {
+                "url": "assets/images/characters/bgCafeteria - buddiess.png",
+                "type": "image",
+                "key": "buddies"
+            },
+            {
+                "url": "assets/images/characters/npcboy.png",
+                "type": "image",
+                "key": "npcboy"
+            },
+            {
+                "url": "assets/images/characters/npcgirl.png",
+                "type": "image",
+                "key": "npcgirl"
+            },
+            {
+                "url": "assets/images/characters/npcgirl - Copy.png",
+                "type": "image",
+                "key": "npcgirlflip"
+            },
+            {
+                "url": "assets/images/characters/teacher.png",
+                "type": "image",
+                "key": "teacher"
+            },
+            {
+                "url": "assets/images/characters/bgFoodBank - Owen.png",
+                "type": "image",
+                "key": "owenOrganizer"
             }
         ]
     },

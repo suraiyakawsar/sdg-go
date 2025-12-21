@@ -14,7 +14,7 @@
                 },
                 {
                     "id": "h_noticeboard",
-                    "speaker": "system",
+                    "speaker": "narrator",
                     "text": "SUSTAINABILITY WEEK – Talks, clean-up events, food bank volunteering. Sign up at the cafeteria."
                 },
                 {
@@ -177,36 +177,21 @@
                 },
                 {
                     "id": "c_bench_1",
+                    "inspectDialogueId": "inspect_c_bench_1",
                     "speaker": "student",
                     "text": "Honestly… I thought SDGs were just another poster thing. But the food bank example is actually real.",
                     "sdgDelta": 1
                 },
                 {
-                    "id": "c_bench_2",
-                    "speaker": "student",
-                    "text": "If we’re doing projects on real issues, I want one that actually helps someone — not just a slideshow.",
-                    "sdgDelta": 1
-                },
-                {
-                    "id": "c_bench_3",
-                    "speaker": "student",
-                    "text": "You know what’s wild? A lot of people around us need help and we don’t notice… because everyone looks 'fine'.",
-                    "sdgDelta": 1
-                },
-                {
-                    "id": "c_bench_4",
-                    "speaker": "student",
-                    "text": "If we can change stuff on campus first… maybe it won’t feel so impossible outside of campus.",
-                    "sdgDelta": 1
-                },
-                {
                     "id": "c_poster_sdg4",
+                    "inspectDialogueId": "inspect_c_poster_sdg4",
                     "speaker": "system",
                     "text": "Poster: SDG 4 — Quality Education. Education isn't just exams; it’s access, support, and equal opportunity.",
                     "sdgDelta": 2
                 },
                 {
                     "id": "c_poster_sdg13",
+                    "inspectDialogueId": "inspect_c_poster_sdg13",
                     "speaker": "system",
                     "text": "Poster: SDG 13 — Climate Action. Small campus habits add up: energy use, waste, transport choices.",
                     "sdgDelta": 2
@@ -219,6 +204,26 @@
             "startNodeId": "f_intro_friends",
             "exitUnlockedFlag": "chapter1_scene3_exit_unlocked",
             "nodes": [
+                {
+                    "id": "friend_busy",
+                    "text": "friendA looks busy. Maybe talking would help.",
+                    "choices": [
+                        {
+                            "text": "Okay",
+                            "nextNodeId": null
+                        }
+                    ]
+                },
+                {
+                    "id": "friend_looking_posters",
+                    "text": "friendA is looking at posters for the Food Bank. Maybe I should also volunteer?",
+                    "choices": [
+                        {
+                            "text": "Okay",
+                            "nextNodeId": null
+                        }
+                    ]
+                },
                 {
                     "id": "f_intro_friends",
                     "speaker": "friendA",
@@ -320,6 +325,80 @@
                             "chapter1_scene3_decision_done"
                         ],
                         "unlockExit": true
+                    }
+                },
+                {
+                    "id": "f_talk_alice",
+                    "speaker": "alice",
+                    "text": "Oh—hey. From the hallway earlier, right?",
+                    "choices": [
+                        {
+                            "id": "f_alice_choice_ask",
+                            "text": "Yeah. You looked busy earlier. What are you working on?",
+                            "sdgDelta": 2,
+                            "nextNodeId": "f_alice_explain"
+                        },
+                        {
+                            "id": "f_alice_choice_smalltalk",
+                            "text": "Just wanted to say hi.",
+                            "sdgDelta": 1,
+                            "nextNodeId": "f_alice_smalltalk"
+                        }
+                    ]
+                },
+                {
+                    "id": "f_alice_explain",
+                    "speaker": "alice",
+                    "text": "I’m helping a senior organise volunteers for a food bank nearby. We’re short on people this week.",
+                    "autoNext": "f_alice_reflect"
+                },
+                {
+                    "id": "f_alice_reflect",
+                    "speaker": "alice",
+                    "text": "Honestly, I didn’t think I’d get involved either. But once you see how many families rely on it… it’s hard to ignore.",
+                    "choices": [
+                        {
+                            "id": "f_alice_choice_support",
+                            "text": "That sounds meaningful. I respect that.",
+                            "sdgDelta": 3,
+                            "nextNodeId": "f_alice_positive"
+                        },
+                        {
+                            "id": "f_alice_choice_neutral",
+                            "text": "That sounds like a lot of responsibility.",
+                            "sdgDelta": 1,
+                            "nextNodeId": "f_alice_neutral"
+                        }
+                    ]
+                },
+                {
+                    "id": "f_alice_positive",
+                    "speaker": "alice",
+                    "text": "Thanks. Even small help adds up. If you’re ever curious, I can tell you more later.",
+                    "onComplete": {
+                        "setFlags": [
+                            "talked_to_alice_cafeteria"
+                        ]
+                    }
+                },
+                {
+                    "id": "f_alice_neutral",
+                    "speaker": "alice",
+                    "text": "Yeah… but someone has to step up eventually, right?",
+                    "onComplete": {
+                        "setFlags": [
+                            "talked_to_alice_cafeteria"
+                        ]
+                    }
+                },
+                {
+                    "id": "f_alice_smalltalk",
+                    "speaker": "alice",
+                    "text": "Hey is good too. Catch you around.",
+                    "onComplete": {
+                        "setFlags": [
+                            "talked_to_alice_cafeteria"
+                        ]
                     }
                 }
             ]

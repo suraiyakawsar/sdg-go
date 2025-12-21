@@ -5,7 +5,7 @@ import { emit, on, off } from "../../utils/eventBus";
 import { getPoints } from "../../utils/sdgPoints";
 import TooltipManager from "../objects/TooltipManager";
 import NPCIndicator from "../objects/NPCIndicator";
-import InteractionPanel from "../objects/InteractionPanel";
+// import InteractionPanel from "../objects/InteractionPanel";
 import HowToPlayScene from "./HowToPlayScene";
 export default class BaseStoryScene extends Phaser.Scene {
     constructor(key, config = {}) {
@@ -15,11 +15,14 @@ export default class BaseStoryScene extends Phaser.Scene {
         this._currentScaleFactor = 1;
         this._bus = [];
         this.playerInExitZone = false;
+        // this.doorUnlocked = true;
         this.doorUnlocked = false;
 
         this._howToHandler = null;
 
         this.walkArea = config.walkArea ? structuredClone(config.walkArea) : null;
+
+        this.currentInteractable = null;
 
     }
 
@@ -60,6 +63,14 @@ export default class BaseStoryScene extends Phaser.Scene {
         // this._debugWalkArea();
 
         // this._createDebugGraphics();
+
+        // Dialogue ended listener for NPC objectives
+        this.events.on("dialogueEnded", ({ lastNodeId }) => {
+            const npc = this.npcs?.find(n => n.dialogueId === lastNodeId);
+            if (npc && this.onNPCDialogueComplete) {
+                this.onNPCDialogueComplete(npc.name);
+            }
+        });
 
     }
 
@@ -184,6 +195,21 @@ export default class BaseStoryScene extends Phaser.Scene {
         this.dialogueManager.startDialogue(this.CONFIG.startNodeId);
     }
 
+    showNPCInfo(npc) {
+        if (!npc) return;
+
+        // OPTION A: If NPC has a dedicated inspect node
+        if (npc.inspectDialogueId) {
+            this.dialogueManager.startDialogue(npc.inspectDialogueId); // Pass the ID directly
+            return;
+        }
+
+        // OPTION B: Fallback generic inspect text
+        this.dialogueManager.startDialogue("friend_busy");
+
+        if (!npc?.inspectDialogueId) return;
+        this.dialogueManager.startInspectDialogue(npc.inspectDialogueId);
+    }
 
     // -------------------------
     // SHARED BUILDERS
@@ -292,12 +318,16 @@ export default class BaseStoryScene extends Phaser.Scene {
 
     _createDialogueAndUI() {
         const c = this.CONFIG;
-        const data = c.jsonKey ? this.cache.json.get(c.jsonKey) : null;
-        const sceneData = data?.scenes?.find(s => s.id === c.sceneId);
+        // const data = c.jsonKey ? this.cache.json.get(c.jsonKey) : null;
+        const data = this.cache.json.get(this.CONFIG.jsonKey);
+
+        // const sceneData = data?.scenes?.find(s => s.id === c.sceneId);
+        const sceneData = data?.scenes?.find(s => s.id === this.CONFIG.sceneId);
+
 
         this.dialogueManager = new DialogueManager(this, sceneData || {}, this.sdgPointsObj, this.uiLayer);
         this.tooltipManager = new TooltipManager(this, this.uiLayer);
-        this.interactionPanel = new InteractionPanel(this, this.uiLayer);
+        // this.interactionPanel = new InteractionPanel(this, this.uiLayer);
     }
 
     _createNPCs() {
@@ -307,30 +337,53 @@ export default class BaseStoryScene extends Phaser.Scene {
         const bindTooltip = (obj) => {
             obj.setInteractive({ useHandCursor: true });
             obj.on("pointerdown", () => {
-                // show tooltip
-                this.tooltipManager.show(obj.x, obj.y - obj.displayHeight / 2, obj);
+                this.currentInteractable = obj;
 
-                // (optional) OR if you want immediate start without tooltip:
-                // this.startDialogue(obj.dialogueId);
+                this.tooltipManager.show(
+
+                    obj.x,
+                    obj.y - obj.displayHeight / 2,
+                    obj
+                );
             });
+
 
 
         };
 
-        list.forEach(cfg => {
-            const npc = this.add.image(cfg.x, cfg.y, cfg.texture)
-                .setScale(cfg.scale ?? 1)
+        // list.forEach(cfg => {
+        //     const npc = this.add.image(cfg.x, cfg.y, cfg.texture)
+        //         .setScale(cfg.scale ?? 1)
+        //         .setDepth(10);
+
+        //     npc.dialogueId = cfg.dialogueId;
+        //     npc.name = cfg.name;
+        //     npc.tooltipConfig = cfg.tooltip || null;
+
+        //     npc._indicator = new NPCIndicator(this, npc);
+        //     bindTooltip(npc);
+
+        //     this.npcs.push(npc);
+        // });
+        list.forEach(obj => {
+            const npc = this.add.image(obj.x, obj.y, obj.texture)
+                .setScale(obj.scale ?? 1)
                 .setDepth(10);
 
-            npc.dialogueId = cfg.dialogueId;
-            npc.name = cfg.name;
-            npc.tooltipConfig = cfg.tooltip || null;
+            npc.dialogueId = obj.dialogueId;
+            npc.name = obj.name;
+            npc.tooltipConfig = obj.tooltip || null;
+            npc.inspectDialogueId = obj.inspectDialogueId;
 
             npc._indicator = new NPCIndicator(this, npc);
             bindTooltip(npc);
 
             this.npcs.push(npc);
+
+            console.log("NPC being created:", obj.name, obj.inspectDialogueId); // ✅ inside loop
         });
+
+
     }
 
     _bindExitUnlockEvent() {
@@ -550,7 +603,6 @@ export default class BaseStoryScene extends Phaser.Scene {
     }
 
     _updateExitZoneOverlap() {
-        this.playerInExitZone = false;
         if (!this.exitZone) return;
 
         this.physics.world.overlap(this.ladyPlayer, this.exitZone, () => {
