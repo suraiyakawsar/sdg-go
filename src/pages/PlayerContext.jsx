@@ -4,7 +4,14 @@ import { loadProfile, saveProfile, resetProfile as resetStorage } from "../utils
 const PlayerContext = createContext(null);
 
 export function PlayerProvider({ children }) {
-    const [profile, setProfile] = useState(null);
+    const [profile, setProfile] = useState(() => {
+        try {
+            const saved = localStorage.getItem("playerProfile");
+            return saved ? JSON.parse(saved) : null;
+        } catch {
+            return null;
+        }
+    });
     const [loading, setLoading] = useState(true);
 
     // Load once on app startup

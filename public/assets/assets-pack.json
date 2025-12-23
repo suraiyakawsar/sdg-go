@@ -62,6 +62,71 @@
                 "key": "bgHallway"
             },
             {
+                "url": "assets/images/props/table.png",
+                "type": "image",
+                "key": "table"
+            },
+            {
+                "url": "assets/images/props/bgClassroom2 - door.png",
+                "type": "image",
+                "key": "bgClassroom2Door"
+            },
+            {
+                "url": "assets/images/props/gardeningTools.png",
+                "type": "image",
+                "key": "gardeningTools"
+            },
+            {
+                "url": "assets/images/props/gardenDoor.png",
+                "type": "image",
+                "key": "gardenDoor"
+            },
+            {
+                "url": "assets/images/props/bgMeetingDooor.png",
+                "type": "image",
+                "key": "bgMeetingDooor"
+            },
+            {
+                "url": "assets/images/props/cat.png",
+                "type": "image",
+                "key": "cat"
+            },
+            {
+                "url": "assets/images/props/meetingDoor - Copy.png",
+                "type": "image",
+                "key": "meetingDoorArch"
+            },
+            {
+                "url": "assets/images/props/meetingDoor.png",
+                "type": "image",
+                "key": "meetingDoor"
+            },
+            {
+                "url": "assets/images/props/posterBank1.png",
+                "type": "image",
+                "key": "posterBank1"
+            },
+            {
+                "url": "assets/images/props/posterBank2.png",
+                "type": "image",
+                "key": "posterBank2"
+            },
+            {
+                "url": "assets/images/props/posterBank3.png",
+                "type": "image",
+                "key": "posterBank3"
+            },
+            {
+                "url": "assets/images/props/posterBank4.png",
+                "type": "image",
+                "key": "posterBank4"
+            },
+            {
+                "url": "assets/images/props/posterBank5.png",
+                "type": "image",
+                "key": "posterBank5"
+            },
+            {
                 "url": "assets/images/props/cafeteriaPoster1.png",
                 "type": "image",
                 "key": "cafeteriaPoster1"
@@ -100,11 +165,6 @@
                 "url": "assets/images/props/bgClassroomDoor.png",
                 "type": "image",
                 "key": "bgClassroomDoor"
-            },
-            {
-                "url": "assets/images/props/bgMeeting - girl.png",
-                "type": "image",
-                "key": "bgMeetingGirl"
             },
             {
                 "url": "assets/images/props/bgMeeting - tree.png",
@@ -172,9 +232,24 @@
                 "key": "trash2"
             },
             {
+                "url": "assets/images/characters/professor.png",
+                "type": "image",
+                "key": "professor"
+            },
+            {
+                "url": "assets/images/characters/gardener.png",
+                "type": "image",
+                "key": "gardener"
+            },
+            {
                 "url": "assets/images/characters/brosNPCs.png",
                 "type": "image",
                 "key": "brosNPCs"
+            },
+            {
+                "url": "assets/images/characters/bgMeeting - girl.png",
+                "type": "image",
+                "key": "bgMeetingGirl"
             },
             {
                 "url": "assets/images/characters/matthewNPC.png",

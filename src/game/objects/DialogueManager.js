@@ -220,40 +220,6 @@ export default class DialogueManager {
         .setOrigin(0.5);
       btnContainer.add(hitArea);
 
-      // // --- Interactions ---
-      // const onHover = () => {
-      //   this.scene.tweens.add({
-      //     targets: btnContainer,
-      //     scale: 1.05,
-      //     y: y - 5,
-      //     duration: 100,
-      //     ease: 'Back.easeOut'
-      //   });
-      //   drawBtn(this.theme.accent, 0.9, 1);
-      //   txt.setColor(this.theme.accent);
-      // };
-
-      // const onOut = () => {
-      //   this.scene.tweens.add({
-      //     targets: btnContainer,
-      //     scale: 1,
-      //     y: y,
-      //     duration: 100
-      //   });
-      //   drawBtn(0xffffff, 0.7, 0.2);
-      //   txt.setColor("#ffffff");
-      // };
-
-      // const onSelect = () => {
-      //   this.scene.tweens.add({
-      //     targets: bg,
-      //     alpha: 0,
-      //     duration: 50,
-      //     yoyo: true,
-      //     repeat: 3,
-      //     onComplete: () => this._handleChoice(choice)
-      //   });
-      // };
 
       // --- Interactions: Juicy/Bouncy ---
       const onHover = () => {
@@ -325,25 +291,10 @@ export default class DialogueManager {
   // ============================================================
   _clearChoices() {
     this.choices.forEach(c => {
-      // 1. Destroy the new Container structure
-      if (c.btnContainer) {
-        c.btnContainer.destroy();
-      }
-
-      // 2. Remove key listener
-      if (c.keyCode) {
-        c.keyCode.removeAllListeners("down");
-      }
-
-      // 3. Legacy safety check (prevents crashes if old objects exist)
-      if (c.bg) c.bg.destroy();
-      if (c.txt) c.txt.destroy();
-      if (c.hitArea) c.hitArea.destroy();
-      if (c.keyCircle) c.keyCircle.destroy();
-      if (c.keyText) c.keyText.destroy();
+      this.choices.forEach(c => c.btnContainer?.destroy());
+      this.choices.forEach(c => c.keyCode?.removeAllListeners("down"));
+      this.choices = [];
     });
-
-    this.choices = [];
   }
 
   // ============================================================
@@ -377,28 +328,6 @@ export default class DialogueManager {
     }
   }
 
-  // startInspectDialogue(inspectId) {
-  //   if (!inspectId) return console.warn("[DialogueManager] No inspectDialogueId provided.");
-
-  //   const node = Object.values(this.nodesById).find(n => n.inspectDialogueId === inspectId);
-  //   if (!node) return console.warn("[DialogueManager] Inspect node not found:", inspectId);
-
-  //   // Show like normal dialogue
-  //   this.currentNodeId = node.id;
-  //   this.currentNode = node;
-  //   this.dialogueVisible = true;
-
-  //   this.container.setVisible(true);
-  //   this.container.setScale(0).setAlpha(0);
-  //   this.scene.tweens.add({ targets: this.container, scale: 1, alpha: 1, duration: 300, ease: "Back.easeOut" });
-
-  //   this._showCurrentNode();
-
-  //   console.log("[DialogueManager] Inspect node search:", inspectId, this.nodesById);
-  //   console.log("Looking for node:", inspectId, this.nodesById);
-
-  // }
-
   startInspectDialogue(inspectId) {
     if (!inspectId) return console.warn("[DialogueManager] No inspectDialogueId provided.");
 
@@ -417,20 +346,6 @@ export default class DialogueManager {
 
     console.log("[DialogueManager] Showing inspect node:", inspectId, node);
   }
-
-
-  // _getNode(id) {
-  //   if (!id || !this.sceneData?.nodes) return null;
-
-  //   // if array
-  //   if (Array.isArray(this.sceneData.nodes)) {
-  //     return this.sceneData.nodes.find(n => n.id === id) || null;
-  //   }
-
-  //   // if object (optional)
-  //   return this.sceneData.nodes[id] || null;
-  // }
-
 
   // ============================================================
   // DIALOGUE CONTROL

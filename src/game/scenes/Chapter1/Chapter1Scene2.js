@@ -2,6 +2,8 @@
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
+import { unlockBadge } from "../../../utils/unlockBadge"; // ← ADD THIS
+
 
 export default class Chapter1Scene2 extends BaseStoryScene {
     constructor() {
@@ -56,14 +58,20 @@ export default class Chapter1Scene2 extends BaseStoryScene {
         // local state just for posters
         this.posterFound = 0;
         this.posterGoal = 2;
-
-
-        // bind storage route
-        localStorage.setItem("sdgExplorer:lastRoute", "/game");
     }
 
     create() {
         super.create();
+
+        localStorage.setItem("sdgExplorer:lastRoute", "/game");
+        localStorage.setItem("currentChapter", 1);
+        localStorage.setItem("currentScene", "Chapter1Scene2"); // Different scene key
+
+        // ✅ Store scene before unload
+        window.addEventListener("beforeunload", () => {
+            localStorage.setItem("currentScene", "Chapter1Scene2");
+        });
+
         emit("updateChapterScene", { title: "Classroom · Chapter 1" });
     }
 
@@ -124,6 +132,9 @@ export default class Chapter1Scene2 extends BaseStoryScene {
 
         emit("updateSDGPoints", 10);
         emit("badgeEarned", "Cafeteria Unlocked! 🔓");
+
+        // ← UNLOCK BADGE HERE
+        unlockBadge("water-saver");
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
@@ -193,16 +204,18 @@ export default class Chapter1Scene2 extends BaseStoryScene {
         });
 
         posterItem.destroy();
-
         this.posterCollected += 1;
 
         // emit("updateSDGPoints", p.reward);
         // emit("badgeEarned", `Found a poster! (+${p.reward})`);
-        emit("updateObjective", { slot: "secondary", delta: 1 });
+        emit("updateObjective", {
+            slot: "secondary",
+            delta: 1
+        });
 
         if (!this.objectiveCompleted && this.posterCollected >= this.posterGoal) {
             this.objectiveCompleted = true;
-            emit("badgeEarned", "Poster Hunter 🏅");
+            unlockBadge("water-saver");
             emit("updateObjective", { slot: "secondary", complete: true });
         }
     }

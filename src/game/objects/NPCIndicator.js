@@ -4,7 +4,7 @@ export default class NPCIndicator {
         this.npc = npc;
 
         this.icon = scene.add.image(npc.x, npc.y - 80, "talkIcon")
-            .setScale(0.4)
+            .setScale(0)
             .setAlpha(0)
             .setDepth(5);
 

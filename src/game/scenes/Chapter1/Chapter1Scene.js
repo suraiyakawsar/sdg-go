@@ -1,6 +1,7 @@
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
+import { unlockBadge } from "../../../utils/unlockBadge"; // ← ADD THIS
 
 export default class Chapter1Scene extends BaseStoryScene {
     constructor() {
@@ -46,13 +47,28 @@ export default class Chapter1Scene extends BaseStoryScene {
         this.trashGoal = 2;
 
         // bind storage route
-        localStorage.setItem("sdgExplorer:lastRoute", "/game");
+        // Save current route to localStorage whenever user enters a new scene
+
+
+
     }
 
     create() {
         super.create();
-        emit("updateChapterScene", { title: "Hallway · Chapter 1" });
 
+
+        // ✅ Store current scene (NO SPACE in key)
+        localStorage.setItem("sdgExplorer:lastRoute", "/game");  // ← Remove space
+        localStorage.setItem("currentChapter", 1);
+        localStorage.setItem("currentScene", "Chapter1Scene");
+
+
+        // ✅ NEW: Store scene before page unload
+        window.addEventListener("beforeunload", () => {
+            localStorage.setItem("currentScene", "Chapter1Scene");
+        });
+
+        emit("updateChapterScene", { title: "Hallway · Chapter 1" });
     }
 
     // --------------------------------
@@ -117,6 +133,9 @@ export default class Chapter1Scene extends BaseStoryScene {
         emit("updateSDGPoints", 10);
         emit("badgeEarned", "Hallway Unlocked! 🔓");
 
+        // ← UNLOCK BADGE HERE
+        unlockBadge("fast-learner");
+
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
         this._unlockDoorGlow?.();
@@ -147,17 +166,60 @@ export default class Chapter1Scene extends BaseStoryScene {
         this.trash2.on("pointerdown", () => this._handleTrashClick(this.trash2));
     }
 
+    // _handleTrashClick(trashItem) {
+    //     if (!trashItem?.scene) return;
+
+    //     // trash only active in step 2
+    //     if (this.objectiveStep !== 2) return;
+
+    //     const points = 3;
+    //     addSDGPoints(points);
+    //     emit("updateSDGPoints", points);
+
+    //     // small floating text
+    //     const msg = this.add.text(trashItem.x, trashItem.y - 40, `+${points}`, {
+    //         font: "16px Arial",
+    //         fill: "#0f0",
+    //     }).setOrigin(0.5);
+
+    //     this.tweens.add({
+    //         targets: msg,
+    //         y: msg.y - 40,
+    //         alpha: 0,
+    //         duration: 700,
+    //         onComplete: () => msg.destroy(),
+    //     });
+
+    //     trashItem.destroy();
+
+    //     this.trashCollected += 1;
+
+    //     emit("updateObjective", {
+    //         slot: "secondary",
+    //         delta: 1,
+    //     });
+
+    //     if (!this.objectiveCompleted && this.trashCollected >= this.trashGoal) {
+    //         this.objectiveCompleted = true;
+    //         unlockBadge("eco-warrior"); // Changed from emit()
+    //         emit("updateObjective", { slot: "secondary", complete: true });
+    //     }
+    // }
+
+    // --------------------------------
+    // Door click override: locked until unlocked
+    // --------------------------------
+
+
+    // Add to _handleTrashClick method
     _handleTrashClick(trashItem) {
         if (!trashItem?.scene) return;
-
-        // trash only active in step 2
         if (this.objectiveStep !== 2) return;
 
         const points = 3;
         addSDGPoints(points);
         emit("updateSDGPoints", points);
 
-        // small floating text
         const msg = this.add.text(trashItem.x, trashItem.y - 40, `+${points}`, {
             font: "16px Arial",
             fill: "#0f0",
@@ -172,7 +234,6 @@ export default class Chapter1Scene extends BaseStoryScene {
         });
 
         trashItem.destroy();
-
         this.trashCollected += 1;
 
         emit("updateObjective", {
@@ -182,14 +243,28 @@ export default class Chapter1Scene extends BaseStoryScene {
 
         if (!this.objectiveCompleted && this.trashCollected >= this.trashGoal) {
             this.objectiveCompleted = true;
-            emit("badgeEarned", "Eco Warrior! 🏅");
+
+            // 🔴 DEBUG: Check if this runs
+            console.log("✅ About to unlock eco-warrior badge");
+            console.log("Current localStorage:", localStorage.getItem("collectedBadges"));
+
+            unlockBadge("eco-warrior");
+
+            console.log("After unlock:", localStorage.getItem("collectedBadges"));
+
             emit("updateObjective", { slot: "secondary", complete: true });
+
+
+            // In your Chapter1Scene.js or wherever chapters complete: 
+            const completedChapters = JSON.parse(localStorage.getItem("completedChapters") || "[]");
+            if (!completedChapters.includes(1)) {
+                completedChapters.push(1);
+                localStorage.setItem("completedChapters", JSON.stringify(completedChapters));
+            }
         }
     }
 
-    // --------------------------------
-    // Door click override: locked until unlocked
-    // --------------------------------
+
     _onDoorClicked() {
         if (!this.doorUnlocked) {
             console.log("Door locked. Talk to your friend first.");

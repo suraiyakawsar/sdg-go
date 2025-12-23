@@ -60,7 +60,7 @@ export default class BaseStoryScene extends Phaser.Scene {
 
         this._registerGlobalUIListeners();
 
-        // this._debugWalkArea();
+        this._debugWalkArea();
 
         // this._createDebugGraphics();
 
@@ -234,7 +234,7 @@ export default class BaseStoryScene extends Phaser.Scene {
 
     _createPlayer() {
         // same everywhere
-        const p = this.CONFIG.player || { x: 1400, y: 1000, key: "ladyy", frame: "frame1.png" };
+        const p = this.CONFIG.player || { x: 600, y: 1000, key: "ladyy", frame: "frame1.png" };
 
         this.ladyPlayer = this.physics.add.sprite(p.x, p.y, p.key, p.frame)
             .setBounce(0.2)
@@ -351,20 +351,6 @@ export default class BaseStoryScene extends Phaser.Scene {
 
         };
 
-        // list.forEach(cfg => {
-        //     const npc = this.add.image(cfg.x, cfg.y, cfg.texture)
-        //         .setScale(cfg.scale ?? 1)
-        //         .setDepth(10);
-
-        //     npc.dialogueId = cfg.dialogueId;
-        //     npc.name = cfg.name;
-        //     npc.tooltipConfig = cfg.tooltip || null;
-
-        //     npc._indicator = new NPCIndicator(this, npc);
-        //     bindTooltip(npc);
-
-        //     this.npcs.push(npc);
-        // });
         list.forEach(obj => {
             const npc = this.add.image(obj.x, obj.y, obj.texture)
                 .setScale(obj.scale ?? 1)
@@ -382,8 +368,6 @@ export default class BaseStoryScene extends Phaser.Scene {
 
             console.log("NPC being created:", obj.name, obj.inspectDialogueId); // ✅ inside loop
         });
-
-
     }
 
     _bindExitUnlockEvent() {
@@ -542,27 +526,6 @@ export default class BaseStoryScene extends Phaser.Scene {
                 .fillPath();
         }
     }
-
-
-    // _updateDepthScale() {
-    //     const a = this.CONFIG.walkArea;
-    //     if (!a) return;
-
-    //     const top = a.topY;
-    //     const bottom = a.bottomY;
-
-    //     let t = (this.ladyPlayer.y - top) / (bottom - top);
-    //     t = Phaser.Math.Clamp(t, 0, 1);
-
-    //     const sFar = this.CONFIG.scaleFar ?? 0.8;
-    //     const sNear = this.CONFIG.scaleNear ?? 1.2;
-    //     const finalScale = Phaser.Math.Linear(sFar, sNear, t);
-
-    //     this.ladyPlayer.setScale(finalScale);
-
-    //     // UNCOMMENT THIS LINE TO DEBUG IN BROWSER CONSOLE:
-    //     // console.log(`Y: ${Math.round(this.ladyPlayer.y)} | T: ${t.toFixed(2)} | Scale: ${finalScale.toFixed(2)}`);
-    // }
 
     _updateDepthScale() {
         const a = this.CONFIG.walkArea;

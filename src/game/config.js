@@ -12,13 +12,8 @@ import Chapter2Scene2 from "../../game/scenes/Chapter2/Chapter2Scene2";
 import Chapter2Scene3 from "../../game/scenes/Chapter2/Chapter2Scene3";
 import Chapter3Scene1 from "../../game/scenes/Chapter3/Chapter3Scene1";
 import Chapter3Scene2 from "../../game/scenes/Chapter3/Chapter3Scene2";
-import Chapter3Scene3 from "../../game/scenes/Chapter3/Chapter3Scene3";
 import Chapter4Scene1 from "../../game/scenes/Chapter4/Chapter4Scene1";
-import Chapter4Scene2 from "../../game/scenes/Chapter4/Chapter4Scene2";
 import Chapter4Scene3 from "../../game/scenes/Chapter4/Chapter4Scene3";
-import Chapter5Scene1 from "../../game/scenes/Chapter5/Chapter5Scene1";
-import Chapter5Scene2 from "../../game/scenes/Chapter5/Chapter5Scene2";
-import Chapter5Scene3 from "../../game/scenes/Chapter5/Chapter5Scene3";
 
 const config = {
   type: Phaser.AUTO,
@@ -57,13 +52,8 @@ const config = {
     Chapter2Scene3,
     Chapter3Scene1,
     Chapter3Scene2,
-    Chapter3Scene3,
     Chapter4Scene1,
-    Chapter4Scene2,
     Chapter4Scene3,
-    Chapter5Scene1,
-    Chapter5Scene2,
-    Chapter5Scene3,
   ],
 
   plugins: {

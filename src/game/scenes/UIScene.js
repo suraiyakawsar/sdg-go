@@ -33,6 +33,31 @@ export default class UIScene extends Phaser.Scene {
         on("npcInteraction", this.handleNpcInteraction);
         on("dialogueNext", this.handleDialogueNext);
         on("dialogueChoice", this.handleDialogueChoice);
+
+
+        // NEW: handle autoplay nodes for cinematic scenes
+        on("startNodeAutoplay", (nodeId) => {
+            console.log("[UIScene] startNodeAutoplay received:", nodeId);
+
+            // Lookup the node from JSON
+            const sceneData = this.scene.dialogueData.scenes.find(s => s.id === "nightCourtyard");
+            const node = sceneData.nodes.find(n => n.id === nodeId);
+            if (!node) {
+                console.warn("[UIScene] Node not found:", nodeId);
+                return;
+            }
+
+            // Start the node as a single-line dialogue
+            this.startDialogue({ lines: [node] });
+
+            // Auto-advance after a short delay based on text length
+            const delay = 1000 + node.text.length * 50; // 50ms per char + 1s buffer
+            this.time.delayedCall(delay, () => {
+                console.log("[UIScene] Auto-advancing node:", nodeId);
+                this.advanceDialogue(); // this will trigger dialogueEnded for the single line
+            });
+        });
+
     }
 
     handleNpcInteraction(data) {
@@ -142,6 +167,10 @@ export default class UIScene extends Phaser.Scene {
      * Moves to the next line or ends dialogue
      */
     advanceDialogue() {
+        console.log("[UIScene] advanceDialogue called, currentIndex:", this.currentIndex);
+        // ... rest of your existing advanceDialogue code
+
+
         if (!this.dialogueLines || this.dialogueLines.length === 0) {
             emit("hideDialogue");
             emit("dialogueEnded");
@@ -167,6 +196,8 @@ export default class UIScene extends Phaser.Scene {
         off("npcInteraction", this.handleNpcInteraction);
         off("dialogueNext", this.handleDialogueNext);
         off("dialogueChoice", this.handleDialogueChoice);
+        off("startNodeAutoplay"); // remove new handler
+
     }
 
     destroy() {

@@ -41,12 +41,13 @@ function subscribe(event, callback) {
   return on(event, callback);
 }
 
-// keep your export (you had this in eventBus for some reason)
-export const chapter1Scenes = [
-  { id: "scene1", dialogueId: "intro", background: "bg" },
-  { id: "scene2", dialogueId: "classroom", background: "classroomBg" },
-  { id: "scene3", dialogueId: "cafeteria", background: "cafeteriaBg" },
-];
+// // keep your export (you had this in eventBus for some reason)
+// export const chapter1Scenes = [
+//   { id: "scene1", dialogueId: "intro", background: "bg" },
+//   { id: "scene2", dialogueId: "classroom", background: "classroomBg" },
+//   { id: "scene3", dialogueId: "cafeteria", background: "cafeteriaBg" },
+// ];
 
 export { on, off, emit, clear, subscribe };
 export default { on, off, emit, clear, subscribe };
+

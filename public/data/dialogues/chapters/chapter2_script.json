@@ -21,18 +21,27 @@
                             "id": "ch2_s1_choice_help_yes",
                             "text": "Yes, I’ll help.",
                             "sdgDelta": 5,
+                            "setFlags": [
+                                "foodbank_helped_positive"
+                            ],
                             "nextNodeId": "ch2_s1_help_confirm"
                         },
                         {
                             "id": "ch2_s1_choice_help_maybe",
                             "text": "Maybe, I’ll see how it goes.",
                             "sdgDelta": 2,
+                            "setFlags": [
+                                "foodbank_helped_neutral"
+                            ],
                             "nextNodeId": "ch2_s1_help_maybe_confirm"
                         },
                         {
                             "id": "ch2_s1_choice_help_no",
                             "text": "I don’t think I can.",
                             "sdgDelta": 0,
+                            "setFlags": [
+                                "foodbank_helped_decline"
+                            ],
                             "nextNodeId": "ch2_s1_help_decline"
                         }
                     ]
@@ -57,18 +66,19 @@
                 {
                     "id": "ch2_s1_help_decline",
                     "speaker": "staff",
-                    "text": "That’s okay. You can still learn by watching how things work.",
+                    "text": "That’s okay. You can still learn by observing and thinking about how to contribute later.",
                     "autoNext": "ch2_s1_wrapup"
                 },
                 {
                     "id": "ch2_s1_wrapup",
                     "speaker": "system",
-                    "text": "Objective completed: Help at the food bank.",
+                    "text": "Objective completed: Help at the food bank and understand its impact on the community.",
                     "onComplete": {
                         "setFlags": [
                             "chapter2_scene1_dialogue_done"
                         ],
-                        "unlockExit": true
+                        "unlockExit": true,
+                        "points": 4
                     }
                 }
             ]
@@ -82,23 +92,29 @@
                 {
                     "id": "ch2_s2_intro",
                     "speaker": "system",
-                    "text": "After helping at the food bank, you head to the nearby street where an SDG awareness campaign is happening."
+                    "text": "After helping at the food bank, you see a small SDG awareness campaign happening just outside campus."
                 },
                 {
-                    "id": "ch2_scene2_organizer",
+                    "id": "ch2_s2_organizer",
                     "speaker": "organizer",
-                    "text": "Hello! We’re promoting small sustainable actions for climate and community. Want to join a quick activity?",
+                    "text": "Hello! We’re promoting simple sustainable actions for the environment and community. Want to join a quick activity?",
                     "choices": [
                         {
                             "id": "ch2_s2_choice_join_yes",
                             "text": "Yes, I’ll participate.",
                             "sdgDelta": 3,
+                            "setFlags": [
+                                "street_activity_participated"
+                            ],
                             "nextNodeId": "ch2_s2_participate"
                         },
                         {
                             "id": "ch2_s2_choice_join_no",
                             "text": "Not right now.",
                             "sdgDelta": 0,
+                            "setFlags": [
+                                "street_activity_skipped"
+                            ],
                             "nextNodeId": "ch2_s2_skip"
                         }
                     ]
@@ -106,65 +122,92 @@
                 {
                     "id": "ch2_s2_participate",
                     "speaker": "system",
-                    "text": "You help distribute pamphlets and talk to passersby about sustainable practices.",
+                    "text": "You help distribute pamphlets and talk to passersby about sustainable practices. Even small actions create awareness.",
                     "autoNext": "ch2_s2_wrapup"
                 },
                 {
                     "id": "ch2_s2_skip",
                     "speaker": "system",
-                    "text": "You watch others participate and think about joining next time.",
+                    "text": "You watch others participate and reflect on how small actions still matter.",
                     "autoNext": "ch2_s2_wrapup"
                 },
                 {
                     "id": "ch2_s2_wrapup",
                     "speaker": "system",
-                    "text": "End of Street Activity. You gained experience raising awareness.",
+                    "text": "End of Street Activity. You gained experience in raising awareness and engaging with your community.",
                     "onComplete": {
                         "setFlags": [
                             "chapter2_scene2_dialogue_done"
                         ],
-                        "unlockExit": true
+                        "unlockExit": true,
+                        "points": 3
                     }
                 },
                 {
-                    "id": "ch2_s2_student_positive",
-                    "speaker": "student1",
-                    "text": "Wow, it feels good to help even in small ways.",
+                    "id": "ch2_s2_student",
+                    "speaker": "matthewNPC",
+                    "text": "Thanks for being here! Every little action counts.",
                     "sdgDelta": 1
                 },
                 {
-                    "id": "ch2_s2_student_neutral",
-                    "speaker": "student2",
-                    "text": "I guess some people care more than others.",
-                    "sdgDelta": 0
+                    "id": "ch2_s2_group_help",
+                    "speaker": "brosNPCs",
+                    "text": "Hey, we’re just helping out this person get the supplies they need. It’s good to see others care too."
+                },
+                {
+                    "id": "ch2_s2_squirrel",
+                    "speaker": "squirrel",
+                    "text": "*Squeak* ...looks like everyone’s busy being responsible. Cute!"
                 }
             ]
         },
         {
-            "id": "chapter2_scene3",
+            "id": "meetingPoint",
             "backgroundKey": "bgMeeting",
-            "startNodeId": "b_intro",
+            "startNodeId": "ch2_s3_intro",
             "exitUnlockedFlag": "chapter2_scene3_exit_unlocked",
             "nodes": [
                 {
-                    "id": "b_intro",
+                    "id": "cat",
+                    "speaker": "Cat",
+                    "text": "Meow?",
+                    "sdgDelta": 2
+                },
+                {
+                    "id": "ch2_s3_intro",
                     "speaker": "beneficiary",
-                    "text": "Thank you for helping at the food bank and awareness campaign. It really makes a difference for us."
+                    "text": "Oh! You helped at the food bank today, right? I… I actually rely on it sometimes. It really helps me get by.",
+                    "autoNext": "ch2_s3_player_react"
                 },
                 {
-                    "id": "f_message",
-                    "speaker": "friendA",
-                    "text": "Hey! Just checking in to see how you’re doing. Proud of you for contributing today."
+                    "id": "ch2_s3_player_react",
+                    "speaker": "player",
+                    "text": "Wait, really? I had no idea. How has it been for you?",
+                    "autoNext": "ch2_s3_beneficiary_story"
                 },
                 {
-                    "id": "b_wrapup",
+                    "id": "ch2_s3_beneficiary_story",
+                    "speaker": "beneficiary",
+                    "text": "It’s been tough at times. Between school and work, some days I just don’t have enough. Coming here gives me a bit of relief, and seeing volunteers like you makes a difference.",
+                    "autoNext": "ch2_s3_player_encourage"
+                },
+                {
+                    "id": "ch2_s3_player_encourage",
+                    "speaker": "player",
+                    "text": "I’m really glad I could help, even a little. Honestly, I didn’t expect it to feel so meaningful talking to people like you.",
+                    "autoNext": "ch2_s3_wrapup"
+                },
+                {
+                    "id": "ch2_s3_wrapup",
                     "speaker": "system",
-                    "text": "End of Chapter 2: Engagement in Action.",
+                    "text": "End of Chapter 2: Engagement in Action. Your involvement shows how students can make a real impact.",
                     "onComplete": {
                         "setFlags": [
-                            "chapter2_completed"
+                            "chapter2_completed",
+                            "chapter2_scene3_decision_done"
                         ],
-                        "unlockExit": true
+                        "unlockExit": true,
+                        "points": 4
                     }
                 }
             ]

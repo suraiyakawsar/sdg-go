@@ -26,7 +26,14 @@ export default function RightSidebar() {
     });
 
     // ⭐ CHAPTER PROGRESSION (0–5)
-    const [chapterProgress, setChapterProgress] = useState(0);
+    const [chapterProgress, setChapterProgress] = useState(() => {
+        try {
+            const completed = JSON.parse(localStorage.getItem("completedChapters") || "[]");
+            return Array.isArray(completed) ? completed.length : 0;
+        } catch {
+            return 0;
+        }
+    });
 
     // ========== DERIVED NUMBERS ==========
     const primarySafeGoal = Number(primaryObj.goal) > 0 ? Number(primaryObj.goal) : 1;
@@ -44,7 +51,7 @@ export default function RightSidebar() {
     const secondaryComplete =
         secondaryObj.active && secondaryObj.collected >= secondarySafeGoal;
 
-    const sdgBarPercent = Math.max(0, Math.min(sdgPoints, 100));
+    const sdgBarPercent = Math.max(0, Math.min(sdgPoints * 0.5, 100));
 
     // FLOATING TEXT & PARTICLES
     const [floatingText, setFloatingText] = useState(null); // { text, label } | null
@@ -183,22 +190,45 @@ export default function RightSidebar() {
     // ============================================================
     // CHAPTER PROGRESSION
     // ============================================================
+    // useEffect(() => {
+    //     const handleChapterProgressUpdate = (data) => {
+    //         let value = 0;
+
+    //         if (typeof data === "number") {
+    //             value = data;
+    //         } else if (data && typeof data === "object") {
+    //             value = Number(data.completed ?? data.chapter ?? 0) || 0;
+    //         }
+
+    //         value = Math.max(0, Math.min(5, value));
+    //         setChapterProgress(value);
+    //     };
+
+    //     on("updateChapterProgress", handleChapterProgressUpdate);
+    //     return () => off("updateChapterProgress", handleChapterProgressUpdate);
+    // }, []);
     useEffect(() => {
-        const handleChapterProgressUpdate = (data) => {
-            let value = 0;
-
-            if (typeof data === "number") {
-                value = data;
-            } else if (data && typeof data === "object") {
-                value = Number(data.completed ?? data.chapter ?? 0) || 0;
+        const handleChapterProgressUpdate = () => {
+            try {
+                const completed = JSON.parse(localStorage.getItem("completedChapters") || "[]");
+                const count = Array.isArray(completed) ? completed.length : 0;
+                setChapterProgress(count);
+                console.log("✅ Chapter progress updated:", count);
+            } catch {
+                setChapterProgress(0);
             }
-
-            value = Math.max(0, Math.min(5, value));
-            setChapterProgress(value);
         };
 
+        // Listen for storage changes (when another tab/scene updates localStorage)
+        window.addEventListener("storage", handleChapterProgressUpdate);
+
+        // Also listen for custom event bus (if scenes emit it)
         on("updateChapterProgress", handleChapterProgressUpdate);
-        return () => off("updateChapterProgress", handleChapterProgressUpdate);
+
+        return () => {
+            window.removeEventListener("storage", handleChapterProgressUpdate);
+            off("updateChapterProgress", handleChapterProgressUpdate);
+        };
     }, []);
 
     // ============================================================
@@ -318,17 +348,12 @@ export default function RightSidebar() {
                             <div className="flex items-center gap-3 w-full">
                                 <div className="flex-grow h-3 bg-gray-800/80 rounded-full overflow-hidden">
                                     <motion.div
-                                        initial={false}
+                                        initial={{ width: 0 }}
                                         animate={{ width: `${sdgBarPercent}%` }}
-                                        transition={{
-                                            type: "spring",
-                                            stiffness: 120,
-                                            damping: 20,
-                                        }}
-                                        className={`h-full bg-gradient-to-r ${getSDGColor(
-                                            sdgPoints
-                                        )}`}
+                                        transition={{ duration: 1.2, ease: "easeInOut" }}
+                                        className={`h-full bg-gradient-to-r ${getSDGColor(sdgPoints)}`}
                                     />
+
                                 </div>
                             </div>
                         </div>
@@ -393,7 +418,7 @@ export default function RightSidebar() {
 
                         {/* SECONDARY / NEXT OBJECTIVE */}
                         {secondaryObj.description && (
-                            <div className="mt-3 rounded-xl p-2 -m-2">
+                            <div className="mt-3 rounded-xl p-2 -m-2 min-h-[85px]">
                                 <div className="flex items-center justify-between mb-1">
                                     <div className="flex items-center gap-2">
                                         <div className="w-6 h-6 rounded-full bg-purple-400/20 border border-purple-300/60 flex items-center justify-center">

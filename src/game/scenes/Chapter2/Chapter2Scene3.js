@@ -1,15 +1,18 @@
 // src/scenes/chapter2/Chapter2Scene3.js
 import BaseStoryScene from "../BaseStoryScene";
-import { emit, on /*, off*/ } from "../../../utils/eventBus";
+import { emit, on, off } from "../../../utils/eventBus";
+import { addSDGPoints } from "../../../utils/sdgPoints";
 
 export default class Chapter2Scene3 extends BaseStoryScene {
     constructor() {
         super("Chapter2Scene3", {
+            sceneId: "meetingPoint",
+            jsonKey: "chapter2Data",
+            jsonPath: "data/dialogues/chapters/chapter2_script.json",
+
             backgroundKey: "bgMeeting",
-            dialogueKey: "chapter2_scene3",
-            startNodeId: "b_intro",
-            nextSceneKey: "Chapter3Scene1",
-            exitFlag: "chapter2_completed",
+            startNodeId: "ch2_s3_intro",
+            exitUnlockedFlag: "chapter2_scene3_exit_unlocked",
 
 
             walkArea: {
@@ -29,64 +32,193 @@ export default class Chapter2Scene3 extends BaseStoryScene {
 
             // ✅ door (swap texture/x/y to match your artwork)
             door: {
-                x: 300,
-                y: 600,
-                w: 120,
-                h: 220,
-                texture: "doorFoodBank", // <-- replace (or reuse a generic door)
+                x: 745,
+                y: 535,
+                w: 198,
+                h: 399,
+                texture: "meetingDoor",
             },
-
 
             npcs: [
                 {
-                    name: "organizer",
-                    texture: "npc_organizer",   // <-- replace
-                    x: 900,
-                    y: 650,
-                    scale: 0.35,
-                    dialogueId: "ch2_scene2_organizer", // <-- replace
-                }
+                    name: "alice",
+                    texture: "bgMeetingGirl",   // <-- replace
+                    x: 1110,
+                    y: 730,
+                    scale: 1.5,
+                    dialogueId: "ch2_s3_intro", // <-- replace
+                },
+                {
+                    name: "cat",
+                    texture: "cat",
+                    x: 1400,
+                    y: 700,
+                    scale: 0.6,
+                    dialogueId: "cat"
+                },
             ],
 
         });
+
+        // objectives
+        this.objectiveStep = 1;         // 1 = talk, 2 = posters
+        this.objectiveCompleted = false;
+
+        this.posterCollected = 0;
+        this.posterGoal = 1;
+
+        // bind storage route
+
     }
 
     create() {
         super.create();
+
+        // ✅ Store current scene (NO SPACE in key)
+        localStorage.setItem("sdgExplorer:lastRoute", "/game");  // ← Remove space
+        localStorage.setItem("currentChapter", 2);
+        localStorage.setItem("currentScene", "Chapter2Scene3");
+
+        // ✅ Store scene before unload
+        window.addEventListener("beforeunload", () => {
+            localStorage.setItem("currentScene", "Chapter2Scene3");
+        });
+
         emit("updateChapterScene", { title: "Meeting · Chapter 2" });
     }
 
-    createSceneContent() {
-        // Beneficiary NPC
-        this.createNPC({
-            id: "beneficiary",
-            x: 960,
-            y: 760,
-            texture: "npcBeneficiary",
-            dialogueNodeId: "b_intro",
+    // Runs after base create()
+    _customCreate() {
+        // objectives for this scene
+        emit("updateObjective", {
+            slot: "primary",
+            collected: 0,
+            goal: 1,
+            description: "Finish talking to Alice to continue.",
+            complete: false,
         });
 
-        // Friend A (non-physical, message-only trigger)
-        this.createTriggerZone({
-            id: "friend_message_trigger",
-            x: 960,
-            y: 600,
-            width: 400,
-            height: 200,
-            onEnter: () => {
-                if (this.flags.has("chapter2_scene3_message_shown")) return;
-                this.flags.add("chapter2_scene3_message_shown");
-                this.startDialogue("f_message");
-            },
+        emit("updateObjective", {
+            slot: "secondary",
+            preview: true,
+            active: false,
+            collected: 0,
+            goal: this.posterGoal,
+            description: "Optional: Find and click hidden classroom posters.",
         });
 
-        // Exit
-        this.createExitZone({
-            x: 1800,
-            y: 780,
-            width: 200,
-            height: 300,
-            glow: true,
+        this._createPosters();
+        // Door starts locked until JSON unlock event fires
+        this.doorUnlocked = false;
+
+        // Listen once for JSON unlock flag
+        this._onSceneExitUnlocked = (payload) => {
+            const { sceneId, exitFlag } = payload || {};
+            if (sceneId !== "meetingPoint") return;
+            if (exitFlag !== "chapter2_scene3_exit_unlocked") return;
+
+            if (this.objectiveStep === 1 && !this.objectiveCompleted) {
+                this._completeStep1AndUnlock();
+            }
+        };
+
+        on("sceneExitUnlocked", this._onSceneExitUnlocked);
+
+        // Cleanup (only if your bus supports off())
+        this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            // if (typeof off === "function") off("sceneExitUnlocked", this._onSceneExitUnlocked);
         });
+
+    }
+
+    // --------------------------------
+    // Step 1 -> Step 2 transition
+    // --------------------------------
+    _completeStep1AndUnlock() {
+        this.objectiveCompleted = true;
+
+        emit("updateObjective", {
+            slot: "primary",
+            delta: 1,
+            complete: true,
+        });
+
+        emit("updateSDGPoints", 10);
+        emit("badgeEarned", "Professor Unlocked! 🔓");
+
+        // unlock door visuals + logic (BaseStoryScene has the glow helper)
+        this.doorUnlocked = true;
+        this._unlockDoorGlow?.();
+
+        // Step 2: trash becomes active
+        this.objectiveStep = 2;
+        this.objectiveCompleted = false;
+        this.posterCollected = 0;
+
+        emit("updateObjective", {
+            slot: "secondary",
+            active: true,
+            preview: false,
+            collected: 0,
+            goal: this.posterGoal,
+            description: "Find and click hidden classroom posters.",
+        });
+    }
+
+
+    _createPosters() {
+        this.poster1 = this.add.image(122, 469, "posterBank1").setInteractive({ useHandCursor: true }).setScale(0.95); //volunteers
+        this.poster1.on("pointerdown", () => this._handlePosterClick(this.poster1));
+        // this.meetingDoorArch = this.add.image(340, 495, "meetingDoorArch");
+    }
+
+    _handlePosterClick(posterItem) {
+        if (!posterItem?.scene) return;
+        // poster only active in step 2
+        if (this.objectiveStep !== 2) return;
+
+        const points = 3;
+        addSDGPoints(points);
+        emit("updateSDGPoints", points);
+
+        // small floating text
+        const msg = this.add.text(posterItem.x, posterItem.y - 40, `+${points}`, {
+            font: "16px Arial",
+            fill: "#0f0",
+        }).setOrigin(0.5);
+
+        this.tweens.add({
+            targets: msg,
+            y: msg.y - 40,
+            alpha: 0,
+            duration: 700,
+            onComplete: () => msg.destroy(),
+        });
+
+        posterItem.destroy();
+
+        this.posterCollected += 1;
+
+        emit("updateObjective", {
+            slot: "secondary",
+            delta: 1,
+        });
+
+        if (!this.objectiveCompleted && this.posterCollected >= this.posterGoal) {
+            this.objectiveCompleted = true;
+            emit("badgeEarned", "Eco Warrior! 🏅");
+            emit("updateObjective", { slot: "secondary", complete: true });
+        }
+    }
+
+
+    _onDoorClicked() {
+        if (!this.doorUnlocked) {
+            console.log("Door locked. Talk to Alice first.");
+            return;
+        }
+
+        if (this.playerInExitZone) this.goToNextScene();
+        else console.log("Too far from the door.");
     }
 }
