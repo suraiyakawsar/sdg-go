@@ -219,7 +219,7 @@ export default class Chapter3Scene1 extends BaseStoryScene {
 
         // ✅ Store scene before unload
         window.addEventListener("beforeunload", () => {
-            localStorage.setItem("currentScene", "Chapter3Scene1");
+            localStorage.setItem("currentScene", "Chapter3Scene1 ");
         });
 
         emit("updateChapterScene", { title: "Garden · Chapter 3" });

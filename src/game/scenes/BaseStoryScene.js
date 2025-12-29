@@ -60,7 +60,7 @@ export default class BaseStoryScene extends Phaser.Scene {
 
         this._registerGlobalUIListeners();
 
-        this._debugWalkArea();
+        // this._debugWalkArea();
 
         // this._createDebugGraphics();
 
@@ -310,6 +310,9 @@ export default class BaseStoryScene extends Phaser.Scene {
     }
 
     goToNextScene() {
+        // ✅ Sync SceneManager with current scene
+        SceneManager.setCurrentScene(this.scene.key);
+
         this.cameras.main.fadeOut(400);
         this.cameras.main.once("camerafadeoutcomplete", () => {
             SceneManager.nextScene(this, getPoints());

@@ -235,9 +235,9 @@ export default function GameSidebar({ currentChapter = 1 }) {
     // Button definitions
     const buttons = useMemo(
         () => [
-            { id: "badges", icon: FiAward, label: "Badges", type: "route", to: routes.badges, hotkey: "1" },
+            { id: "menu", icon: FiHome, label: "Menu", type: "route", to: routes.menu, hotkey: "1" },
             { id: "profile", icon: FiUser, label: "Profile", type: "route", to: routes.profile, hotkey: "2" },
-            { id: "menu", icon: FiHome, label: "Menu", type: "route", to: routes.menu, hotkey: "3" },
+            { id: "badges", icon: FiAward, label: "Badges", type: "route", to: routes.badges, hotkey: "3" },
             { id: "howto", icon: FiBookOpen, label: "How To Play", type: "overlay", event: "openHowToPlay", hotkey: "H" },
         ],
         []

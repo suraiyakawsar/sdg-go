@@ -56,7 +56,6 @@ export default class Chapter1Scene extends BaseStoryScene {
     create() {
         super.create();
 
-
         // ✅ Store current scene (NO SPACE in key)
         localStorage.setItem("sdgExplorer:lastRoute", "/game");  // ← Remove space
         localStorage.setItem("currentChapter", 1);

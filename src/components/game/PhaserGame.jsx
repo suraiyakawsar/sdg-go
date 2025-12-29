@@ -15,7 +15,7 @@
 // import Chapter3Scene1 from "../../game/scenes/Chapter3/Chapter3Scene1";
 // import Chapter3Scene2 from "../../game/scenes/Chapter3/Chapter3Scene2";
 // import Chapter4Scene1 from "../../game/scenes/Chapter4/Chapter4Scene1";
-// import Chapter4Scene3 from "../../game/scenes/Chapter4/Chapter4Scene3";
+// import Chapter4Scene2 from "../../game/scenes/Chapter4/Chapter4Scene2";
 // import HowToPlayScene from "../../game/scenes/HowToPlayScene";
 
 // export default function PhaserGame() {
@@ -59,7 +59,7 @@
 //         roundPixels: false,
 //       },
 
-//       scene: [BootScene, UIScene, HowToPlayScene, Chapter1Scene, Chapter1Scene2, Chapter1Scene3, Chapter2Scene1, Chapter2Scene2, Chapter2Scene3, Chapter3Scene1, Chapter3Scene2, Chapter4Scene1, Chapter4Scene3],
+//       scene: [BootScene, UIScene, HowToPlayScene, Chapter1Scene, Chapter1Scene2, Chapter1Scene3, Chapter2Scene1, Chapter2Scene2, Chapter2Scene3, Chapter3Scene1, Chapter3Scene2, Chapter4Scene1, Chapter4Scene2],
 //     };
 
 //     phaserRef.current = new Phaser.Game(config);
@@ -114,12 +114,12 @@ import Chapter2Scene3 from "../../game/scenes/Chapter2/Chapter2Scene3";
 import Chapter3Scene1 from "../../game/scenes/Chapter3/Chapter3Scene1";
 import Chapter3Scene2 from "../../game/scenes/Chapter3/Chapter3Scene2";
 import Chapter4Scene1 from "../../game/scenes/Chapter4/Chapter4Scene1";
-import Chapter4Scene3 from "../../game/scenes/Chapter4/Chapter4Scene3";
 import HowToPlayScene from "../../game/scenes/HowToPlayScene";
 import { useEffect, useRef } from "react";
 import Phaser from "phaser";
 import { emit } from "../../utils/eventBus";
 import { useLocation } from "react-router-dom"; // ← ADD THIS
+import Chapter4Scene2 from "../../game/scenes/Chapter4/Chapter4Scene3";
 
 // ... imports ...
 
@@ -174,7 +174,7 @@ export default function PhaserGame() {
       scene: [
         BootScene, UIScene, HowToPlayScene, Chapter1Scene, Chapter1Scene2,
         Chapter1Scene3, Chapter2Scene1, Chapter2Scene2, Chapter2Scene3,
-        Chapter3Scene1, Chapter3Scene2, Chapter4Scene1, Chapter4Scene3
+        Chapter3Scene1, Chapter3Scene2, Chapter4Scene1, Chapter4Scene2
       ],
     };
 

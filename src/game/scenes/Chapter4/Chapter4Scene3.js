@@ -1,10 +1,10 @@
-// src/scenes/chapter4/Chapter4Scene3.js
+// src/scenes/chapter4/Chapter4Scene2.js
 import BaseStoryScene from "../BaseStoryScene";
 import { emit } from "../../../utils/eventBus";
 
-export default class Chapter4Scene3 extends BaseStoryScene {
+export default class Chapter4Scene2 extends BaseStoryScene {
     constructor() {
-        super("Chapter4Scene3", {
+        super("Chapter4Scene2", {
             sceneId: "busStop",
             jsonKey: "chapter4Data",
             jsonPath: "data/dialogues/chapters/chapter4_script.json",
@@ -54,11 +54,11 @@ export default class Chapter4Scene3 extends BaseStoryScene {
         // ✅ Store current scene (NO SPACE in key)
         localStorage.setItem("sdgExplorer:lastRoute", "/game");  // ← Remove space
         localStorage.setItem("currentChapter", 4);
-        localStorage.setItem("currentScene", "Chapter4Scene3");
+        localStorage.setItem("currentScene", "Chapter4Scene2");
 
         // ✅ Store scene before unload
         window.addEventListener("beforeunload", () => {
-            localStorage.setItem("currentScene", "Chapter4Scene3");
+            localStorage.setItem("currentScene", "Chapter4Scene2");
         });
 
 
