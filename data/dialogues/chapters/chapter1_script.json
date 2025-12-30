@@ -14,7 +14,7 @@
                 },
                 {
                     "id": "h_noticeboard",
-                    "speaker": "system",
+                    "speaker": "narrator",
                     "text": "SUSTAINABILITY WEEK – Talks, clean-up events, food bank volunteering. Sign up at the cafeteria."
                 },
                 {
@@ -26,18 +26,27 @@
                             "id": "h_choice_seen_posters",
                             "text": "Yeah, something about SDGs, right?",
                             "sdgDelta": 5,
+                            "setFlags": [
+                                "interest_sdg_positive"
+                            ],
                             "nextNodeId": "h_explain_positive"
                         },
                         {
                             "id": "h_choice_not_sure",
                             "text": "Not really… what’s SDG?",
                             "sdgDelta": 3,
+                            "setFlags": [
+                                "interest_sdg_neutral"
+                            ],
                             "nextNodeId": "h_explain_neutral"
                         },
                         {
                             "id": "h_choice_extra_work",
                             "text": "Looks like extra work to me.",
                             "sdgDelta": 0,
+                            "setFlags": [
+                                "interest_sdg_indifferent"
+                            ],
                             "nextNodeId": "h_explain_pushback"
                         }
                     ]
@@ -61,6 +70,12 @@
                     "autoNext": "h_explain_neutral_b"
                 },
                 {
+                    "id": "h_explain_neutral_b",
+                    "speaker": "friendA",
+                    "text": "You might not know yet, but even small actions matter here on campus.",
+                    "autoNext": "h_friends_wrapup"
+                },
+                {
                     "id": "h_explain_pushback",
                     "speaker": "friendA",
                     "text": "Maybe. But if we’re already stuck here studying, might as well make it mean something.",
@@ -81,12 +96,14 @@
                 {
                     "id": "h_objective_update",
                     "speaker": "system",
-                    "text": "New objective: Go to class.",
+                    "text": "New objective: Go to class to learn how SDGs relate to your campus life.",
                     "onComplete": {
                         "setFlags": [
-                            "chapter1_scene1_dialogue_done"
+                            "chapter1_scene1_dialogue_done",
+                            "{major_choice_flag}"
                         ],
-                        "unlockExit": true
+                        "unlockExit": true,
+                        "points": 2
                     }
                 }
             ]
@@ -106,30 +123,39 @@
                 {
                     "id": "c_prof_explain",
                     "speaker": "professor",
-                    "text": "There are 17 SDGs. They cover things like poverty, education, climate, equality… and we’re going to connect them to your lives here on campus.",
+                    "text": "There are 17 SDGs. They cover poverty, education, climate, equality… and we’ll connect them to your lives here on campus.",
                     "autoNext": "c_prof_question"
                 },
                 {
                     "id": "c_prof_question",
                     "speaker": "professor",
-                    "text": "So, be honest. How many of you actually think students like you can make a difference?",
+                    "text": "Be honest. How many of you think students like you can make a difference?",
                     "choices": [
                         {
                             "id": "c_choice_confident",
                             "text": "If we work together, yeah.",
                             "sdgDelta": 5,
+                            "setFlags": [
+                                "confidence_positive"
+                            ],
                             "nextNodeId": "c_prof_answer_confident"
                         },
                         {
                             "id": "c_choice_unsure",
                             "text": "Maybe? But it feels far from us.",
                             "sdgDelta": 3,
+                            "setFlags": [
+                                "confidence_neutral"
+                            ],
                             "nextNodeId": "c_prof_answer_unsure"
                         },
                         {
                             "id": "c_choice_dismissive",
                             "text": "I don’t think we can do much.",
                             "sdgDelta": -1,
+                            "setFlags": [
+                                "confidence_negative"
+                            ],
                             "nextNodeId": "c_prof_answer_dismissive"
                         }
                     ]
@@ -137,25 +163,25 @@
                 {
                     "id": "c_prof_answer_confident",
                     "speaker": "professor",
-                    "text": "Exactly. Change usually starts with small groups who take things seriously. Campus is a perfect place to experiment.",
+                    "text": "Exactly. Change starts with small groups taking things seriously. Campus is perfect for experimenting.",
                     "autoNext": "c_prof_foodbank"
                 },
                 {
                     "id": "c_prof_answer_unsure",
                     "speaker": "professor",
-                    "text": "That’s fair. It can feel distant. That’s why your projects this semester will focus on real issues around you.",
+                    "text": "It can feel distant. That’s why your projects this semester focus on real issues around you.",
                     "autoNext": "c_prof_foodbank"
                 },
                 {
                     "id": "c_prof_answer_dismissive",
                     "speaker": "professor",
-                    "text": "I get that reaction a lot. But by the end of this semester, I hope you’ll prove yourself wrong.",
+                    "text": "I get that reaction a lot. By the end of the semester, I hope you’ll prove yourself wrong.",
                     "autoNext": "c_prof_foodbank"
                 },
                 {
                     "id": "c_prof_foodbank",
                     "speaker": "professor",
-                    "text": "For example, some of your seniors worked with the campus food bank last year. They helped redistribute surplus food to students who needed it.",
+                    "text": "Some seniors worked with the campus food bank last year, helping redistribute surplus food to students who needed it.",
                     "autoNext": "c_friend_whisper"
                 },
                 {
@@ -170,10 +196,33 @@
                     "text": "New idea unlocked: Campus Food Bank.",
                     "onComplete": {
                         "setFlags": [
-                            "chapter1_scene2_dialogue_done"
+                            "chapter1_scene2_dialogue_done",
+                            "{major_choice_flag}"
                         ],
-                        "unlockExit": true
+                        "unlockExit": true,
+                        "points": 3
                     }
+                },
+                {
+                    "id": "c_bench_1",
+                    "inspectDialogueId": "inspect_c_bench_1",
+                    "speaker": "student",
+                    "text": "Honestly… I thought SDGs were just another poster thing. But the food bank example is real.",
+                    "sdgDelta": 1
+                },
+                {
+                    "id": "c_poster_sdg4",
+                    "inspectDialogueId": "inspect_c_poster_sdg4",
+                    "speaker": "system",
+                    "text": "Poster: SDG 4 — Quality Education. Education isn't just exams; it’s access, support, and equal opportunity.",
+                    "sdgDelta": 2
+                },
+                {
+                    "id": "c_poster_sdg13",
+                    "inspectDialogueId": "inspect_c_poster_sdg13",
+                    "speaker": "system",
+                    "text": "Poster: SDG 13 — Climate Action. Small campus habits add up: energy use, waste, transport choices.",
+                    "sdgDelta": 2
                 }
             ]
         },
@@ -183,6 +232,21 @@
             "startNodeId": "f_intro_friends",
             "exitUnlockedFlag": "chapter1_scene3_exit_unlocked",
             "nodes": [
+                {
+                    "id": "friend_looking_posters",
+                    "text": "Hey, you checking out those SDG posters too?",
+                    "choices": [
+                        {
+                            "text": "Okay",
+                            "nextNodeId": null
+                        }
+                    ]
+                },
+                {
+                    "id": "alice_npc",
+                    "speaker": "Alice",
+                    "text": "Oh hello."
+                },
                 {
                     "id": "f_intro_friends",
                     "speaker": "friendA",
@@ -217,7 +281,7 @@
                 {
                     "id": "f_friend_foodbank_intro",
                     "speaker": "friendA",
-                    "text": "We were just talking about that food bank the lecturer mentioned. They’re asking for student helpers this week.",
+                    "text": "We were just talking about the food bank the lecturer mentioned. They’re asking for student helpers this week.",
                     "autoNext": "f_friend_question"
                 },
                 {
@@ -230,7 +294,7 @@
                             "text": "Yes. I want to help.",
                             "sdgDelta": 5,
                             "setFlags": [
-                                "chapter2_joinedFoodBank"
+                                "initiative_foodbank"
                             ],
                             "nextNodeId": "f_friend_join_yes"
                         },
@@ -238,12 +302,18 @@
                             "id": "f_choice_join_maybe",
                             "text": "Maybe… I’ll see how my schedule is.",
                             "sdgDelta": 2,
+                            "setFlags": [
+                                "initiative_foodbank_neutral"
+                            ],
                             "nextNodeId": "f_friend_join_maybe"
                         },
                         {
                             "id": "f_choice_join_no",
                             "text": "I don’t know if I’m the right person for that.",
                             "sdgDelta": 0,
+                            "setFlags": [
+                                "initiative_foodbank_no"
+                            ],
                             "nextNodeId": "f_friend_join_no"
                         }
                     ]
@@ -252,6 +322,12 @@
                     "id": "f_friend_join_yes",
                     "speaker": "friendB",
                     "text": "Nice! We’ll go together. I’ll send you the details later.",
+                    "onComplete": {
+                        "points": 5,
+                        "setFlags": [
+                            "chapter1_scene3_joinedFoodBank"
+                        ]
+                    },
                     "autoNext": "f_friend_closing"
                 },
                 {
@@ -281,7 +357,8 @@
                             "chapter1_completed",
                             "chapter1_scene3_decision_done"
                         ],
-                        "unlockExit": true
+                        "unlockExit": true,
+                        "points": 3
                     }
                 }
             ]
