@@ -459,7 +459,7 @@ export default class Chapter2Scene2 extends BaseStoryScene {
             localStorage.setItem("currentScene", "Chapter2Scene2");
         });
 
-        emit("updateChapterScene", { title: "Street Outside Food Bank · Chapter 2" });
+        emit("updateChapterScene", { title: "Streets · Chapter 2" });
     }
 
     // Runs after BaseStoryScene.create()

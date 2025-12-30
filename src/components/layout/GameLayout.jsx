@@ -50,32 +50,12 @@ export default function GameLayout({ children }) {
                     "
                 >
                     {/* Top meta bar – fixed height */}
-                    {/* <div className="flex items-center justify-between px-5 h-12 border-b border-white/5 bg-gradient-to-r from-slate-950/80 via-slate-900/70 to-slate-950/80">
-                        <div className="flex items-center gap-2">
-                            <span className="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/50 text-emerald-300 text-sm font-semibold">
-                                SDG
-                            </span>
-                            <div className="flex flex-col">
-                                <span className="text-xs uppercase tracking-[0.18em] text-slate-400">
-                                    Story Chapter
-                                </span>
-                                <span className="text-sm font-semibold text-slate-100">
-                                    <ChapterHeader title={chapterTitle} />
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-1 text-[10px] text-slate-400">
-                            <span className="h-2 w-2 rounded-full bg-emerald-400/80" />
-                            <span>Progress autosaves on this device</span>
-                        </div>
-                    </div> */}
-                    <div className="flex items-center justify-between px-5 h-12 border-b border-white/5 bg-gradient-to-r from-slate-950/80 via-slate-900/70 to-slate-950/80">
+                    <div className="flex items-center justify-between px-5 h-13 border-b border-white/5 bg-gradient-to-r from-slate-950/80 via-slate-900/70 to-slate-950/80">
                         <ChapterHeader title={chapterTitle} />
 
-                        <div className="flex items-center gap-1 text-[10px] text-slate-400">
+                        <div className="flex items-center gap-4 text-[10px] text-slate-400">
                             <span className="h-2 w-2 rounded-full bg-emerald-400/80" />
-                            <span>Progress autosaves on this device</span>
+                            <span className="w-40">Progress autosaves on this device</span>
                         </div>
                     </div>
 

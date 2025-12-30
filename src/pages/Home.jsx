@@ -290,6 +290,8 @@ function ActionCard({
 }
 
 export default function Home() {
+  const [showResetConfirm, setShowResetConfirm] = useState(false); // ← Add state
+
   const [selectedSDG, setSelectedSDG] = useState(null);
   const [query, setQuery] = useState("");
   const [lastRoute, setLastRoute] = useState("/game"); // ✅ Start with default
@@ -310,38 +312,60 @@ export default function Home() {
   }
 
   const handleStartOver = () => {
-    if (
-      window.confirm(
-        "🔄 Are you sure you want to start over? This will reset all your progress, badges, and profile.  This cannot be undone!"
-      )
-    ) {
-      localStorage.removeItem("collectedBadges");
-      localStorage.removeItem("sdgExplorer:lastRoute");
-      localStorage.removeItem("currentChapter");
-      localStorage.removeItem("currentScene");
-      localStorage.removeItem("sdgPoints");
-      localStorage.removeItem("playerName");
-      localStorage.removeItem("completedChapters"); // ✅ ADD THIS
-      // Add any other keys your game uses
-      // ✅ NEW: Clear chapter completion flags
-      localStorage.removeItem("chapter1_completed");
-      localStorage.removeItem("chapter2_completed");
-      localStorage.removeItem("chapter3_completed");
-      localStorage.removeItem("chapter4_completed");
+    setShowResetConfirm(true); // Show modal instead of window.confirm
+  };
 
+  // if (
+  //   window.confirm(
+  //     "🔄 Are you sure you want to start over? This will reset all your progress, badges, and profile.  This cannot be undone!"
+  //   )
+  // ) {
 
+  // localStorage.removeItem("collectedBadges");
+  // localStorage.removeItem("sdgExplorer:lastRoute");
+  // localStorage.removeItem("currentChapter");
+  // localStorage.removeItem("currentScene");
+  // localStorage.removeItem("sdgPoints");
+  // localStorage.removeItem("playerName");
+  // localStorage.removeItem("completedChapters"); // ✅ ADD THIS
+  // // Add any other keys your game uses
+  // // ✅ NEW: Clear chapter completion flags
+  // localStorage.removeItem("chapter1_completed");
+  // localStorage.removeItem("chapter2_completed");
+  // localStorage.removeItem("chapter3_completed");
+  // localStorage.removeItem("chapter4_completed");
+  // ✅ Save profile before clearing
+  const confirmReset = () => {
+    // ✅ Save profile before clearing
+    const savedProfile = localStorage.getItem("sdgGoPlayerProfile");
 
-      // Force page reload to reset everything
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 100);
+    // ✅ Set reset flag
+    sessionStorage.setItem("isResetting", "true");
+
+    // ✅ SIMPLE: Clear everything
+    localStorage.clear();
+
+    // ✅ Restore profile
+    if (savedProfile) {
+      localStorage.setItem("sdgGoPlayerProfile", savedProfile);
     }
+
+    setShowResetConfirm(false);
+
+    // Force page reload
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 200);
+  };
+
+  const cancelReset = () => {
+    setShowResetConfirm(false);
   };
 
   // ✅ Update lastRoute whenever component mounts or focus returns
   useEffect(() => {
     const updateLastRoute = () => {
-      const saved = localStorage.getItem("sdgExplorer: lastRoute") || "/game";
+      const saved = localStorage.getItem("sdgExplorer:lastRoute") || "/game";
       setLastRoute(saved);
       console.log("✅ Updated lastRoute:", saved);
     };
@@ -623,6 +647,64 @@ export default function Home() {
             </div>
           </m.div>
         </div>
+
+
+
+
+        {/* ✅ CUSTOM RESET MODAL */}
+        <AnimatePresence>
+          {showResetConfirm && (
+            <m.div
+              className="fixed inset-0 z-50 flex items-center justify-center px-5 bg-black/70"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <m.div
+                className="relative w-full max-w-md rounded-3xl border border-white/10 bg-[#0B1024]/95 backdrop-blur-xl p-8 shadow-[0_30px_120px_-60px_rgba(0,0,0,0.95)]"
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+              >
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-red-500/70 via-orange-400/50 to-red-400/60" />
+
+                <div className="text-center">
+                  <div className="text-5xl mb-4">🔄</div>
+                  <h2 className="text-2xl font-extrabold text-white mb-2">Start Over? </h2>
+                  <p className="text-white/70 leading-relaxed">
+                    This will erase all your progress, badges, and game data. Your profile will be saved, but everything else resets.
+                  </p>
+                  <p className="text-red-300 font-semibold mt-4">This cannot be undone! </p>
+                </div>
+
+                <div className="mt-8 flex gap-3">
+                  <m.button
+                    type="button"
+                    whileHover={{ y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={cancelReset}
+                    className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white/80 hover:text-white transition"
+                  >
+                    Cancel
+                  </m.button>
+
+                  <m.button
+                    type="button"
+                    whileHover={{ y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={confirmReset}
+                    className="flex-1 rounded-2xl border border-red-400/30 bg-gradient-to-br from-red-500/28 to-orange-500/12 px-4 py-3 text-sm font-semibold text-white shadow-[0_12px_35px_-20px_rgba(239,68,68,0.6)]"
+                  >
+                    Yes, Reset Everything
+                  </m.button>
+                </div>
+              </m.div>
+            </m.div>
+          )}
+        </AnimatePresence>
+
+
+
 
         {/* Modal */}
         <AnimatePresence>

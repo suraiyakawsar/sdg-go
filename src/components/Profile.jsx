@@ -14,6 +14,9 @@ import {
 import { SDGProgress } from "./ui/SDGProgress";
 import { usePlayer } from "../pages/PlayerContext";
 import { BADGES } from "../utils/badges";
+import { getAvatarUri } from "../utils/avatar";
+import AvatarPicker from "./ui/AvatarPicker";
+
 
 // ✅ Helper functions to read live data from storage
 function getSDGPoints() {
@@ -109,6 +112,8 @@ export default function Profile() {
     const reduceMotion = useReducedMotion();
     const { profile, updateProfile } = usePlayer();
     const navigate = useNavigate();
+    // Inside the Profile component: 
+    const [showAvatarPicker, setShowAvatarPicker] = useState(false);
 
     // ✅ Editing state
     const [editing, setEditing] = useState(false);
@@ -129,6 +134,21 @@ export default function Profile() {
     const [lastRoute, setLastRoute] = useState(() =>
         localStorage.getItem("sdgExplorer:lastRoute") || "/game"
     );
+
+    // Get avatar URI (regenerate from config or use cached)
+    const avatarUri = profile?.avatar?.uri
+        || getAvatarUri(profile?.avatar)
+        || "assets/images/characters/ladyy.png";
+
+    // Handle avatar selection
+    const handleAvatarSelect = (avatarConfig) => {
+        updateProfile({
+            ...profile,
+            avatar: avatarConfig,
+        });
+        setShowAvatarPicker(false);
+    };
+
 
     // ✅ Update stats whenever profile or storage changes
     useEffect(() => {
@@ -323,14 +343,33 @@ export default function Profile() {
 
                                         <div className="flex items-center gap-4">
                                             <div className="relative">
-                                                <div className="w-16 h-16 rounded-2xl bg-black/40 border border-white/10 overflow-hidden">
+                                                {/* <div className="w-16 h-16 rounded-2xl bg-black/40 border border-white/10 overflow-hidden">
                                                     <img
                                                         src="assets/images/characters/ladyy.png"
                                                         alt="Avatar"
                                                         className="w-full h-full object-cover"
                                                         draggable={false}
                                                     />
+                                                </div> */}
+
+
+                                                <div
+                                                    className="w-16 h-16 rounded-2xl bg-black/40 border border-white/10 overflow-hidden cursor-pointer hover:border-emerald-400/50 transition relative group"
+                                                    onClick={() => setShowAvatarPicker(true)}
+                                                >
+                                                    <img
+                                                        src={avatarUri}  // ← DYNAMIC AVATAR
+                                                        alt="Avatar"
+                                                        className="w-full h-full object-cover"
+                                                        draggable={false}
+                                                    />
+                                                    {/* Hover edit overlay */}
+                                                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition rounded-2xl">
+                                                        <FiEdit3 className="w-5 h-5 text-white" />
+                                                    </div>
                                                 </div>
+
+
                                                 <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-400/90 shadow-[0_0_18px_rgba(52,211,153,0.5)] border border-black/40" />
                                             </div>
 
@@ -578,6 +617,29 @@ export default function Profile() {
                     </m.div>
                 </div>
             </div>
+
+
+            {/* Avatar Picker Modal */}
+            {showAvatarPicker && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70">
+                    <div className="relative w-full max-w-md rounded-3xl border border-white/10 bg-[#0B1024]/95 backdrop-blur-xl shadow-[0_30px_120px_-60px_rgba(0,0,0,0.95)] overflow-hidden">
+                        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500/70 via-cyan-400/50 to-purple-400/60" />
+
+                        <div className="p-2">
+                            <div className="text-center pt-4">
+                                <h2 className="text-xl font-extrabold text-white">Change Avatar</h2>
+                                <p className="text-sm text-white/60 mt-1">Pick a new look</p>
+                            </div>
+
+                            <AvatarPicker
+                                initialSeed={profile?.avatar?.seed || profile?.name || "player"}
+                                onSelect={handleAvatarSelect}
+                                onCancel={() => setShowAvatarPicker(false)}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
         </LazyMotion>
     );
 }

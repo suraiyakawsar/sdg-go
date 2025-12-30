@@ -14,51 +14,39 @@ export default function Game() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setReady(true), 2000);
+    const timer = setTimeout(() => setReady(true), 2200);
     return () => clearTimeout(timer);
   }, []);
 
+  // ✅ FULL SCREEN LOADING - before GameLayout renders
+  if (!ready) {
+    return (
+      <div className="fixed inset-0 z-50">
+        <GameLoadingScreen />
+      </div>
+    );
+  }
+  // ✅ GAME LAYOUT - after loading
   return (
     <GameLayout>
-      <div className="flex items-center justify-center w-full">
-        <div className="flex w-full gap-4">
-          {/* LEFT rail – hidden on very small screens, narrow on md, wider on xl */}
-          <div className="hidden sm:flex items-center justify-center sm:w-16 lg:w-20 xl:w-24">
-            {ready && <GameSidebar />}
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="flex items-center justify-center gap-2">
+
+          <div className="hidden sm:flex items-center justify-center sm:w-16 lg:w-20 xl:w-24 shrink-0">
+            <GameSidebar />
           </div>
 
-          {/* CENTER: playable canvas – grows/shrinks with viewport */}
-          <div className="flex-1 flex justify-start">
-            <div
-              className="relative w-full max-w-5xl rounded-2xl bg-slate-950 aspect-[16/9]"
-            >
-              {!ready ? (
-                <GameLoadingScreen />
-              ) : (
-                <>
-                  <PhaserGame />
-
-                  {/* overlay things that belong inside play area */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <BadgePopup />
-                  </div>
-                </>
-              )}
+          <div className="flex items-center justify-center">
+            <div className="relative w-full max-w-5xl rounded-2xl bg-slate-950 aspect-[16/9]">
+              <PhaserGame />
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <BadgePopup />
+              </div>
             </div>
           </div>
 
-          {/* RIGHT rail – same idea, sits outside play area
-          <div className="hidden sm:flex items-center justify-center sm:w-16 lg:w-20 xl:w-24">
-            {ready && <RightSidebar />}
-          </div> */}
-          {/* RIGHT rail (outside playable field) */}
-          <div
-            className="
-    flex items-center justify-center h-full
-    w-[220px] sm:w-[240px] md:w-[260px] lg:w-[280px] xl:w-[420px]
-  "
-          >
-            {ready && <RightSidebar />}
+          <div className="flex items-center justify-center h-full w-[220px] sm:w-[240px] md: w-[260px] lg:w-[280px] xl:w-[320px] shrink-0">
+            <RightSidebar />
           </div>
 
         </div>

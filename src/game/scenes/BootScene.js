@@ -14,6 +14,23 @@ export default class BootScene extends Phaser.Scene {
     }
 
     create() {
+        // // ✅ Check if resetting
+        // if (sessionStorage.getItem("isResetting")) {
+        //     sessionStorage.removeItem("isResetting");
+        //     console.log("🔄 Reset detected, starting fresh");
+        //     this.scene.start("Chapter1Scene");
+        //     return;
+        // }
+        // ✅ Check if reset flag is in URL
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("reset") === "true") {
+            console.log("🔄 Reset detected, starting Chapter1Scene");
+            // ✅ Remove the flag from URL
+            window.history.replaceState({}, document.title, "/");
+            this.scene.start("Chapter1Scene");
+            return;
+        }
+
         // ✅ NEW: Try to read saved scene first
         let sceneToStart = localStorage.getItem("currentScene");
 
