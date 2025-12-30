@@ -128,7 +128,7 @@ export default class Chapter4Scene1 extends BaseStoryScene {
             exitUnlockedFlag: "chapter4_scene1_exit_unlocked",
 
             walkArea: {
-                topY: 800,
+                topY: 600,
                 bottomY: 1100,
                 leftTopX: 400,
                 rightTopX: 1000,

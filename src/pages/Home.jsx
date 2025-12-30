@@ -318,15 +318,18 @@ export default function Home() {
       localStorage.removeItem("collectedBadges");
       localStorage.removeItem("sdgExplorer:lastRoute");
       localStorage.removeItem("currentChapter");
-      localStorage.removeItem("currentScene"); // ← ADD THIS LINE
+      localStorage.removeItem("currentScene");
       localStorage.removeItem("sdgPoints");
       localStorage.removeItem("playerName");
       localStorage.removeItem("completedChapters"); // ✅ ADD THIS
       // Add any other keys your game uses
+      // ✅ NEW: Clear chapter completion flags
+      localStorage.removeItem("chapter1_completed");
+      localStorage.removeItem("chapter2_completed");
+      localStorage.removeItem("chapter3_completed");
+      localStorage.removeItem("chapter4_completed");
 
-      // ✅ Also clear the profile context
-      const { resetProfile } = usePlayer(); // Make sure you have this
-      resetProfile();
+
 
       // Force page reload to reset everything
       setTimeout(() => {

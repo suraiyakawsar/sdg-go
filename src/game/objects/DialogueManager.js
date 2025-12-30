@@ -495,8 +495,43 @@ export default class DialogueManager {
   _handleNodeComplete(node) {
     const oc = node?.onComplete;
     if (!oc) return;
-    if (Array.isArray(oc.setFlags)) this._applyFlags(oc.setFlags);
-    if (oc.unlockExit) emit("sceneExitUnlocked", { sceneId: this.sceneConfig?.id, exitFlag: this.sceneConfig?.exitUnlockedFlag });
+
+    //   if (Array.isArray(oc.setFlags)) this._applyFlags(oc.setFlags);
+    //   if (oc.unlockExit) emit("sceneExitUnlocked", { sceneId: this.sceneConfig?.id, exitFlag: this.sceneConfig?.exitUnlockedFlag });
+    // }
+    // ✅ NEW: Save chapter completion flags to localStorage
+    if (Array.isArray(oc.setFlags)) {
+      oc.setFlags.forEach(flag => {
+        if (flag === "chapter1_completed") {
+          localStorage.setItem("chapter1_completed", "true");
+          console.log("✅ Chapter 1 marked as completed");
+        }
+        if (flag === "chapter2_completed") {
+          localStorage.setItem("chapter2_completed", "true");
+          console.log("✅ Chapter 2 marked as completed");
+        }
+        if (flag === "chapter3_completed") {
+          localStorage.setItem("chapter3_completed", "true");
+          console.log("✅ Chapter 3 marked as completed");
+        }
+        if (flag === "chapter4_completed") {
+          localStorage.setItem("chapter4_completed", "true");
+          console.log("✅ Chapter 4 marked as completed");
+        }
+      });
+
+      // ✅ EMIT EVENT to update RightSidebar
+      emit("updateChapterProgress");
+
+      this._applyFlags(oc.setFlags);
+    }
+
+    if (oc.unlockExit) {
+      emit("sceneExitUnlocked", {
+        sceneId: this.sceneConfig?.id,
+        exitFlag: this.sceneConfig?.exitUnlockedFlag
+      });
+    }
   }
 
   _runNodeCompletion(node) { this._handleNodeComplete(node); }

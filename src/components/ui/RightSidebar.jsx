@@ -28,12 +28,27 @@ export default function RightSidebar() {
     // ⭐ CHAPTER PROGRESSION (0–5)
     const [chapterProgress, setChapterProgress] = useState(() => {
         try {
-            const completed = JSON.parse(localStorage.getItem("completedChapters") || "[]");
-            return Array.isArray(completed) ? completed.length : 0;
+            // ✅ Check for actual chapter completion flags
+            const completedFlags = [
+                "chapter1_completed",
+                "chapter2_completed",
+                "chapter3_completed",
+                "chapter4_completed",
+            ];
+
+            let completedCount = 0;
+            for (const flag of completedFlags) {
+                if (localStorage.getItem(flag)) {
+                    completedCount++;
+                }
+            }
+
+            return completedCount;
         } catch {
             return 0;
         }
     });
+
 
     // ========== DERIVED NUMBERS ==========
     const primarySafeGoal = Number(primaryObj.goal) > 0 ? Number(primaryObj.goal) : 1;
@@ -207,13 +222,43 @@ export default function RightSidebar() {
     //     on("updateChapterProgress", handleChapterProgressUpdate);
     //     return () => off("updateChapterProgress", handleChapterProgressUpdate);
     // }, []);
+
+
+    // useEffect(() => {
+    //     const handleChapterProgressUpdate = () => {
+    //         try {
+    //             const completed = JSON.parse(localStorage.getItem("completedChapters") || "[]");
+    //             const count = Array.isArray(completed) ? completed.length : 0;
+    //             setChapterProgress(count);
+    //             console.log("✅ Chapter progress updated:", count);
+    //         } catch {
+    //             setChapterProgress(0);
+    //         }
+    //     };
+
+    // ============================================================
+    // CHAPTER PROGRESSION - Listen for updates
+    // ============================================================
     useEffect(() => {
         const handleChapterProgressUpdate = () => {
             try {
-                const completed = JSON.parse(localStorage.getItem("completedChapters") || "[]");
-                const count = Array.isArray(completed) ? completed.length : 0;
-                setChapterProgress(count);
-                console.log("✅ Chapter progress updated:", count);
+                // ✅ Check for actual chapter completion flags
+                const completedFlags = [
+                    "chapter1_completed",
+                    "chapter2_completed",
+                    "chapter3_completed",
+                    "chapter4_completed",
+                ];
+
+                let completedCount = 0;
+                for (const flag of completedFlags) {
+                    if (localStorage.getItem(flag)) {
+                        completedCount++;
+                    }
+                }
+
+                setChapterProgress(completedCount);
+                console.log("✅ Chapter progress updated:", completedCount);
             } catch {
                 setChapterProgress(0);
             }
@@ -498,8 +543,8 @@ export default function RightSidebar() {
                             </span>
                         </div>
 
-                        <div className="flex items-center justify-between gap-2">
-                            {Array.from({ length: 5 }).map((_, index) => {
+                        <div className=" mt-3 flex items-center justify-between gap-2">
+                            {Array.from({ length: 4 }).map((_, index) => {
                                 const unlocked = index < chapterProgress;
                                 return (
                                     <div key={index} className="flex flex-col items-center gap-1">
