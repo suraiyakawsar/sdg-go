@@ -104,7 +104,7 @@ export default function Navbar() {
                                     aria-label="Open user menu"
                                 >
                                     {/* subtle rim glow on hover */}
-                                    <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-purple-400/18 group-hover: ring-emerald-400/40 transition" />
+                                    <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-purple-400/18 group-hover:ring-emerald-400/40 transition" />
 
 
                                     {/* ✅ DYNAMIC AVATAR */}

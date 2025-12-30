@@ -10,13 +10,14 @@ import {
     FiBookOpen,
     FiTrendingUp,
     FiHome,
+    FiChevronRight,
 } from "react-icons/fi";
 import { SDGProgress } from "./ui/SDGProgress";
 import { usePlayer } from "../pages/PlayerContext";
 import { BADGES } from "../utils/badges";
 import { getAvatarUri } from "../utils/avatar";
 import AvatarPicker from "./ui/AvatarPicker";
-
+import { on, off } from "../utils/eventBus";
 
 // ✅ Helper functions to read live data from storage
 function getSDGPoints() {
@@ -35,22 +36,43 @@ function getBadgesCount() {
     return getBadgesKeys().length;
 }
 
+// ✅ FIXED: Read chapter completion flags correctly
 function getCompletedChapters() {
-    try {
-        const stored = localStorage.getItem("completedChapters");
-        if (stored) {
-            const arr = JSON.parse(stored);
-            return Array.isArray(arr) ? arr.length : Number(arr) || 1;
+    const completedFlags = [
+        "chapter1_completed",
+        "chapter2_completed",
+        "chapter3_completed",
+        "chapter4_completed",
+    ];
+
+    let count = 0;
+    for (const flag of completedFlags) {
+        if (localStorage.getItem(flag) === "true") {
+            count++;
         }
-        return 1;
-    } catch {
-        return 1;
     }
+
+    return count;
+}
+
+// ✅ Get current chapter (the one player is on)
+function getCurrentChapter() {
+    return Number(localStorage.getItem("currentChapter")) || 1;
+}
+
+// ✅ Get current scene name
+function getCurrentScene() {
+    return localStorage.getItem("currentScene") || "Chapter1Scene";
 }
 
 function getXP(points) {
-    // XP is 0-100 based on points
-    return Math.min(Math.round((points / 300) * 100), 100);
+    // XP is 0-100 based on points (adjust max as needed)
+    return Math.min(Math.round((points / 200) * 100), 100);
+}
+
+// ✅ Get total play time (if you're storing it)
+function getPlayTime() {
+    return Number(localStorage.getItem("totalPlayTime")) || 0;
 }
 
 function HudButton({ children, className = "", ...props }) {
@@ -108,11 +130,20 @@ function StatMini({ label, value, Icon, glow }) {
     );
 }
 
+// ✅ Chapter names for "Next Up" section
+const CHAPTER_INFO = {
+    1: { name: "Campus Life", scene: "Hallway", description: "Explore the hallway and meet your classmates." },
+    2: { name: "Food Bank", scene: "Food Bank", description: "Help at the local food bank and learn about hunger." },
+    3: { name: "Garden", scene: "Garden", description: "Work in the community garden and explore sustainability." },
+    4: { name: "Pond", scene: "Pond", description: "Clean up the pond and reflect on environmental impact." },
+};
+
+const TOTAL_CHAPTERS = 4; // Update this to match your actual chapter count
+
 export default function Profile() {
     const reduceMotion = useReducedMotion();
     const { profile, updateProfile } = usePlayer();
     const navigate = useNavigate();
-    // Inside the Profile component: 
     const [showAvatarPicker, setShowAvatarPicker] = useState(false);
 
     // ✅ Editing state
@@ -121,21 +152,23 @@ export default function Profile() {
 
     // ✅ Live stats state
     const [stats, setStats] = useState({
-        username: profile?.name || "Raya",
+        username: profile?.name || "Explorer",
         title: profile?.role || "Eco Explorer",
         sdgPoints: 0,
         badges: 0,
-        chapters: 1,
+        completedChapters: 0,
+        currentChapter: 1,
+        currentScene: "",
         xp: 0,
         badgeKeys: [],
     });
 
-    // ✅ Continue button route - read fresh from localStorage
+    // ✅ Continue button route
     const [lastRoute, setLastRoute] = useState(() =>
-        localStorage.getItem("sdgExplorer:lastRoute") || "/game"
+        localStorage.getItem("sdgExplorer: lastRoute") || "/game"
     );
 
-    // Get avatar URI (regenerate from config or use cached)
+    // Get avatar URI
     const avatarUri = profile?.avatar?.uri
         || getAvatarUri(profile?.avatar)
         || "assets/images/characters/ladyy.png";
@@ -149,66 +182,75 @@ export default function Profile() {
         setShowAvatarPicker(false);
     };
 
-
-    // ✅ Update stats whenever profile or storage changes
-    useEffect(() => {
+    // ✅ Load stats function
+    const loadStats = () => {
         const points = getSDGPoints();
         const badgeKeys = getBadgesKeys();
-        const badgesCount = badgeKeys.length;
-        const chapters = getCompletedChapters();
+        const completedChapters = getCompletedChapters();
+        const currentChapter = getCurrentChapter();
+        const currentScene = getCurrentScene();
         const xp = getXP(points);
 
         setStats({
-            username: profile?.name || "Raya",
+            username: profile?.name || "Explorer",
             title: profile?.role || "Eco Explorer",
             sdgPoints: points,
-            badges: badgesCount,
-            chapters: chapters,
+            badges: badgeKeys.length,
+            completedChapters: completedChapters,
+            currentChapter: currentChapter,
+            currentScene: currentScene,
             xp: xp,
             badgeKeys: badgeKeys,
         });
 
+        console.log("📊 Profile stats loaded:", {
+            points,
+            badges: badgeKeys.length,
+            completedChapters,
+            currentChapter,
+        });
+    };
+
+    // ✅ Update stats on mount and profile change
+    useEffect(() => {
+        loadStats();
         setEditName(profile?.name || "");
     }, [profile]);
 
-    // ✅ Listen for storage changes (when badges unlock, points change, etc.)
+    // ✅ Listen for storage changes
     useEffect(() => {
         const handleStorageChange = () => {
-            const points = getSDGPoints();
-            const badgeKeys = getBadgesKeys();
-            const badgesCount = badgeKeys.length;
-            const chapters = getCompletedChapters();
-            const xp = getXP(points);
-
-            setStats(prev => ({
-                ...prev,
-                sdgPoints: points,
-                badges: badgesCount,
-                chapters: chapters,
-                xp: xp,
-                badgeKeys: badgeKeys,
-            }));
+            loadStats();
         };
 
         window.addEventListener("storage", handleStorageChange);
         return () => window.removeEventListener("storage", handleStorageChange);
     }, []);
 
-    // ✅ Update lastRoute when component mounts or focus returns
+    // ✅ Listen for event bus updates (SDG points, badges, chapter progress)
+    useEffect(() => {
+        const handleUpdate = () => loadStats();
+
+        on("updateSDGPoints", handleUpdate);
+        on("badgeEarned", handleUpdate);
+        on("updateChapterProgress", handleUpdate);
+
+        return () => {
+            off("updateSDGPoints", handleUpdate);
+            off("badgeEarned", handleUpdate);
+            off("updateChapterProgress", handleUpdate);
+        };
+    }, []);
+
+    // ✅ Update lastRoute on mount
     useEffect(() => {
         const updateLastRoute = () => {
             const saved = localStorage.getItem("sdgExplorer:lastRoute") || "/game";
             setLastRoute(saved);
-            console.log("✅ Updated lastRoute in Profile:", saved);
         };
 
-        // Load on mount
         updateLastRoute();
-
-        // Listen for visibility changes (when user returns to tab)
         document.addEventListener("visibilitychange", updateLastRoute);
-
-        // Listen for window focus
         window.addEventListener("focus", updateLastRoute);
 
         return () => {
@@ -217,18 +259,16 @@ export default function Profile() {
         };
     }, []);
 
-    // ✅ Save edited name using updateProfile
+    // ✅ Save edited name
     function saveName() {
         const newName = editName.trim();
         if (newName && updateProfile) {
-            // Use updateProfile from PlayerContext
             updateProfile({
                 ...profile,
                 name: newName,
             });
             setStats(s => ({ ...s, username: newName }));
             setEditing(false);
-            console.log("✅ Profile name saved:", newName);
         }
     }
 
@@ -237,6 +277,15 @@ export default function Profile() {
         .slice(-4)
         .reverse()
         .map(key => BADGES.find(b => b.key === key));
+
+    // ✅ Calculate next chapter info
+    const nextChapter = stats.completedChapters < TOTAL_CHAPTERS
+        ? stats.completedChapters + 1
+        : null;
+    const nextChapterInfo = nextChapter ? CHAPTER_INFO[nextChapter] : null;
+
+    // ✅ Calculate completion percentage
+    const completionPercent = Math.round((stats.completedChapters / TOTAL_CHAPTERS) * 100);
 
     const pageEnter = {
         initial: { opacity: 0, y: 14, filter: "blur(4px)" },
@@ -253,7 +302,7 @@ export default function Profile() {
                     <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(to_right,rgba(255,255,255,0.35)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.35)_1px,transparent_1px)] bg-[size:48px_48px]" />
                 </div>
 
-                <div className="max-w-6xl mx-auto px-6 pb-14 relative">
+                <div className="max-w-6xl mx-auto px-6 pb-5 relative">
                     {/* Top HUD nav */}
                     <div className="flex items-center gap-2 shrink-0 mb-5">
                         <Link
@@ -264,10 +313,8 @@ export default function Profile() {
                                 "shadow-[0_18px_55px_-30px_rgba(0,0,0,0.95)]",
                                 "flex items-center justify-center",
                                 "text-white/75 hover:text-white transition",
-                                "focus:outline-none focus:ring-2 focus:ring-purple-500/25",
                             ].join(" ")}
                             aria-label="Back"
-                            title="Back"
                         >
                             <FiArrowLeft className="w-5 h-5 text-emerald-200" />
                         </Link>
@@ -280,10 +327,8 @@ export default function Profile() {
                                 "shadow-[0_18px_55px_-30px_rgba(0,0,0,0.95)]",
                                 "flex items-center justify-center",
                                 "text-white/75 hover:text-white transition",
-                                "focus:outline-none focus:ring-2 focus:ring-purple-500/25",
                             ].join(" ")}
                             aria-label="Home"
-                            title="Home"
                         >
                             <FiHome className="w-5 h-5 text-emerald-200" />
                         </Link>
@@ -343,33 +388,17 @@ export default function Profile() {
 
                                         <div className="flex items-center gap-4">
                                             <div className="relative">
-                                                {/* <div className="w-16 h-16 rounded-2xl bg-black/40 border border-white/10 overflow-hidden">
-                                                    <img
-                                                        src="assets/images/characters/ladyy.png"
-                                                        alt="Avatar"
-                                                        className="w-full h-full object-cover"
-                                                        draggable={false}
-                                                    />
-                                                </div> */}
-
-
                                                 <div
-                                                    className="w-16 h-16 rounded-2xl bg-black/40 border border-white/10 overflow-hidden cursor-pointer hover:border-emerald-400/50 transition relative group"
+                                                    className="w-16 h-16 rounded-2xl bg-black/40 border border-white/10 overflow-hidden cursor-pointer hover:border-emerald-400/50 transition group"
                                                     onClick={() => setShowAvatarPicker(true)}
                                                 >
                                                     <img
-                                                        src={avatarUri}  // ← DYNAMIC AVATAR
+                                                        src={avatarUri}
                                                         alt="Avatar"
-                                                        className="w-full h-full object-cover"
+                                                        className="w-full h-full object-cover transition group-hover:scale-105"
                                                         draggable={false}
                                                     />
-                                                    {/* Hover edit overlay */}
-                                                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition rounded-2xl">
-                                                        <FiEdit3 className="w-5 h-5 text-white" />
-                                                    </div>
                                                 </div>
-
-
                                                 <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-400/90 shadow-[0_0_18px_rgba(52,211,153,0.5)] border border-black/40" />
                                             </div>
 
@@ -388,7 +417,7 @@ export default function Profile() {
                                                         onChange={e => setEditName(e.target.value)}
                                                         maxLength={24}
                                                         placeholder="Enter name"
-                                                        className="w-full px-2 py-1 bg-black/40 border border-white/20 rounded text-white text-lg font-extrabold focus:outline-none focus:border-emerald-400/60"
+                                                        className="w-full px-2 py-1 bg-black/40 border border-white/20 rounded text-white text-lg font-extrabold focus:outline-none focus:border-emerald-400/50"
                                                         autoFocus
                                                     />
                                                 )}
@@ -403,7 +432,6 @@ export default function Profile() {
                                             <div className="mt-4 flex gap-2">
                                                 <m.button
                                                     type="button"
-                                                    whileHover={{ y: -2 }}
                                                     whileTap={{ scale: 0.98 }}
                                                     onClick={saveName}
                                                     className="flex-1 px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition text-sm"
@@ -412,7 +440,6 @@ export default function Profile() {
                                                 </m.button>
                                                 <m.button
                                                     type="button"
-                                                    whileHover={{ y: -2 }}
                                                     whileTap={{ scale: 0.98 }}
                                                     onClick={() => {
                                                         setEditing(false);
@@ -449,7 +476,7 @@ export default function Profile() {
 
                                             <HudButton
                                                 onClick={() => navigate(lastRoute)}
-                                                className="from-emerald-500/28 to-lime-500/12"
+                                                className="bg-gradient-to-r from-emerald-500/20 to-lime-500/10"
                                             >
                                                 <FiPlay className="w-4 h-4 text-emerald-200" />
                                                 Continue
@@ -465,9 +492,9 @@ export default function Profile() {
                                             </div>
                                             <Link
                                                 to="/badges"
-                                                className="text-xs text-white/60 hover:text-white transition"
+                                                className="text-xs text-white/60 hover:text-white transition flex items-center gap-1"
                                             >
-                                                View all →
+                                                View all <FiChevronRight size={12} />
                                             </Link>
                                         </div>
 
@@ -511,7 +538,7 @@ export default function Profile() {
                                     </div>
                                 </m.div>
 
-                                {/* RIGHT: Stats + progress */}
+                                {/* RIGHT:  Stats + progress */}
                                 <m.div
                                     initial={{ opacity: 0, x: 10 }}
                                     animate={{ opacity: 1, x: 0 }}
@@ -534,13 +561,13 @@ export default function Profile() {
                                         />
                                         <StatMini
                                             label="Chapters"
-                                            value={stats.chapters}
+                                            value={`${stats.completedChapters}/${TOTAL_CHAPTERS}`}
                                             Icon={FiBookOpen}
                                             glow="#60A5FA"
                                         />
                                     </div>
 
-                                    {/* Progress module */}
+                                    {/* Progress Summary */}
                                     <div className="group relative rounded-3xl bg-black/60 border border-white/10 backdrop-blur-md p-6 shadow-[0_18px_55px_-30px_rgba(0,0,0,0.95)] overflow-hidden">
                                         <span
                                             className="pointer-events-none absolute inset-x-1 bottom-0 h-[3px] opacity-0 group-hover:opacity-100 transition"
@@ -557,18 +584,20 @@ export default function Profile() {
                                                     Progress Summary
                                                 </div>
                                                 <div className="text-lg font-extrabold text-white/90 mt-1">
-                                                    {stats.chapters >= 17
+                                                    {stats.completedChapters >= TOTAL_CHAPTERS
                                                         ? "🎉 All chapters complete!"
-                                                        : "You're building momentum. "}
+                                                        : stats.completedChapters > 0
+                                                            ? "You're building momentum!"
+                                                            : "Your journey begins... "}
                                                 </div>
                                                 <div className="text-sm text-white/65 mt-2 leading-relaxed">
-                                                    {stats.chapters >= 17
+                                                    {stats.completedChapters >= TOTAL_CHAPTERS
                                                         ? "Amazing!  You've completed all SDG chapters.  Explore badges and replay for higher SDG points!"
-                                                        : "Keep completing chapters to unlock more SDGs, missions, and badges. "}
+                                                        : `You've completed ${stats.completedChapters} of ${TOTAL_CHAPTERS} chapters.  Keep exploring to unlock more SDGs and badges!`}
                                                 </div>
                                             </div>
 
-                                            <div className="w-11 h-11 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+                                            <div className="w-11 h-11 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
                                                 <FiTrendingUp className="w-5 h-5 text-fuchsia-200" />
                                             </div>
                                         </div>
@@ -578,46 +607,94 @@ export default function Profile() {
                                             <div className="flex items-center justify-between text-xs text-white/55">
                                                 <span>Chapter Completion</span>
                                                 <span className="text-white/60 font-semibold">
-                                                    {stats.chapters}/17
+                                                    {completionPercent}%
                                                 </span>
                                             </div>
 
                                             <div className="mt-2 h-3 bg-gray-800/80 rounded-full overflow-hidden">
                                                 <m.div
-                                                    className="h-full bg-gradient-to-r from-purple-400 to-cyan-300 transition-all duration-500"
-                                                    style={{
-                                                        width: `${Math.min(
-                                                            (stats.chapters / 17) * 100,
-                                                            100
-                                                        )}%`,
-                                                    }}
+                                                    className="h-full bg-gradient-to-r from-purple-400 to-cyan-300"
+                                                    initial={{ width: 0 }}
+                                                    animate={{ width: `${completionPercent}%` }}
+                                                    transition={{ duration: 0.8, ease: "easeOut" }}
                                                 />
                                             </div>
 
+                                            {/* Chapter indicators */}
+                                            <div className="mt-3 flex items-center justify-between gap-2">
+                                                {Array.from({ length: TOTAL_CHAPTERS }).map((_, i) => {
+                                                    const isCompleted = i < stats.completedChapters;
+                                                    const isCurrent = i + 1 === stats.currentChapter;
+                                                    return (
+                                                        <div
+                                                            key={i}
+                                                            className={`flex-1 h-1. 5 rounded-full transition-all ${isCompleted
+                                                                ? "bg-emerald-400"
+                                                                : isCurrent
+                                                                    ? "bg-purple-400/60"
+                                                                    : "bg-white/10"
+                                                                }`}
+                                                            title={`Chapter ${i + 1}${isCompleted ? " ✓" : isCurrent ? " (current)" : ""}`}
+                                                        />
+                                                    );
+                                                })}
+                                            </div>
+
                                             <div className="mt-2 text-[11px] text-white/45">
-                                                Tip: explore SDGs on the Home hub to preview actions before each chapter.
+                                                Currently on Chapter {stats.currentChapter}
+                                                {stats.currentScene && ` · ${stats.currentScene.replace(/Scene\d*$/, "").replace(/Chapter\d/, "")}`}
                                             </div>
                                         </div>
                                     </div>
 
                                     {/* Next Up */}
-                                    <div className="rounded-3xl bg-black/60 border border-white/10 backdrop-blur-md p-5 shadow-[0_18px_55px_-30px_rgba(0,0,0,0.95)]">
-                                        <div className="text-xs text-white/55 uppercase tracking-wider">
-                                            Next Up
+                                    <m.div
+                                        className="group relative rounded-3xl bg-black/60 border border-white/10 backdrop-blur-md p-5 shadow-[0_18px_55px_-30px_rgba(0,0,0,0.95)] overflow-hidden cursor-pointer"
+                                        whileHover={{ y: -2 }}
+                                        onClick={() => navigate(lastRoute)}
+                                    >
+                                        <span
+                                            className="pointer-events-none absolute inset-x-1 bottom-0 h-[3px] opacity-0 group-hover:opacity-100 transition"
+                                            style={{
+                                                background: `linear-gradient(90deg, transparent, #34D399, transparent)`,
+                                                boxShadow: `0 0 10px #34D399, 0 0 22px #34D399CC`,
+                                                filter: "saturate(1.6)",
+                                            }}
+                                        />
+
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <div className="text-xs text-white/55 uppercase tracking-wider flex items-center gap-2">
+                                                    Next Up
+                                                    {stats.completedChapters < TOTAL_CHAPTERS && (
+                                                        <span className="px-1. 5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-semibold">
+                                                            Ch.  {nextChapter}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div className="mt-2 text-base font-semibold text-white/90">
+                                                    {stats.completedChapters >= TOTAL_CHAPTERS
+                                                        ? "🏆 All chapters completed!"
+                                                        : nextChapterInfo?.name || `Chapter ${nextChapter}`}
+                                                </div>
+                                                <div className="mt-1 text-sm text-white/60 leading-relaxed">
+                                                    {stats.completedChapters >= TOTAL_CHAPTERS
+                                                        ? "Review your badges or replay for higher SDG points."
+                                                        : nextChapterInfo?.description || `Continue to Chapter ${nextChapter} and aim for a +10 SDG point choice. `}
+                                                </div>
+                                            </div>
+
+                                            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center shrink-0 group-hover:bg-emerald-500/30 transition">
+                                                <FiPlay className="w-5 h-5 text-emerald-300" />
+                                            </div>
                                         </div>
-                                        <div className="mt-2 text-sm text-white/75 leading-relaxed">
-                                            {stats.chapters >= 17
-                                                ? "All chapters completed! Review your badges or replay for higher SDG points."
-                                                : `Continue Chapter ${stats.chapters + 1} and aim for a +10 SDG point choice.`}
-                                        </div>
-                                    </div>
+                                    </m.div>
                                 </m.div>
                             </div>
                         </div>
                     </m.div>
                 </div>
             </div>
-
 
             {/* Avatar Picker Modal */}
             {showAvatarPicker && (

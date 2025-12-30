@@ -45,7 +45,7 @@ export default function Game() {
             </div>
           </div>
 
-          <div className="flex items-center justify-center h-full w-[220px] sm:w-[240px] md: w-[260px] lg:w-[280px] xl:w-[320px] shrink-0">
+          <div className="flex items-center justify-center h-full w-[220px] sm:w-[240px] md:w-[260px] lg:w-[280px] xl:w-[320px] shrink-0">
             <RightSidebar />
           </div>
 
