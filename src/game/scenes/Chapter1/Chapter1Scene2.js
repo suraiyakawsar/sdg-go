@@ -42,8 +42,8 @@ export default class Chapter1Scene2 extends BaseStoryScene {
 
             // NPC list (BaseStoryScene will create + tooltip + indicator automatically)
             npcs: [
-                { name: "teacher", texture: "teacher", x: 950, y: 630, scale: 0.37, dialogueId: "c_intro_prof" },
-                { name: "students", texture: "students", x: 940, y: 770, dialogueId: "c_bench_1", tooltip: { offsetX: 60, offsetY: 50 } },
+                { name: "teacher", texture: "teacher", x: 950, y: 630, scale: 0.37, dialogueId: "c_prof_start", inspectDialogueId: "inspect_professor" },
+                { name: "students", texture: "students", x: 940, y: 770, dialogueId: "c_bench_1", tooltip: { offsetX: 60, offsetY: 50 }, inspectDialogueId: "inspect_student" },
                 // { name: "bench2", texture: "crystal_npc", x: 1210, y: 825, scale: 1.35, dialogueId: "c_bench_2" },
                 // { name: "bench3", texture: "elvis_npc", x: 740, y: 725, scale: 1.3, dialogueId: "c_bench_3" },
                 // { name: "bench4", texture: "zahir_npc", x: 1120, y: 735, scale: 1.4, dialogueId: "c_bench_4" },

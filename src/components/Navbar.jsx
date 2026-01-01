@@ -8,12 +8,10 @@ import { getAvatarUri } from "../utils/avatar";
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
-    const ref = useRef(null);
-
     const navigate = useNavigate();
     const location = useLocation();
+    const ref = useRef(null);
     const reduceMotion = useReducedMotion();
-
 
 
     // ✅ Get profile FIRST
@@ -56,30 +54,68 @@ export default function Navbar() {
         navigate("/", { replace: true });
     }
 
+    // To handle home page navigation
+    const handleSmoothScroll = (sectionId) => {
+        setOpen(false);
+        if (location.pathname === "/") {
+            // If already on home, scroll to section
+            const element = document.getElementById(sectionId);
+            element?.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+            // Navigate to home first, then scroll
+            navigate(`/? section=${sectionId}`, { replace: false });
+        }
+    };
+
+
     return (
         <LazyMotion features={domAnimation}>
             <header className="fixed top-0 left-0 right-0 z-50">
                 <div className="relative border-b border-white/10 bg-black/60 backdrop-blur-md">
+
+
                     {/* subtle color wash */}
                     <div className="pointer-events-none absolute inset-0 opacity-70">
                         <div className="absolute -top-10 left-8 h-20 w-52 rounded-full bg-purple-500/18 blur-2xl" />
                         <div className="absolute -top-12 right-10 h-20 w-52 rounded-full bg-cyan-400/14 blur-2xl" />
                     </div>
-
                     {/* thin gradient accent line */}
                     <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-purple-400/35 via-emerald-300/25 to-cyan-300/35" />
+
 
                     <div className="relative max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
                         {/* Brand */}
                         <Link to="/" className="flex items-center gap-2 select-none">
                             <span className="text-lg">🌍</span>
                             <span className="text-base sm:text-lg font-extrabold tracking-tight text-white">
-                                SDG Explorer
+                                SDGo!
                             </span>
                             <span className="hidden sm:inline-flex ml-2 text-[11px] px-2 py-0.5 rounded-full border border-white/10 bg-white/5 text-white/60">
                                 Hub
                             </span>
                         </Link>
+
+                        {/* Desktop Navigation - Add this */}
+                        {location.pathname === "/" && (
+                            <nav className="hidden lg:flex items-center gap-1">
+                                {[
+                                    { label: "Features", id: "features" },
+                                    { label: "Explore SDGs", id: "explore" },
+                                    { label: "Impact", id: "impact" },
+                                    { label: "About", id: "about" },
+                                ].map((item) => (
+                                    <m.button
+                                        key={item.id}
+                                        onClick={() => handleSmoothScroll(item.id)}
+                                        whileHover={{ y: -2 }}
+                                        className="px-4 py-2 text-sm text-white/70 hover:text-emerald-400 transition"
+                                    >
+                                        {item.label}
+                                    </m.button>
+                                ))}
+                            </nav>
+                        )}
+
 
                         {/* Right side */}
                         <div className="flex items-center gap-2">
@@ -261,6 +297,7 @@ export default function Navbar() {
                                 </AnimatePresence>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </header>

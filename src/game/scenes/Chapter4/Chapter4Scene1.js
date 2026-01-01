@@ -164,6 +164,12 @@ export default class Chapter4Scene1 extends BaseStoryScene {
     create() {
         super.create();
 
+        // ✅ Reset session counters at the START of chapter 4
+        localStorage.setItem("sessionSDGPoints", "0");
+        localStorage.setItem("sessionGoodChoices", "0");
+        localStorage.setItem("sessionBadChoices", "0");
+        console.log("🔄 Chapter 4: Session counters reset");
+
         // ✅ Store current scene (NO SPACE in key)
         localStorage.setItem("sdgExplorer:lastRoute", "/game");  // ← Remove space
         localStorage.setItem("currentChapter", 4);

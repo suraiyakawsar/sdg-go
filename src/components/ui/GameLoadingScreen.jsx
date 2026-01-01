@@ -188,7 +188,7 @@ export default function GameLoadingScreen() {
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.2, duration: 0.6 }}
                                 >
-                                    SDG Explorer
+                                    SDGo!
                                 </motion.h1>
                                 <motion.p
                                     className="text-base text-white/60 mt-1"

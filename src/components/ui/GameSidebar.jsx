@@ -5,7 +5,7 @@ import { emit, on } from "../../utils/eventBus";
 import { FiAward, FiUser, FiHome, FiBookOpen } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePlayer } from "../../pages/PlayerContext";
-import { getAvatarUri } from "../../utils/avatar"; // ← Add this import
+import { getAvatarUri } from "../../utils/avatar";
 
 // ✅ Helper:  Get current chapter from localStorage
 function getCurrentChapter() {

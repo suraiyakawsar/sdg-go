@@ -294,7 +294,7 @@ export default function Profile() {
 
     return (
         <LazyMotion features={domAnimation}>
-            <div className="min-h-screen w-screen overflow-hidden bg-gradient-to-br from-gray-900 via-indigo-950 to-purple-900 text-white pt-10">
+            <div className="min-h-screen w-screen overflow-hidden bg-gradient-to-br from-gray-900 via-indigo-950 to-purple-900 text-white pt-10 pb-20">
                 {/* Ambient glow */}
                 <div className="absolute inset-0 -z-10 overflow-hidden">
                     <div className="absolute -inset-10 bg-gradient-to-tr from-emerald-400/10 via-purple-500/10 to-cyan-400/10 blur-3xl pointer-events-none" />

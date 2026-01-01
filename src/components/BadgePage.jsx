@@ -247,7 +247,7 @@ export default function BadgePage() {
     // Share logic
     const shareUrl = window.location.origin;
     const shareText = selected
-        ? `I just unlocked the "${selected.name}" badge in SDG Explorer! 🏆 #SDGExplorer #Achievement`
+        ? `I just unlocked the "${selected.name}" badge in SDGo! 🏆 #SDGExplorer #Achievement`
         : "";
 
     const handleNativeShare = async () => {

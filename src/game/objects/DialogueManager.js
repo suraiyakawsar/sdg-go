@@ -470,10 +470,68 @@ export default class DialogueManager {
   _handleChoice(choice) {
     if (!choice) return;
 
-    if (typeof choice.sdgDelta === "number") {
+
+    // ✅ TRACK CHOICE TYPE FOR GAME SUMMARY
+    // ✅ Record good vs bad choices
+    if (typeof choice.sdgDelta === "number" && choice.sdgDelta !== 0) {
       addSDGPoints(choice.sdgDelta);
       emit("updateSDGPoints", (this.sdgPointsObj.points || 0) + choice.sdgDelta);
+
+
+      // ✅ Track total SDG points
+      const totalPoints = Number(localStorage.getItem("sdgPoints")) || 0;
+      localStorage.setItem("sdgPoints", String(totalPoints + choice.sdgDelta));
+
+
+      // ✅ Track session SDG points (for chapter summary)
+      const sessionPoints = Number(localStorage.getItem("sessionSDGPoints")) || 0;
+      localStorage.setItem("sessionSDGPoints", String(sessionPoints + choice.sdgDelta));
+
+      if (choice.sdgDelta > 0) {
+        // GOOD CHOICE
+        const totalGood = Number(localStorage.getItem("goodChoices")) || 0;
+        localStorage.setItem("goodChoices", String(totalGood + 1));
+
+        const sessionGood = Number(localStorage.getItem("sessionGoodChoices")) || 0;
+        localStorage.setItem("sessionGoodChoices", String(sessionGood + 1));
+
+        console.log("✅ Good choice!  Total:", totalGood + 1, "Session:", sessionGood + 1);
+      } else if (choice.sdgDelta < 0) {
+        // BAD CHOICE
+        const totalBad = Number(localStorage.getItem("badChoices")) || 0;
+        localStorage.setItem("badChoices", String(totalBad + 1));
+
+        const sessionBad = Number(localStorage.getItem("sessionBadChoices")) || 0;
+        localStorage.setItem("sessionBadChoices", String(sessionBad + 1));
+
+        console.log("❌ Bad choice! Total:", totalBad + 1, "Session:", sessionBad + 1);
+      }
     }
+
+
+
+    // ✅ Also check for explicit markers (for choices without sdgDelta)
+    if (choice.isGoodChoice === true) {
+      const totalGood = Number(localStorage.getItem("goodChoices")) || 0;
+      localStorage.setItem("goodChoices", String(totalGood + 1));
+      const sessionGood = Number(localStorage.getItem("sessionGoodChoices")) || 0;
+      localStorage.setItem("sessionGoodChoices", String(sessionGood + 1));
+      console.log("✅ Good choice (explicit)! Total:", totalGood + 1);
+    } else if (choice.isBadChoice === true || choice.isCareless === true) {
+      const totalBad = Number(localStorage.getItem("badChoices")) || 0;
+      localStorage.setItem("badChoices", String(totalBad + 1));
+      const sessionBad = Number(localStorage.getItem("sessionBadChoices")) || 0;
+      localStorage.setItem("sessionBadChoices", String(sessionBad + 1));
+      console.log("❌ Bad choice (explicit)! Total:", totalBad + 1);
+    }
+
+
+    // if (typeof choice.sdgDelta === "number") {
+    //   addSDGPoints(choice.sdgDelta);
+    //   emit("updateSDGPoints", (this.sdgPointsObj.points || 0) + choice.sdgDelta);
+    // }
+
+
 
     if (Array.isArray(choice.setFlags)) this._applyFlags(choice.setFlags);
 

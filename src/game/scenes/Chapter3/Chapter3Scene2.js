@@ -1,6 +1,7 @@
 // src/scenes/chapter3/Chapter3Scene2.js
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on /*, off*/ } from "../../../utils/eventBus";
+import { saveChapterStats } from "../../../utils/gameSummary";
 
 export default class Chapter3Scene2 extends BaseStoryScene {
     constructor() {
@@ -87,6 +88,7 @@ export default class Chapter3Scene2 extends BaseStoryScene {
         // local state just for posters
         this.posterFound = 0;
         this.posterGoal = 3;
+        this._chapterCompleted = false;
 
         // bind storage route
     }
@@ -242,14 +244,60 @@ export default class Chapter3Scene2 extends BaseStoryScene {
     // --------------------------------
     // Door click override: locked until unlocked
     // --------------------------------
+    // _onDoorClicked() {
+    //     if (!this.doorUnlocked) {
+    //         console.log("Door locked. Talk to your professor first.");
+    //         return;
+    //     }
+
+    //     if (this.playerInExitZone) {
+    //         this._onChapterComplete(); // ✅ Show summary instead of going directly
+    //     } else {
+    //         console.log("Too far from the door.");
+    //     }
+    // }
+    // ✅ OVERRIDE:  Show chapter summary when clicking door
     _onDoorClicked() {
+        console.log("🚪 Door clicked!  doorUnlocked:", this.doorUnlocked);
+
         if (!this.doorUnlocked) {
-            console.log("Door locked. Talk to your professor first.");
+            console.log("❌ Door is locked");
             return;
         }
 
-        if (this.playerInExitZone) this.goToNextScene();
-        else console.log("Too far from the door.");
+        this._onChapterComplete();
     }
 
+    // ✅ Chapter complete handler
+    _onChapterComplete() {
+        if (this._chapterCompleted) {
+            console.log("⚠️ Chapter already completed, skipping.. .");
+            return;
+        }
+        this._chapterCompleted = true;
+
+        console.log("🎉 Chapter 3 Complete!");
+
+        // Mark chapter as complete
+        localStorage.setItem("chapter3_completed", "true");
+        emit("updateChapterProgress");
+
+        // Freeze the player
+        if (this.ladyPlayer) {
+            this.ladyPlayer.setVelocity(0, 0);
+            this.ladyPlayer.anims?.play("idle", true);
+        }
+        this.input.enabled = false;
+
+        // Show chapter summary
+        console.log("📤 Emitting ui:showChapterSummary for chapter 3...");
+        emit("ui:showChapterSummary", { chapter: 3 });
+    }
+}
+
+// Helper to add SDG points (session-based)
+function addSDGPoints(points) {
+    const currentPoints = Number(localStorage.getItem("sessionSDGPoints")) || 0;
+    const newTotal = currentPoints + points;
+    localStorage.setItem("sessionSDGPoints", String(newTotal));
 }

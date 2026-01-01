@@ -1,6 +1,7 @@
 // src/scenes/chapter4/Chapter4Scene2.js
 import BaseStoryScene from "../BaseStoryScene";
 import { emit } from "../../../utils/eventBus";
+import { saveChapterStats } from "../../../utils/gameSummary";
 
 export default class Chapter4Scene2 extends BaseStoryScene {
     constructor() {
@@ -46,6 +47,8 @@ export default class Chapter4Scene2 extends BaseStoryScene {
             ],
         });
 
+        this._chapterCompleted = false;
+
     }
 
     create() {
@@ -82,12 +85,25 @@ export default class Chapter4Scene2 extends BaseStoryScene {
             console.log("Door locked. Complete the bus stop conversation first.");
             return;
         }
+
         if (this.playerInExitZone) {
-            console.log("End of game reached! 🎉");
-            // You can trigger end-game scene or summary here
-            emit("gameCompleted");
+            this._onChapterComplete(); // ✅ Show summary instead of going directly
         } else {
             console.log("Too far from the door.");
         }
+    }
+
+    _onChapterComplete() {
+        // Save chapter stats
+        saveChapterStats(4); // Pass chapter number
+
+        // Mark chapter as complete
+        localStorage.setItem("chapter4_completed", "true");
+        emit("updateChapterProgress");
+
+        // Show chapter summary after a short delay
+        this.time.delayedCall(1000, () => {
+            emit("ui:showChapterSummary", { chapter: 4 });
+        });
     }
 }

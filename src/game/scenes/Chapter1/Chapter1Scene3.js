@@ -1,6 +1,8 @@
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
+import { saveChapterStats } from "../../../utils/gameSummary";
+
 
 export default class Chapter1Scene3 extends BaseStoryScene {
   constructor() {
@@ -36,7 +38,7 @@ export default class Chapter1Scene3 extends BaseStoryScene {
           y: 670,
           scale: 0.45,
           dialogueId: "f_intro_friends",
-          inspectDialogueId: "friend_looking_posters"
+          inspectDialogueId: "inspect_friends"
         },
         {
           name: "alice",
@@ -45,7 +47,7 @@ export default class Chapter1Scene3 extends BaseStoryScene {
           y: 575,
           scale: 0.23,
           dialogueId: "alice_npc",
-          inspectDialogueId: "friend_looking_posters"
+          inspectDialogueId: "inspect_alice"
         }
       ]
     });
@@ -57,6 +59,7 @@ export default class Chapter1Scene3 extends BaseStoryScene {
     // local state just for posters
     this.posterFound = 0;
     this.posterGoal = 3;
+    this._chapterCompleted = false; // ✅ Add flag
 
     // bind storage route
   }
@@ -217,19 +220,6 @@ export default class Chapter1Scene3 extends BaseStoryScene {
     }
   }
 
-  // --------------------------------
-  // Door click override: locked until unlocked
-  // --------------------------------
-  _onDoorClicked() {
-    if (!this.doorUnlocked) {
-      console.log("Door locked. Talk to your friends first.");
-      return;
-    }
-
-    if (this.playerInExitZone) this.goToNextScene();
-    else console.log("Too far from the door.");
-  }
-
 
   // --------------------------------------------------
   // Easter egg
@@ -251,4 +241,69 @@ export default class Chapter1Scene3 extends BaseStoryScene {
       emit("badgeEarned", { name: "Curious Cat", icon: "😼", subtitle: "Why are you touching other people's bag?" });
     });
   }
+
+
+  // --------------------------------
+  // Door click override: locked until unlocked
+  // --------------------------------
+  // _onDoorClicked() {
+  //   if (!this.doorUnlocked) {
+  //     console.log("Door locked. Talk to your friends first.");
+  //     return;
+  //   }
+
+  //   if (this.playerInExitZone) {
+  //     this._onChapterComplete(); // ✅ Show summary instead of going directly
+  //   } else {
+  //     console.log("Too far from the door.");
+  //   }
+  // }
+
+  _onDoorClicked() {
+    console.log("🚪 Door clicked!");
+    console.log("  - doorUnlocked:", this.doorUnlocked);
+    console.log("  - playerInExitZone:", this.playerInExitZone);
+
+    if (!this.doorUnlocked) {
+      console.log("❌ Door locked.  Talk to your friends first.");
+      return;
+    }
+
+    // ✅ TEMPORARY FIX: Skip the exit zone check for now
+    // if (this.playerInExitZone) {
+    this._onChapterComplete();
+    // } else {
+    //     console.log("Too far from the door.");
+    // }
+  }
+
+  // ✅ Chapter complete handler
+  _onChapterComplete() {
+    // Prevent double-triggering
+    if (this._chapterCompleted) {
+      console.log("⚠️ Chapter already completed, skipping.. .");
+      return;
+    }
+    this._chapterCompleted = true;
+
+    console.log("🎉 Chapter 1 Complete!  Showing summary.. .");
+
+    // Mark chapter as complete
+    localStorage.setItem("chapter1_completed", "true");
+    emit("updateChapterProgress");
+
+    // Freeze the player
+    this.input.enabled = false;
+    if (this.ladyPlayer) {
+      this.ladyPlayer.setVelocity(0, 0);
+      this.ladyPlayer.body.enable = false;
+      this.ladyPlayer.anims?.play("idle", true);
+    }
+
+    // ✅ Emit immediately - don't wait
+    console.log("📤 Emitting ui:showChapterSummary for chapter 1.. .");
+    emit("ui:showChapterSummary", { chapter: 1 });
+  }
+
+
 }

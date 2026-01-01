@@ -33,9 +33,9 @@ export default class Chapter1Scene extends BaseStoryScene {
             door: { x: 610, y: 587, w: 120, h: 220, texture: "classroomDoor" },
 
             npcs: [
-                { name: "npcboy", texture: "npcboy", x: 480, y: 762, scale: 0.4, dialogueId: "h_intro_narration" },
-                { name: "npcgirl", texture: "npcgirl", x: 1700, y: 740, scale: 0.3, dialogueId: "h_friends_start" },
-                { name: "noticeBoard", texture: "noticeboard", x: 320, y: 355, scale: 1.0, dialogueId: "h_noticeboard", tooltip: { offsetX: 120, offsetY: 0 } },
+                { name: "npcboy", texture: "npcboy", x: 480, y: 762, scale: 0.4, dialogueId: "h_intro_narration", inspectDialogueId: "inspect_npcboy" },
+                { name: "npcgirl", texture: "npcgirl", x: 1700, y: 740, scale: 0.3, dialogueId: "h_friends_start", inspectDialogueId: "inspect_npcgirl" },
+                { name: "noticeBoard", texture: "noticeboard", x: 320, y: 355, scale: 1.0, dialogueId: "h_noticeboard", tooltip: { offsetX: 120, offsetY: 0 }, inspectDialogueId: "inspect_noticeboard" },
             ],
         });
 
@@ -55,6 +55,12 @@ export default class Chapter1Scene extends BaseStoryScene {
 
     create() {
         super.create();
+
+        // ✅ Reset session counters at the START of chapter 1
+        localStorage.setItem("sessionSDGPoints", "0");
+        localStorage.setItem("sessionGoodChoices", "0");
+        localStorage.setItem("sessionBadChoices", "0");
+        console.log("🔄 Chapter 1: Session counters reset");
 
         // ✅ Store current scene (NO SPACE in key)
         localStorage.setItem("sdgExplorer:lastRoute", "/game");  // ← Remove space

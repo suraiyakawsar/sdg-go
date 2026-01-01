@@ -18,7 +18,7 @@ export default class UIScene extends Phaser.Scene {
     create() {
         this.registerEvents();
 
-        this.infoText = this.add.text(16, 16, "SDG Explorer", {
+        this.infoText = this.add.text(16, 16, "SDGo!", {
             fontSize: "18px",
             fill: "#ffffff",
             fontFamily: "Arial",
@@ -80,16 +80,34 @@ export default class UIScene extends Phaser.Scene {
             emit("updateSDGPoints", choice.sdgPoints);
 
             if (choice.sdgPoints > 0) {
+                // GOOD CHOICE
+                const currentGood = Number(localStorage.getItem("goodChoices")) || 0;
+                localStorage.setItem("goodChoices", String(currentGood + 1));
+
                 emit("showFeedback", {
-                    text: `✅ Good choice! +${choice.sdgPoints} SDG points.`,
+                    text: `✅ Good choice! +${choice.sdgPoints} SDG points. `,
                     color: "#00ff00",
                 });
+
             } else if (choice.sdgPoints < 0) {
+                // BAD CHOICE
+                const currentBad = Number(localStorage.getItem("badChoices")) || 0;
+                localStorage.setItem("badChoices", String(currentBad + 1));
+
                 emit("showFeedback", {
-                    text: `❌ That choice had negative impact. ${choice.sdgPoints} SDG points.`,
+                    text: `❌ That choice had negative impact.  ${choice.sdgPoints} SDG points. `,
                     color: "#ff5555",
                 });
             }
+        }
+
+        // ✅ Also check for explicit good/bad markers
+        if (choice.isGoodChoice === true) {
+            const currentGood = Number(localStorage.getItem("goodChoices")) || 0;
+            localStorage.setItem("goodChoices", String(currentGood + 1));
+        } else if (choice.isBadChoice === true || choice.isCareless === true) {
+            const currentBad = Number(localStorage.getItem("badChoices")) || 0;
+            localStorage.setItem("badChoices", String(currentBad + 1));
         }
 
         // ✅ Let chapter scenes know about branching / next step

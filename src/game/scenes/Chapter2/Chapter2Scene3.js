@@ -2,6 +2,7 @@
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
+import { saveChapterStats } from "../../../utils/gameSummary";
 
 export default class Chapter2Scene3 extends BaseStoryScene {
     constructor() {
@@ -46,7 +47,8 @@ export default class Chapter2Scene3 extends BaseStoryScene {
                     x: 1110,
                     y: 730,
                     scale: 1.5,
-                    dialogueId: "ch2_s3_intro", // <-- replace
+                    dialogueId: "ch2_s3_beneficiary_notice", // <-- replace
+                    inspectDialogueId: "inspect_beneficiary_notice"
                 },
                 {
                     name: "cat",
@@ -54,7 +56,8 @@ export default class Chapter2Scene3 extends BaseStoryScene {
                     x: 1400,
                     y: 700,
                     scale: 0.6,
-                    dialogueId: "cat"
+                    dialogueId: "cat",
+                    inspectDialogueId: "inspect_cat"
                 },
             ],
 
@@ -66,6 +69,7 @@ export default class Chapter2Scene3 extends BaseStoryScene {
 
         this.posterCollected = 0;
         this.posterGoal = 1;
+        this._chapterCompleted = false;
 
         // bind storage route
 
@@ -212,13 +216,63 @@ export default class Chapter2Scene3 extends BaseStoryScene {
     }
 
 
+    // _onDoorClicked() {
+    //     if (!this.doorUnlocked) {
+    //         console.log("Door locked. Talk to Alice first.");
+    //         return;
+    //     }
+
+    //     if (this.playerInExitZone) {
+    //         this._onChapterComplete(); // ✅ Show summary instead of going directly
+    //     } else {
+    //         console.log("Too far from the door.");
+    //     }
+    // }
     _onDoorClicked() {
+        console.log("🚪 Door clicked!");
+        console.log("  - doorUnlocked:", this.doorUnlocked);
+        console.log("  - playerInExitZone:", this.playerInExitZone);
+
         if (!this.doorUnlocked) {
-            console.log("Door locked. Talk to Alice first.");
+            console.log("❌ Door locked.  Talk to your friends first.");
             return;
         }
 
-        if (this.playerInExitZone) this.goToNextScene();
-        else console.log("Too far from the door.");
+        // ✅ TEMPORARY FIX: Skip the exit zone check for now
+        // if (this.playerInExitZone) {
+        this._onChapterComplete();
+        // } else {
+        //     console.log("Too far from the door.");
+        // }
     }
+
+    // Call this when chapter is complete
+    // ✅ Chapter complete handler
+    _onChapterComplete() {
+        // Prevent double-triggering
+        if (this._chapterCompleted) {
+            console.log("⚠️ Chapter already completed, skipping.. .");
+            return;
+        }
+        this._chapterCompleted = true;
+
+        console.log("🎉 Chapter 2 Complete!  Showing summary.. .");
+
+        // Mark chapter as complete
+        localStorage.setItem("chapter2_completed", "true");
+        emit("updateChapterProgress");
+
+        // Freeze the player
+        this.input.enabled = false;
+        if (this.ladyPlayer) {
+            this.ladyPlayer.setVelocity(0, 0);
+            this.ladyPlayer.body.enable = false;
+            this.ladyPlayer.anims?.play("idle", true);
+        }
+
+        // ✅ Emit immediately - don't wait
+        console.log("📤 Emitting ui:showChapterSummary for chapter 2.. .");
+        emit("ui:showChapterSummary", { chapter: 2 });
+    }
+
 }
