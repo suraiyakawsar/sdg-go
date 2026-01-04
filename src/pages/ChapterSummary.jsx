@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { LazyMotion, domAnimation, m } from "framer-motion";
 import { FiTarget, FiCheckCircle, FiXCircle, FiArrowRight } from "react-icons/fi";
+import { getChapterStats, saveChapterStats } from "../utils/gameSummary";
 // import { getChapterStats, CHAPTER_INFO } from "../utils/gameSummary";
 
 
@@ -37,42 +38,34 @@ function getChapterTitle(points, goodChoices, badChoices) {
 
 export default function ChapterSummary({ chapterNumber, onContinue }) {
     const [stats, setStats] = useState(null);
+    // Read SESSION stats (this chapter only)
+    const sdgPoints = Number(localStorage.getItem("sessionSDGPoints")) || 0;
+    const goodChoices = Number(localStorage.getItem("sessionGoodChoices")) || 0;
+    const badChoices = Number(localStorage.getItem("sessionBadChoices")) || 0;
 
     useEffect(() => {
-        // ✅ Read SESSION stats (this chapter only)
-        const sdgPoints = Number(localStorage.getItem("sessionSDGPoints")) || 0;
-        const goodChoices = Number(localStorage.getItem("sessionGoodChoices")) || 0;
-        const badChoices = Number(localStorage.getItem("sessionBadChoices")) || 0;
+        // ✅ Save chapter stats (this also resets session counters)
+        console.log("📚 ChapterSummary loading chapter", chapterNumber);
 
-        console.log(`📊 Chapter ${chapterNumber} Summary Stats: `, {
-            sdgPoints,
-            goodChoices,
-            badChoices,
-            source: "session counters"
-        });
+        // ✅ READ from chapter-specific storage (already saved by the scene)
+        // NOT from session counters! 
+        const stats = getChapterStats(chapterNumber);
 
-        const chapterTitle = getChapterTitle(sdgPoints, goodChoices, badChoices);
+        console.log(`📊 Chapter ${chapterNumber} Summary Stats:`, stats);
 
         setStats({
             chapterNumber,
             chapterName: CHAPTER_INFO[chapterNumber]?.name || `Chapter ${chapterNumber}`,
             sdgFocus: CHAPTER_INFO[chapterNumber]?.sdgFocus || "Sustainability",
-            sdgPoints,
-            goodChoices,
-            badChoices,
-            totalChoices: goodChoices + badChoices,
-            chapterTitle,
+            sdgPoints: stats.sdgPoints,
+            goodChoices: stats.goodChoices,
+            badChoices: stats.badChoices,
+            totalChoices: stats.totalChoices,
+            chapterTitle: stats.chapterTitle,
         });
-
-        // ✅ Save this chapter's stats to permanent storage
-        localStorage.setItem(`chapter${chapterNumber}_sdgPoints`, String(sdgPoints));
-        localStorage.setItem(`chapter${chapterNumber}_goodChoices`, String(goodChoices));
-        localStorage.setItem(`chapter${chapterNumber}_badChoices`, String(badChoices));
-        localStorage.setItem(`chapter${chapterNumber}_completed`, "true");
-
-        console.log(`💾 Saved Chapter ${chapterNumber} stats to permanent storage`);
-
     }, [chapterNumber]);
+
+
 
     if (!stats) return null;
 

@@ -89,10 +89,10 @@ export default function Game() {
 
       if (nextScene) {
         // ✅ Reset session counters BEFORE starting next chapter
-        localStorage.setItem("sessionSDGPoints", "0");
-        localStorage.setItem("sessionGoodChoices", "0");
-        localStorage.setItem("sessionBadChoices", "0");
-        console.log("🔄 Session counters reset before next chapter");
+        // localStorage.setItem("sessionSDGPoints", "0");
+        // localStorage.setItem("sessionGoodChoices", "0");
+        // localStorage.setItem("sessionBadChoices", "0");
+        // console.log("🔄 Session counters reset before next chapter");
 
         // Update localStorage for the next scene
         localStorage.setItem("currentChapter", String(completedChapter + 1));
@@ -146,7 +146,7 @@ export default function Game() {
     localStorage.removeItem("goodChoices");
     localStorage.removeItem("badChoices");
     localStorage.removeItem("collectedBadges");
-    localStorage.setItem("sdgExplorer: lastRoute", "/game");
+    localStorage.setItem("sdgo: lastRoute", "/game");
 
     window.location.reload();
   };

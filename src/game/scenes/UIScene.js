@@ -68,55 +68,127 @@ export default class UIScene extends Phaser.Scene {
         this.advanceDialogue();
     }
 
+    // handleDialogueChoice(choice) {
+    //     if (!choice) return;
+
+    //     // ✅ Optionally handle SDG points here OR just emit to React/UI
+    //     if (typeof choice.sdgDelta === "number" && choice.sdgDelta !== 0) {
+
+    //         // Save to persistent storage AND session
+    //         const totalPoints = Number(localStorage.getItem("sdgPoints")) || 0;
+    //         localStorage.setItem("sdgPoints", String(totalPoints + choice.sdgDelta));
+
+    //         const sessionPoints = Number(localStorage.getItem("sessionSDGPoints")) || 0;
+    //         localStorage.setItem("sessionSDGPoints", String(sessionPoints + choice.sdgDelta));
+
+    //         // ✅ Emit ONLY the delta
+    //         emit("updateSDGPoints", choice.sdgDelta);
+
+
+    //         // if (choice.sdgDelta > 0) {
+    //         //     // GOOD CHOICE
+    //         //     const currentGood = Number(localStorage.getItem("goodChoices")) || 0;
+    //         //     localStorage.setItem("goodChoices", String(currentGood + 1));
+
+    //         //     emit("showFeedback", {
+    //         //         text: `✅ Good choice! +${choice.sdgDelta} SDG points. `,
+    //         //         color: "#00ff00",
+    //         //     });
+
+    //         // } else if (choice.sdgPoints < 0) {
+    //         //     // BAD CHOICE
+    //         //     const currentBad = Number(localStorage.getItem("badChoices")) || 0;
+    //         //     localStorage.setItem("badChoices", String(currentBad + 1));
+
+    //         //     emit("showFeedback", {
+    //         //         text: `❌ That choice had negative impact.  ${choice.sdgPoints} SDG points. `,
+    //         //         color: "#ff5555",
+    //         //     });
+    //         // }
+
+    //         // Track good/bad
+    //         if (choice.sdgDelta > 0) {
+    //             const sessionGood = Number(localStorage.getItem("sessionGoodChoices")) || 0;
+    //             localStorage.setItem("sessionGoodChoices", String(sessionGood + 1));
+    //         } else if (choice.sdgDelta < 0) {
+    //             const sessionBad = Number(localStorage.getItem("sessionBadChoices")) || 0;
+    //             localStorage.setItem("sessionBadChoices", String(sessionBad + 1));
+    //         }
+    //     }
+
+    //     // ✅ Also check for explicit good/bad markers
+    //     if (choice.isGoodChoice === true) {
+    //         const currentGood = Number(localStorage.getItem("goodChoices")) || 0;
+    //         localStorage.setItem("goodChoices", String(currentGood + 1));
+    //     } else if (choice.isBadChoice === true || choice.isCareless === true) {
+    //         const currentBad = Number(localStorage.getItem("badChoices")) || 0;
+    //         localStorage.setItem("badChoices", String(currentBad + 1));
+    //     }
+
+    //     // ✅ Let chapter scenes know about branching / next step
+    //     emit("dialogueChoiceApplied", {
+    //         next: choice.next,
+    //         sdgPoints: choice.sdgDelta || 0,
+    //     });
+
+    //     // ✅ handle simple branching keywords
+    //     if (choice.next === "end") {
+    //         emit("hideDialogue");
+    //         emit("dialogueEnded");
+    //         return;
+    //     }
+
+    //     if (choice.next === "more") {
+    //         this.startDialogue({
+    //             text: "Nice! Let’s make the world better, one SDG at a time 🌏",
+    //             choices: [{ text: "Let's go!", next: "end", sdgPoints: 5 }],
+    //         });
+    //         return;
+    //     }
+
+    //     // ✅ Otherwise, treat as "continue to next line"
+    //     this.advanceDialogue();
+    // }
+
+
     handleDialogueChoice(choice) {
         if (!choice) return;
 
-        // ✅ Optionally handle SDG points here OR just emit to React/UI
-        if (typeof choice.sdgPoints === "number") {
-            // If you want UIScene to directly mutate SDG points:
-            // addSDGPoints(choice.sdgPoints);
+        // ✅ Handle points (ONLY here, not in DialogueManager or chapter scenes)
+        if (typeof choice.sdgDelta === "number" && choice.sdgDelta !== 0) {
 
-            // Or: use your existing UI/event pipeline:
-            emit("updateSDGPoints", choice.sdgPoints);
+            const sessionPoints = Number(localStorage.getItem("sessionSDGPoints")) || 0;
+            localStorage.setItem("sessionSDGPoints", String(sessionPoints + choice.sdgDelta));
 
-            if (choice.sdgPoints > 0) {
-                // GOOD CHOICE
-                const currentGood = Number(localStorage.getItem("goodChoices")) || 0;
-                localStorage.setItem("goodChoices", String(currentGood + 1));
 
-                emit("showFeedback", {
-                    text: `✅ Good choice! +${choice.sdgPoints} SDG points. `,
-                    color: "#00ff00",
-                });
-
-            } else if (choice.sdgPoints < 0) {
-                // BAD CHOICE
-                const currentBad = Number(localStorage.getItem("badChoices")) || 0;
-                localStorage.setItem("badChoices", String(currentBad + 1));
-
-                emit("showFeedback", {
-                    text: `❌ That choice had negative impact.  ${choice.sdgPoints} SDG points. `,
-                    color: "#ff5555",
-                });
+            // Track good/bad CHOICES (not points) - SESSION only
+            if (choice.sdgDelta > 0) {
+                const sessionGood = Number(localStorage.getItem("sessionGoodChoices")) || 0;
+                localStorage.setItem("sessionGoodChoices", String(sessionGood + 1));
+                console.log(`✅ Good choice!  Session:  ${sessionGood + 1}`);
+            } else if (choice.sdgDelta < 0) {
+                const sessionBad = Number(localStorage.getItem("sessionBadChoices")) || 0;
+                localStorage.setItem("sessionBadChoices", String(sessionBad + 1));
+                console.log(`❌ Bad choice!  Session: ${sessionBad + 1}`);
             }
         }
 
-        // ✅ Also check for explicit good/bad markers
+        // Also check for explicit markers
         if (choice.isGoodChoice === true) {
-            const currentGood = Number(localStorage.getItem("goodChoices")) || 0;
-            localStorage.setItem("goodChoices", String(currentGood + 1));
+            const sessionGood = Number(localStorage.getItem("sessionGoodChoices")) || 0;
+            localStorage.setItem("sessionGoodChoices", String(sessionGood + 1));
         } else if (choice.isBadChoice === true || choice.isCareless === true) {
-            const currentBad = Number(localStorage.getItem("badChoices")) || 0;
-            localStorage.setItem("badChoices", String(currentBad + 1));
+            const sessionBad = Number(localStorage.getItem("sessionBadChoices")) || 0;
+            localStorage.setItem("sessionBadChoices", String(sessionBad + 1));
         }
 
-        // ✅ Let chapter scenes know about branching / next step
+        // Let chapter scenes know about branching / next step
         emit("dialogueChoiceApplied", {
             next: choice.next,
-            sdgPoints: choice.sdgPoints || 0,
+            sdgPoints: choice.sdgDelta || 0,
         });
 
-        // ✅ handle simple branching keywords
+        // Handle simple branching keywords
         if (choice.next === "end") {
             emit("hideDialogue");
             emit("dialogueEnded");
@@ -125,15 +197,17 @@ export default class UIScene extends Phaser.Scene {
 
         if (choice.next === "more") {
             this.startDialogue({
-                text: "Nice! Let’s make the world better, one SDG at a time 🌏",
-                choices: [{ text: "Let's go!", next: "end", sdgPoints: 5 }],
+                text: "Nice!  Let's make the world better, one SDG at a time 🌏",
+                choices: [{ text: "Let's go!", next: "end", sdgDelta: 5 }],
             });
             return;
         }
 
-        // ✅ Otherwise, treat as "continue to next line"
+        // Otherwise, treat as "continue to next line"
         this.advanceDialogue();
     }
+
+
 
     /* ============================================================
        DIALOGUE FLOW

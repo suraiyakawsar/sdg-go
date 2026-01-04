@@ -63,7 +63,7 @@ export default class Chapter1Scene extends BaseStoryScene {
         console.log("🔄 Chapter 1: Session counters reset");
 
         // ✅ Store current scene (NO SPACE in key)
-        localStorage.setItem("sdgExplorer:lastRoute", "/game");  // ← Remove space
+        localStorage.setItem("sdgo:lastRoute", "/game");  // ← Remove space
         localStorage.setItem("currentChapter", 1);
         localStorage.setItem("currentScene", "Chapter1Scene");
 
@@ -135,7 +135,6 @@ export default class Chapter1Scene extends BaseStoryScene {
             complete: true,
         });
 
-        emit("updateSDGPoints", 10);
         emit("badgeEarned", "Hallway Unlocked! 🔓");
 
         // ← UNLOCK BADGE HERE
@@ -223,7 +222,6 @@ export default class Chapter1Scene extends BaseStoryScene {
 
         const points = 3;
         addSDGPoints(points);
-        emit("updateSDGPoints", points);
 
         const msg = this.add.text(trashItem.x, trashItem.y - 40, `+${points}`, {
             font: "16px Arial",

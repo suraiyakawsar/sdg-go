@@ -79,7 +79,7 @@ export default class Chapter2Scene3 extends BaseStoryScene {
         super.create();
 
         // ✅ Store current scene (NO SPACE in key)
-        localStorage.setItem("sdgExplorer:lastRoute", "/game");  // ← Remove space
+        localStorage.setItem("sdgo:lastRoute", "/game");  // ← Remove space
         localStorage.setItem("currentChapter", 2);
         localStorage.setItem("currentScene", "Chapter2Scene3");
 
@@ -147,7 +147,6 @@ export default class Chapter2Scene3 extends BaseStoryScene {
             complete: true,
         });
 
-        emit("updateSDGPoints", 10);
         emit("badgeEarned", "Professor Unlocked! 🔓");
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
@@ -183,7 +182,6 @@ export default class Chapter2Scene3 extends BaseStoryScene {
 
         const points = 3;
         addSDGPoints(points);
-        emit("updateSDGPoints", points);
 
         // small floating text
         const msg = this.add.text(posterItem.x, posterItem.y - 40, `+${points}`, {
@@ -257,6 +255,8 @@ export default class Chapter2Scene3 extends BaseStoryScene {
         this._chapterCompleted = true;
 
         console.log("🎉 Chapter 2 Complete!  Showing summary.. .");
+
+        saveChapterStats(2);
 
         // Mark chapter as complete
         localStorage.setItem("chapter2_completed", "true");

@@ -6,7 +6,10 @@ import { on, off } from "../../utils/eventBus";
 
 export default function RightSidebar() {
     // ⭐ SDG STATE
-    const [sdgPoints, setSdgPoints] = useState(0);
+    // ✅ NEW (RightSidebar.jsx)
+    const [sdgPoints, setSdgPoints] = useState(() => {
+        return Number(localStorage.getItem("sdgPoints")) || 0;  // Loads on mount
+    });
 
     // ⭐ PRIMARY OBJECTIVE
     const [primaryObj, setPrimaryObj] = useState({
@@ -106,19 +109,31 @@ export default function RightSidebar() {
     // ============================================================
     // SDG UPDATES (delta)
     // ============================================================
+    // useEffect(() => {
+    //     const handleSdgUpdate = (delta) => {
+    //         if (typeof delta !== "number" || isNaN(delta)) return;
+
+    //         setSdgPoints((prev) => {
+    //             const next = prev + delta;
+    //             if (delta !== 0) {
+    //                 triggerEffects(formatDelta(delta), "SDG", "sdg");
+    //             }
+    //             return next;
+    //         });
+    //     };
+
+    //     on("updateSDGPoints", handleSdgUpdate);
+    //     return () => off("updateSDGPoints", handleSdgUpdate);
+    // }, []);
     useEffect(() => {
         const handleSdgUpdate = (delta) => {
-            if (typeof delta !== "number" || isNaN(delta)) return;
+            setSdgPoints((prev) => prev + delta);
 
-            setSdgPoints((prev) => {
-                const next = prev + delta;
-                if (delta !== 0) {
-                    triggerEffects(formatDelta(delta), "SDG", "sdg");
-                }
-                return next;
-            });
+            // ✅ ADD THIS:  Trigger floating text
+            if (delta !== 0) {
+                triggerEffects(formatDelta(delta), "SDG", "sdg");
+            }
         };
-
         on("updateSDGPoints", handleSdgUpdate);
         return () => off("updateSDGPoints", handleSdgUpdate);
     }, []);
@@ -281,7 +296,7 @@ export default function RightSidebar() {
     // ============================================================
     return (
         <div className="h-full w-full flex items-center justify-center pointer-events-none">
-            <div className="relative z-[9999] w-full max-w-xs sm:max-w-sm md:max-w-sm lg:max-w-md">
+            <div className="relative z-[99] w-full max-w-xs sm:max-w-sm md:max-w-sm lg:max-w-md">
                 {/* FLOATING TEXT
                 {floatingText && (
                     <motion.div

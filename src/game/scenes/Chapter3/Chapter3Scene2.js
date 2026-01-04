@@ -1,6 +1,8 @@
 // src/game/scenes/Chapter3/Chapter3Scene2.js
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
+import { saveChapterStats } from "../../../utils/gameSummary";
+
 
 export default class Chapter3Scene2 extends BaseStoryScene {
     constructor() {
@@ -14,25 +16,23 @@ export default class Chapter3Scene2 extends BaseStoryScene {
             exitUnlockedFlag: "chapter3_scene2_exit_unlocked",
 
             walkArea: {
-                zones: [
-                    { xMin: 300, xMax: 600, yMin: 650, yMax: 1000 },
-                    { xMin: 100, xMax: 1300, yMin: 700, yMax: 900 },
-                    { xMin: 300, xMax: 600, yMin: 650, yMax: 1000 },
-                    { xMin: 50, xMax: 1920, yMin: 990, yMax: 1080 },
-                ],
-                topY: 700,
-                bottomY: 1080
+                topY: 840,
+                bottomY: 1077,
+                leftTopX: 500,
+                rightTopX: 1000,
+                leftBottomX: 160,
+                rightBottomX: 1070,
             },
 
-            scaleFar: 0.75,
+            scaleFar: 0.83,
             scaleNear: 1.45,
             scaleTopOffset: 20,
 
             player: {
-                x: 1125,
+                x: 1000,
                 y: 1077,
                 key: "ladyy",
-                frame: "frame1. png"
+                frame: "frame1.png"
             },
 
             door: {
@@ -72,9 +72,26 @@ export default class Chapter3Scene2 extends BaseStoryScene {
     }
 
     create() {
+        console.log("🎮 Chapter3Scene2.create() - BEFORE super. create()");
+        console.log("Session values on boot:", {
+            sessionSDGPoints: localStorage.getItem("sessionSDGPoints"),
+            sessionGoodChoices: localStorage.getItem("sessionGoodChoices"),
+            sessionBadChoices: localStorage.getItem("sessionBadChoices"),
+        });
+
+
         super.create();
 
-        localStorage.setItem("sdgExplorer: lastRoute", "/game");
+        console.log("🎮 Chapter3Scene2.create() - AFTER super.create()");
+        console.log("Session values after super:", {
+            sessionSDGPoints: localStorage.getItem("sessionSDGPoints"),
+            sessionGoodChoices: localStorage.getItem("sessionGoodChoices"),
+            sessionBadChoices: localStorage.getItem("sessionBadChoices"),
+        });
+
+
+
+        localStorage.setItem("sdgo:lastRoute", "/game");
         localStorage.setItem("currentChapter", 3);
         localStorage.setItem("currentScene", "Chapter3Scene2");
 
@@ -144,7 +161,6 @@ export default class Chapter3Scene2 extends BaseStoryScene {
                     delta: 1,
                     complete: true,
                 });
-                emit("updateSDGPoints", 5);
                 emit("badgeEarned", "Screen Info Read!  📺");
             }
         };
@@ -174,7 +190,6 @@ export default class Chapter3Scene2 extends BaseStoryScene {
             complete: true,
         });
 
-        emit("updateSDGPoints", 10);
         emit("badgeEarned", "Professor Conversation! 💬");
 
         // Unlock door visuals
@@ -199,13 +214,32 @@ export default class Chapter3Scene2 extends BaseStoryScene {
 
     // ✅ Chapter complete handler
     _onChapterComplete() {
+        // Guard check FIRST
         if (this._chapterCompleted) {
             console.log("⚠️ Chapter already completed, skipping.. .");
             return;
         }
         this._chapterCompleted = true;
 
+        console.log("🏁 _onChapterComplete called!");
         console.log("🎉 Chapter 3 Complete!");
+
+        // ✅ Log BEFORE
+        console.log("Session values BEFORE saveChapterStats:", {
+            sessionSDGPoints: localStorage.getItem("sessionSDGPoints"),
+            sessionGoodChoices: localStorage.getItem("sessionGoodChoices"),
+            sessionBadChoices: localStorage.getItem("sessionBadChoices"),
+        });
+
+        // ✅ Save chapter stats (this resets session counters)
+        saveChapterStats(3);
+
+        // ✅ Log AFTER
+        console.log("Session values AFTER saveChapterStats:", {
+            sessionSDGPoints: localStorage.getItem("sessionSDGPoints"),
+            sessionGoodChoices: localStorage.getItem("sessionGoodChoices"),
+            sessionBadChoices: localStorage.getItem("sessionBadChoices"),
+        });
 
         localStorage.setItem("chapter3_completed", "true");
         emit("updateChapterProgress");
@@ -217,6 +251,6 @@ export default class Chapter3Scene2 extends BaseStoryScene {
             this.ladyPlayer.anims?.play("idle", true);
         }
 
-        emit("ui: showChapterSummary", { chapter: 3 });
+        emit("ui:showChapterSummary", { chapter: 3 });
     }
 }

@@ -359,7 +359,7 @@ export default function Home() {
   // ✅ Update lastRoute whenever component mounts or focus returns
   useEffect(() => {
     const updateLastRoute = () => {
-      const saved = localStorage.getItem("sdgExplorer:lastRoute") || "/game";
+      const saved = localStorage.getItem("sdgo:lastRoute") || "/game";
       setLastRoute(saved);
       console.log("✅ Updated lastRoute:", saved);
     };
@@ -382,7 +382,7 @@ export default function Home() {
   // ✅ Also listen for storage changes (if playing on another tab)
   useEffect(() => {
     const handleStorageChange = () => {
-      const saved = localStorage.getItem("sdgExplorer:lastRoute") || "/game";
+      const saved = localStorage.getItem("sdgo:lastRoute") || "/game";
       setLastRoute(saved);
       console.log("✅ Storage changed, lastRoute:", saved);
     };

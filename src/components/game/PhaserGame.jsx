@@ -14,7 +14,7 @@ import { useEffect, useRef } from "react";
 import Phaser from "phaser";
 import { emit } from "../../utils/eventBus";
 import { useLocation } from "react-router-dom"; // ← ADD THIS
-import Chapter4Scene2 from "../../game/scenes/Chapter4/Chapter4Scene3";
+import Chapter4Scene2 from "../../game/scenes/Chapter4/Chapter4Scene2";
 
 // ... imports ...
 
@@ -24,7 +24,7 @@ export default function PhaserGame() {
   const location = useLocation();
 
   // 🔧 DEBUG:  Hardcode scene here
-  const DEBUG_SCENE = "Chapter3Scene2"; // ← Change this line
+  const DEBUG_SCENE = "Chapter4Scene2"; // ← Change this line
 
   useEffect(() => {
     // ✅ If game already exists, just switch scenes

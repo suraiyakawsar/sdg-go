@@ -507,74 +507,136 @@ export default class DialogueManager {
   // ============================================================
   // CHOICE HANDLER & HELPERS
   // ============================================================
+  // _handleChoice(choice) {
+  //   if (!choice) return;
+
+
+  //   // ✅ TRACK CHOICE TYPE FOR GAME SUMMARY
+  //   // ✅ Record good vs bad choices
+  //   if (typeof choice.sdgDelta === "number" && choice.sdgDelta !== 0) {
+  //     addSDGPoints(choice.sdgDelta);
+  //     emit("updateSDGPoints", (this.sdgPointsObj.points || 0) + choice.sdgDelta);
+
+
+  //     // ✅ Track total SDG points
+  //     const totalPoints = Number(localStorage.getItem("sdgPoints")) || 0;
+  //     localStorage.setItem("sdgPoints", String(totalPoints + choice.sdgDelta));
+
+
+  //     // ✅ Track session SDG points (for chapter summary)
+  //     const sessionPoints = Number(localStorage.getItem("sessionSDGPoints")) || 0;
+  //     localStorage.setItem("sessionSDGPoints", String(sessionPoints + choice.sdgDelta));
+
+  //     if (choice.sdgDelta > 0) {
+  //       // GOOD CHOICE
+  //       const totalGood = Number(localStorage.getItem("goodChoices")) || 0;
+  //       localStorage.setItem("goodChoices", String(totalGood + 1));
+
+  //       const sessionGood = Number(localStorage.getItem("sessionGoodChoices")) || 0;
+  //       localStorage.setItem("sessionGoodChoices", String(sessionGood + 1));
+
+  //       console.log("✅ Good choice!  Total:", totalGood + 1, "Session:", sessionGood + 1);
+  //     } else if (choice.sdgDelta < 0) {
+  //       // BAD CHOICE
+  //       const totalBad = Number(localStorage.getItem("badChoices")) || 0;
+  //       localStorage.setItem("badChoices", String(totalBad + 1));
+
+  //       const sessionBad = Number(localStorage.getItem("sessionBadChoices")) || 0;
+  //       localStorage.setItem("sessionBadChoices", String(sessionBad + 1));
+
+  //       console.log("❌ Bad choice! Total:", totalBad + 1, "Session:", sessionBad + 1);
+  //     }
+  //   }
+
+
+
+  //   // ✅ Also check for explicit markers (for choices without sdgDelta)
+  //   if (choice.isGoodChoice === true) {
+  //     const totalGood = Number(localStorage.getItem("goodChoices")) || 0;
+  //     localStorage.setItem("goodChoices", String(totalGood + 1));
+  //     const sessionGood = Number(localStorage.getItem("sessionGoodChoices")) || 0;
+  //     localStorage.setItem("sessionGoodChoices", String(sessionGood + 1));
+  //     console.log("✅ Good choice (explicit)! Total:", totalGood + 1);
+  //   } else if (choice.isBadChoice === true || choice.isCareless === true) {
+  //     const totalBad = Number(localStorage.getItem("badChoices")) || 0;
+  //     localStorage.setItem("badChoices", String(totalBad + 1));
+  //     const sessionBad = Number(localStorage.getItem("sessionBadChoices")) || 0;
+  //     localStorage.setItem("sessionBadChoices", String(sessionBad + 1));
+  //     console.log("❌ Bad choice (explicit)! Total:", totalBad + 1);
+  //   }
+
+
+  //   // if (typeof choice.sdgDelta === "number") {
+  //   //   addSDGPoints(choice.sdgDelta);
+  //   //   emit("updateSDGPoints", (this.sdgPointsObj.points || 0) + choice.sdgDelta);
+  //   // }
+
+
+
+  //   if (Array.isArray(choice.setFlags)) this._applyFlags(choice.setFlags);
+
+  //   if (choice.nextNodeId) {
+  //     const nextNode = this._getNode(choice.nextNodeId);
+  //     if (nextNode) {
+  //       this.currentNodeId = choice.nextNodeId;
+  //       this.currentNode = nextNode;
+  //       this._pendingChoices = null;
+  //       this._showCurrentNode();
+  //       return;
+  //     }
+  //   }
+
+  //   this._runNodeCompletion(this.currentNode);
+  //   this.endDialogue();
+  // }
+
+
+
   _handleChoice(choice) {
     if (!choice) return;
 
+    let alreadyTrackedChoice = false;  // ✅ Flag to prevent double-counting
 
-    // ✅ TRACK CHOICE TYPE FOR GAME SUMMARY
-    // ✅ Record good vs bad choices
+    // ✅ HANDLE SDG POINTS
     if (typeof choice.sdgDelta === "number" && choice.sdgDelta !== 0) {
-      addSDGPoints(choice.sdgDelta);
-      emit("updateSDGPoints", (this.sdgPointsObj.points || 0) + choice.sdgDelta);
-
-
-      // ✅ Track total SDG points
-      const totalPoints = Number(localStorage.getItem("sdgPoints")) || 0;
-      localStorage.setItem("sdgPoints", String(totalPoints + choice.sdgDelta));
-
-
-      // ✅ Track session SDG points (for chapter summary)
+      // Update SESSION counters
       const sessionPoints = Number(localStorage.getItem("sessionSDGPoints")) || 0;
       localStorage.setItem("sessionSDGPoints", String(sessionPoints + choice.sdgDelta));
 
-      if (choice.sdgDelta > 0) {
-        // GOOD CHOICE
-        const totalGood = Number(localStorage.getItem("goodChoices")) || 0;
-        localStorage.setItem("goodChoices", String(totalGood + 1));
+      // Update PERSISTENT storage
+      addSDGPoints(choice.sdgDelta);
 
+      // Track good/bad choices
+      if (choice.sdgDelta > 0) {
         const sessionGood = Number(localStorage.getItem("sessionGoodChoices")) || 0;
         localStorage.setItem("sessionGoodChoices", String(sessionGood + 1));
-
-        console.log("✅ Good choice!  Total:", totalGood + 1, "Session:", sessionGood + 1);
-      } else if (choice.sdgDelta < 0) {
-        // BAD CHOICE
-        const totalBad = Number(localStorage.getItem("badChoices")) || 0;
-        localStorage.setItem("badChoices", String(totalBad + 1));
-
+        console.log(`✅ Good choice!  +${choice.sdgDelta} | Session good: ${sessionGood + 1}`);
+      } else {
         const sessionBad = Number(localStorage.getItem("sessionBadChoices")) || 0;
         localStorage.setItem("sessionBadChoices", String(sessionBad + 1));
+        console.log(`❌ Bad choice! ${choice.sdgDelta} | Session bad: ${sessionBad + 1}`);
+      }
 
-        console.log("❌ Bad choice! Total:", totalBad + 1, "Session:", sessionBad + 1);
+      alreadyTrackedChoice = true;  // ✅ Mark as already tracked
+    }
+
+    // ✅ ONLY check explicit markers if we haven't already tracked from sdgDelta
+    if (!alreadyTrackedChoice) {
+      if (choice.isGoodChoice === true) {
+        const sessionGood = Number(localStorage.getItem("sessionGoodChoices")) || 0;
+        localStorage.setItem("sessionGoodChoices", String(sessionGood + 1));
+        console.log(`✅ Good choice (explicit)! Session good: ${sessionGood + 1}`);
+      } else if (choice.isBadChoice === true || choice.isCareless === true) {
+        const sessionBad = Number(localStorage.getItem("sessionBadChoices")) || 0;
+        localStorage.setItem("sessionBadChoices", String(sessionBad + 1));
+        console.log(`❌ Bad choice (explicit)! Session bad: ${sessionBad + 1}`);
       }
     }
 
-
-
-    // ✅ Also check for explicit markers (for choices without sdgDelta)
-    if (choice.isGoodChoice === true) {
-      const totalGood = Number(localStorage.getItem("goodChoices")) || 0;
-      localStorage.setItem("goodChoices", String(totalGood + 1));
-      const sessionGood = Number(localStorage.getItem("sessionGoodChoices")) || 0;
-      localStorage.setItem("sessionGoodChoices", String(sessionGood + 1));
-      console.log("✅ Good choice (explicit)! Total:", totalGood + 1);
-    } else if (choice.isBadChoice === true || choice.isCareless === true) {
-      const totalBad = Number(localStorage.getItem("badChoices")) || 0;
-      localStorage.setItem("badChoices", String(totalBad + 1));
-      const sessionBad = Number(localStorage.getItem("sessionBadChoices")) || 0;
-      localStorage.setItem("sessionBadChoices", String(sessionBad + 1));
-      console.log("❌ Bad choice (explicit)! Total:", totalBad + 1);
-    }
-
-
-    // if (typeof choice.sdgDelta === "number") {
-    //   addSDGPoints(choice.sdgDelta);
-    //   emit("updateSDGPoints", (this.sdgPointsObj.points || 0) + choice.sdgDelta);
-    // }
-
-
-
+    // ✅ Handle flags
     if (Array.isArray(choice.setFlags)) this._applyFlags(choice.setFlags);
 
+    // ✅ Navigate to next node
     if (choice.nextNodeId) {
       const nextNode = this._getNode(choice.nextNodeId);
       if (nextNode) {
@@ -589,6 +651,9 @@ export default class DialogueManager {
     this._runNodeCompletion(this.currentNode);
     this.endDialogue();
   }
+
+
+
 
   _handleNodeComplete(node) {
     const oc = node?.onComplete;

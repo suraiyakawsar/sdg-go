@@ -165,7 +165,7 @@ export default function Profile() {
 
     // ✅ Continue button route
     const [lastRoute, setLastRoute] = useState(() =>
-        localStorage.getItem("sdgExplorer: lastRoute") || "/game"
+        localStorage.getItem("sdgo:lastRoute") || "/game"
     );
 
     // Get avatar URI
@@ -245,7 +245,7 @@ export default function Profile() {
     // ✅ Update lastRoute on mount
     useEffect(() => {
         const updateLastRoute = () => {
-            const saved = localStorage.getItem("sdgExplorer:lastRoute") || "/game";
+            const saved = localStorage.getItem("sdgo:lastRoute") || "/game";
             setLastRoute(saved);
         };
 

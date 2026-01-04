@@ -374,10 +374,10 @@
                     "onComplete": {
                         "setFlags": [
                             "chapter4_completed",
+                            "chapter4_scene2_decision_done",
                             "game_completed"
                         ],
-                        "unlockExit": true,
-                        "points": 10
+                        "unlockExit": true
                     }
                 }
             ]

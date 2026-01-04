@@ -248,7 +248,7 @@
 
 
 //         // bind storage route
-//         localStorage.setItem("sdgExplorer:lastRoute", "/game");
+//         localStorage.setItem("sdgo:lastRoute", "/game");
 //     }
 
 //     create() {
@@ -450,7 +450,7 @@ export default class Chapter2Scene2 extends BaseStoryScene {
         super.create();
 
         // ✅ Store current scene (NO SPACE in key)
-        localStorage.setItem("sdgExplorer:lastRoute", "/game");  // ← Remove space
+        localStorage.setItem("sdgo:lastRoute", "/game");  // ← Remove space
         localStorage.setItem("currentChapter", 2);
         localStorage.setItem("currentScene", "Chapter2Scene2");
 
@@ -516,7 +516,6 @@ export default class Chapter2Scene2 extends BaseStoryScene {
             complete: true,
         });
 
-        emit("updateSDGPoints", 10);
         emit("badgeEarned", "Meeting Point Unlocked! 🔓");
 
         // Unlock door

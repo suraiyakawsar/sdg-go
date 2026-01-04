@@ -63,7 +63,7 @@ export default class Chapter1Scene2 extends BaseStoryScene {
     create() {
         super.create();
 
-        localStorage.setItem("sdgExplorer:lastRoute", "/game");
+        localStorage.setItem("sdgo:lastRoute", "/game");
         localStorage.setItem("currentChapter", 1);
         localStorage.setItem("currentScene", "Chapter1Scene2"); // Different scene key
 
@@ -130,7 +130,6 @@ export default class Chapter1Scene2 extends BaseStoryScene {
             complete: true,
         });
 
-        emit("updateSDGPoints", 10);
         emit("badgeEarned", "Cafeteria Unlocked! 🔓");
 
         // ← UNLOCK BADGE HERE
@@ -186,7 +185,6 @@ export default class Chapter1Scene2 extends BaseStoryScene {
 
         const points = 3;
         addSDGPoints(points);
-        emit("updateSDGPoints", points);
         emit("badgeEarned", `Found a poster! (+${posterItem.reward})`);
 
         // small floating text

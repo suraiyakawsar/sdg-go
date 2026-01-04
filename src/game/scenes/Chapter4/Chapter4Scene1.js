@@ -1,121 +1,8 @@
-// // src/scenes/chapter3/Chapter3Scene2.js
-// import BaseStoryScene from "../BaseStoryScene";
-// import { emit, on /*, off*/ } from "../../../utils/eventBus";
-
-// export default class Chapter4Scene1 extends BaseStoryScene {
-//     constructor() {
-//         super("Chapter4Scene1", {
-//             sceneId: "nightCourtyard",
-//             jsonKey: "chapter4Data",
-//             jsonPath: "data/dialogues/chapters/chapter4_script.json",
-
-//             backgroundKey: "bgClassroom2",
-//             dialogueKey: "chapter4_scene1",
-//             startNodeId: "r_intro_prof",
-//             nextSceneKey: "Chapter4Scene2",
-//             exitFlag: "chapter4_scene1_exit_unlocked",
-
-
-//             walkArea: {
-//                 topY: 844,
-//                 bottomY: 1077,
-//                 leftTopX: 893,
-//                 rightTopX: 1125,
-//                 leftBottomX: 400,
-//                 rightBottomX: 1125,
-//             },
-
-
-//             // perfect scaling values found via tracker:
-//             scaleFar: 0.75,
-//             scaleNear: 1.45,
-//             // Add this if you use Option 1:
-//             scaleTopOffset: 20,
-
-//             // perfect scaling values found via tracker:
-//             scaleFar: 0.75,
-//             scaleNear: 1.45,
-//             // Add this if you use Option 1:
-//             scaleTopOffset: 20,
-
-//             player: {
-//                 x: 1125,        // Change this to your desired horizontal start
-//                 y: 1077,        // Change this to your desired vertical start
-//                 key: "ladyy",  // Your sprite texture key
-//                 frame: "frame1.png"
-//             },
-
-
-//             // ✅ door (swap texture/x/y to match your artwork)
-//             door: {
-//                 x: 300,
-//                 y: 600,
-//                 w: 120,
-//                 h: 220,
-//                 texture: "doorFoodBank", // <-- replace (or reuse a generic door)
-//             },
-
-
-//             npcs: [
-//                 {
-//                     name: "organizer",
-//                     texture: "npc_organizer",   // <-- replace
-//                     x: 900,
-//                     y: 650,
-//                     scale: 0.35,
-//                     dialogueId: "ch2_scene2_organizer", // <-- replace
-//                 }
-//             ],
-
-
-//         });
-//     }
-
-//     create() {
-//         super.create();
-//         emit("updateChapterScene", { title: "Classroom · Chapter 3" });
-//     }
-
-//     createSceneContent() {
-//         // Professor NPC
-//         this.createNPC({
-//             id: "professor",
-//             x: 900,
-//             y: 720,
-//             texture: "npcProfessor",
-//             dialogueNodeId: "r_intro_prof",
-//         });
-
-//         // Reflection trigger (player internal dialogue)
-//         this.createTriggerZone({
-//             id: "reflection_zone",
-//             x: 960,
-//             y: 620,
-//             width: 400,
-//             height: 240,
-//             onEnter: () => {
-//                 if (this.flags.has("chapter3_scene2_reflection_done")) return;
-//                 this.startDialogue("r_player_reflect");
-//             },
-//         });
-
-//         // Exit zone
-//         this.createExitZone({
-//             x: 1820,
-//             y: 780,
-//             width: 200,
-//             height: 300,
-//             glow: true,
-//         });
-//     }
-// }
-
-
-
 // src/scenes/chapter4/Chapter4Scene1.js
 import BaseStoryScene from "../BaseStoryScene";
-import { emit } from "../../../utils/eventBus";
-
+import { emit, on, off } from "../../../utils/eventBus";
+import { addSDGPoints } from "../../../utils/sdgPoints";
+import { saveChapterStats } from "../../../utils/gameSummary";
 export default class Chapter4Scene1 extends BaseStoryScene {
     constructor() {
         super("Chapter4Scene1", {
@@ -128,41 +15,63 @@ export default class Chapter4Scene1 extends BaseStoryScene {
             exitUnlockedFlag: "chapter4_scene1_exit_unlocked",
 
             walkArea: {
-                topY: 600,
+                topY: 800,
                 bottomY: 1100,
                 leftTopX: 400,
-                rightTopX: 1000,
+                rightTopX: 1300,
                 leftBottomX: 300,
-                rightBottomX: 1050,
+                rightBottomX: 1450,
             },
 
-            scaleFar: 0.8,
+            scaleFar: 0.6,
             scaleNear: 1.4,
             scaleTopOffset: 20,
 
             door: {
-                x: 100,
+                x: 200,
                 y: 900,
-                w: 200,
-                h: 400,
-                texture: "pondExitDoor",
+                w: 447,
+                h: 1230,
+                scale: 0.5,
+                texture: "busStopSignPond",
             },
 
             npcs: [
                 {
-                    name: "volunteer",
-                    texture: "volunteer",
-                    x: 700,
-                    y: 850,
-                    scale: 1.2,
+                    name: "pondBoy",
+                    texture: "pondBoy",
+                    x: 1310,
+                    y: 710,
+                    scale: 1.45,
                     dialogueId: "ch4_s1_npc",
+                    inspectDialogueId: "inspect_pondBoy",
                 }
             ],
         });
+
+        // objectives
+        this.objectiveStep = 1;         // 1 = talk, 2 = trash
+        this.objectiveCompleted = false;
+
+        this.trashCollected = 0;
+        this.trashGoal = 3;
+
     }
 
     create() {
         super.create();
+
+        // 🔥 Scene-specific door scaling
+        if (this.door) {
+            const s = this.CONFIG.door.scale ?? 1;
+            this.door.setScale(s);
+
+            // Match exit zone to visual size
+            this.exitZone.setSize(
+                this.CONFIG.door.w * s,
+                this.CONFIG.door.h * s
+            );
+        }
 
         // ✅ Reset session counters at the START of chapter 4
         localStorage.setItem("sessionSDGPoints", "0");
@@ -171,7 +80,7 @@ export default class Chapter4Scene1 extends BaseStoryScene {
         console.log("🔄 Chapter 4: Session counters reset");
 
         // ✅ Store current scene (NO SPACE in key)
-        localStorage.setItem("sdgExplorer:lastRoute", "/game");  // ← Remove space
+        localStorage.setItem("sdgo:lastRoute", "/game");  // ← Remove space
         localStorage.setItem("currentChapter", 4);
         localStorage.setItem("currentScene", "Chapter4Scene1");
 
@@ -194,8 +103,128 @@ export default class Chapter4Scene1 extends BaseStoryScene {
             complete: false,
         });
 
+        // Secondary: trash (preview only until step 2)
+        emit("updateObjective", {
+            slot: "secondary",
+            preview: true,
+            active: false,
+            collected: 0,
+            goal: this.trashGoal,
+            description: "Optional: Collect all the trash.",
+        });
+
+        this._createTrash();
+
         this.doorUnlocked = false;
+
+        // Listen once for JSON unlock flag
+        this._onSceneExitUnlocked = (payload) => {
+            const { sceneId, exitFlag } = payload || {};
+            if (sceneId !== "pond") return;
+            if (exitFlag !== "chapter4_scene1_exit_unlocked") return;
+
+            if (this.objectiveStep === 1 && !this.objectiveCompleted) {
+                this._completeStep1AndUnlock();
+            }
+        };
+
+        on("sceneExitUnlocked", this._onSceneExitUnlocked);
+
+        // Cleanup (only if your bus supports off())
+        this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            // if (typeof off === "function") off("sceneExitUnlocked", this._onSceneExitUnlocked);
+        });
     }
+
+
+    // --------------------------------
+    // Step 1 -> Step 2 transition
+    // --------------------------------
+    _completeStep1AndUnlock() {
+        this.objectiveCompleted = true;
+
+        emit("updateObjective", {
+            slot: "primary",
+            delta: 1,
+            complete: true,
+        });
+
+        emit("badgeEarned", { name: "Bus Stop Unlocked!", icon: "🔓" });
+
+        // unlock door visuals + logic (BaseStoryScene has the glow helper)
+        this.doorUnlocked = true;
+
+
+        // Step 2: trash becomes active
+        this.objectiveStep = 2;
+        this.objectiveCompleted = false;
+        this.trashCollected = 0;
+
+        emit("updateObjective", {
+            slot: "secondary",
+            active: true,
+            preview: false,
+            collected: 0,
+            goal: this.trashGoal,
+            description: "Collect all the trash.",
+        });
+    }
+
+    // --------------------------------
+    // Trash
+    // --------------------------------
+    _createTrash() {
+        this.trash1 = this.add.image(900, 800, "pondTrash").setInteractive({ useHandCursor: true }).setScale(1.2); //volunteers
+        this.trash2 = this.add.image(500, 800, "pondTrash2").setInteractive({ useHandCursor: true }).setScale(1.2); //beside banner
+        this.trash3 = this.add.image(1200, 800, "pondTrash3").setInteractive({ useHandCursor: true }).setScale(1.2); //banner
+
+        this.trash1.on("pointerdown", () => this._handleTrashClick(this.trash1));
+        this.trash2.on("pointerdown", () => this._handleTrashClick(this.trash2));
+        this.trash3.on("pointerdown", () => this._handleTrashClick(this.trash3));
+
+    }
+
+    _handleTrashClick(trashItem) {
+        if (!trashItem?.scene) return;
+        // trash only active in step 2
+        if (this.objectiveStep !== 2) return;
+
+        const points = 3;
+        addSDGPoints(points);
+
+        // small floating text
+        const msg = this.add.text(trashItem.x, trashItem.y - 40, `+${points}`, {
+            font: "16px Arial",
+            fill: "#0f0",
+        }).setOrigin(0.5);
+
+        this.tweens.add({
+            targets: msg,
+            y: msg.y - 40,
+            alpha: 0,
+            duration: 700,
+            onComplete: () => msg.destroy(),
+        });
+
+        trashItem.destroy();
+
+        this.trashCollected += 1;
+
+        emit("updateObjective", {
+            slot: "secondary",
+            delta: 1,
+        });
+
+        if (!this.objectiveCompleted && this.trashCollected >= this.trashGoal) {
+            this.objectiveCompleted = true;
+            emit("badgeEarned", { name: "Eco Warrior!", icon: "🏅" });
+            emit("updateObjective", { slot: "secondary", complete: true });
+        }
+    }
+
+
+
+
 
     _onDoorClicked() {
         if (!this.doorUnlocked) {

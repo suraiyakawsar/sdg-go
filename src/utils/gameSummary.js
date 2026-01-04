@@ -170,10 +170,6 @@ export function getGameStats() {
         totalBad += Number(localStorage.getItem(`chapter${i}_badChoices`)) || 0;
     }
 
-    // Also add any current session stats (in case chapter wasn't saved yet)
-    totalPoints += Number(localStorage.getItem("sessionSDGPoints")) || 0;
-    totalGood += Number(localStorage.getItem("sessionGoodChoices")) || 0;
-    totalBad += Number(localStorage.getItem("sessionBadChoices")) || 0;
 
     // Count completed chapters
     let chaptersCompleted = 0;

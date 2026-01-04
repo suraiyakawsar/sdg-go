@@ -219,7 +219,7 @@ export default class Chapter3Scene1 extends BaseStoryScene {
         console.log("🔄 Chapter 3: Session counters reset");
 
         // ✅ Store current scene (NO SPACE in key)
-        localStorage.setItem("sdgExplorer:lastRoute", "/game");  // ← Remove space
+        localStorage.setItem("sdgo:lastRoute", "/game");  // ← Remove space
         localStorage.setItem("currentChapter", 3);
         localStorage.setItem("currentScene", "Chapter3Scene1");
 
@@ -299,7 +299,6 @@ export default class Chapter3Scene1 extends BaseStoryScene {
             complete: true,
         });
 
-        emit("updateSDGPoints", 10);
         emit("badgeEarned", "Reflection Complete 🌱");
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
