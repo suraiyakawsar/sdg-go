@@ -23,24 +23,29 @@ export default function PhaserGame() {
   const phaserRef = useRef(null);
   const location = useLocation();
 
+  // 🔧 DEBUG:  Hardcode scene here
+  const DEBUG_SCENE = "Chapter3Scene2"; // ← Change this line
 
   useEffect(() => {
     // ✅ If game already exists, just switch scenes
     if (phaserRef.current) {
       // ✅ NEW: If game exists, just switch scenes instead of destroying
-      const savedScene = localStorage.getItem("currentScene") || "Chapter1Scene";
-      console.log("🎮 Switching to scene:", savedScene);
+      // const savedScene = localStorage.getItem("currentScene") || "Chapter1Scene";
+      console.log("🎮 Switching to scene:", DEBUG_SCENE);
 
       // Stop all running scenes and start the saved one
       phaserRef.current.scene.stopAll();
-      phaserRef.current.scene.start(savedScene, { resumed: true });
-
+      phaserRef.current.scene.start(DEBUG_SCENE, { resumed: true });
       return; // Don't create a new game
     }
 
-    // ✅ ORIGINAL: Create game only on first load
-    const savedScene = localStorage.getItem("currentScene") || "Chapter1Scene";
-    console.log("🎮 Loading scene:", savedScene);
+    // ✅ Create game only on first load
+    console.log("🎮 Loading scene:", DEBUG_SCENE);
+
+
+    // // ✅ ORIGINAL: Create game only on first load
+    // const savedScene = localStorage.getItem("currentScene") || "Chapter1Scene";
+    // console.log("🎮 Loading scene:", savedScene);
 
     const game = new Phaser.Game({
       type: Phaser.AUTO,
@@ -81,10 +86,13 @@ export default function PhaserGame() {
     window.__PHASER_GAME__ = game;
 
     game.events.once("ready", () => {
-      console.log("✅ Phaser ready, starting scene:", savedScene);
-      game.scene.isActive("BootScene") && game.scene.stop("BootScene");
-      game.scene.isActive("UIScene") && game.scene.sleep("UIScene");
-      game.scene.start(savedScene, { resumed: true });
+      console.log("✅ Phaser ready, starting scene:", DEBUG_SCENE);
+      // game.scene.isActive("BootScene") && game.scene.stop("BootScene");
+      // game.scene.isActive("UIScene") && game.scene.sleep("UIScene");
+      // game.scene.start(savedScene, { resumed: true });
+      // 🔧 DEBUG: Start debug scene directly instead of BootScene
+      game.scene.stop("BootScene");
+      game.scene.start(DEBUG_SCENE);
     });
 
     return () => {

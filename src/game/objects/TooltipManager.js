@@ -172,9 +172,6 @@ export default class TooltipManager {
         console.log("[TooltipManager] currentNPC:", npc);
         console.log("[TooltipManager] inspectDialogueId:", npc?.inspectDialogueId);
 
-
-        // console.log("[TooltipManager] show() called for npc:", npc?.dialogueId);
-
         this.currentNPC = npc;
 
         const cam = this.scene.cameras.main;
@@ -183,8 +180,6 @@ export default class TooltipManager {
         const screenX = (worldX - cam.worldView.x) * cam.zoom;
         const screenY = (worldY - cam.worldView.y) * cam.zoom;
 
-        // Position a bit offset from NPC
-        // this.tooltipContainer.setPosition(screenX + 90, screenY - 65);
         const offsetX = npc?.tooltipConfig?.offsetX ?? 90;
         const offsetY = npc?.tooltipConfig?.offsetY ?? -65;
 
@@ -193,11 +188,9 @@ export default class TooltipManager {
             screenY + offsetY
         );
 
-
-
         this.tooltipContainer.setVisible(true);
         this.tooltipContainer.setAlpha(0);
-        this.tooltipContainer.setScale(this.baseScale * 0.8); // small pop-in
+        this.tooltipContainer.setScale(this.baseScale * 0.8);
 
         // --- Keyboard listener cleanup ---
         if (this.keyListener) {
@@ -212,19 +205,17 @@ export default class TooltipManager {
             const key = event.key.toLowerCase();
 
             if (key === "q") {
-                // Talk
                 this.hide();
-                // console.log(
-                //     "[Tooltip] Q pressed, starting dialogue:",
-                //     this.currentNPC?.dialogueId
-                // );
                 this.scene.startDialogue(
                     this.currentNPC?.dialogueId || "h_intro_narration"
                 );
             } else if (key === "e") {
                 this.hide();
                 this.scene.dialogueManager.startInspectDialogue(this.currentNPC?.inspectDialogueId);
-
+            } else if (event.key === " " || event.code === "Space") {
+                if (this.scene.dialogueManager?.isInspectMode) {
+                    this.scene.dialogueManager._closeInspectDialogue();
+                }
             }
         };
 
@@ -250,6 +241,7 @@ export default class TooltipManager {
             this.scene.showNPCInfo(this.currentNPC);
             this.hide();
         });
+
         this.tooltipContainer.y -= 10;
 
         // --- Pop-in animation ---
@@ -261,7 +253,6 @@ export default class TooltipManager {
             duration: 200,
             ease: "Back.Out"
         });
-
     }
 
     // ============================================================

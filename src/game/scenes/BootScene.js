@@ -23,6 +23,8 @@ export default class BootScene extends Phaser.Scene {
         // }
         // ✅ Check if reset flag is in URL
         const params = new URLSearchParams(window.location.search);
+
+        // ✅ If reset flag found, start from beginning
         if (params.get("reset") === "true") {
             console.log("🔄 Reset detected, starting Chapter1Scene");
             // ✅ Remove the flag from URL

@@ -43,7 +43,7 @@ export default class BaseStoryScene extends Phaser.Scene {
 
     create() {
         this._createUILayer();
-        this._createCoordinateDebug(); // Add this
+        // this._createCoordinateDebug(); // Add this
         this._createCameraAndBackground();
         this._createPlayer();
         this._createInput();
@@ -167,7 +167,7 @@ export default class BaseStoryScene extends Phaser.Scene {
         this._customUpdate?.(time, delta); // optional hook
         this._updateDebugWalkArea();
 
-        this._updateCoordinateDebug(); // Add this
+        // this._updateCoordinateDebug(); // Add this
     }
 
     _cleanup() {

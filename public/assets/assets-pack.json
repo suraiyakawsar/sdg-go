@@ -62,9 +62,9 @@
                 "key": "bgHallway"
             },
             {
-                "url": "assets/images/props/table.png",
+                "url": "assets/images/props/screen.png",
                 "type": "image",
-                "key": "table"
+                "key": "screen"
             },
             {
                 "url": "assets/images/props/bgClassroom2 - door.png",

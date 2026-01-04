@@ -25,6 +25,18 @@ export default function Game() {
   // ✅ Reference to the Phaser game instance
   const phaserGameRef = useRef(null);
 
+  // ✅ LOCK SCROLLING ON GAME PAGE
+  useEffect(() => {
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      // ✅ RESTORE SCROLLING WHEN LEAVING GAME PAGE
+      document.documentElement.style.overflow = "auto";
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
 
   useEffect(() => {
     const timer = setTimeout(() => setReady(true), 2200);

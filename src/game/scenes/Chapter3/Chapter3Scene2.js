@@ -1,7 +1,6 @@
-// src/scenes/chapter3/Chapter3Scene2.js
+// src/game/scenes/Chapter3/Chapter3Scene2.js
 import BaseStoryScene from "../BaseStoryScene";
-import { emit, on /*, off*/ } from "../../../utils/eventBus";
-import { saveChapterStats } from "../../../utils/gameSummary";
+import { emit, on, off } from "../../../utils/eventBus";
 
 export default class Chapter3Scene2 extends BaseStoryScene {
     constructor() {
@@ -14,94 +13,71 @@ export default class Chapter3Scene2 extends BaseStoryScene {
             startNodeId: "ch3_s2_intro",
             exitUnlockedFlag: "chapter3_scene2_exit_unlocked",
 
-
-            // walkArea: {
-            //     topY: 844,
-            //     bottomY: 1077,
-            //     leftTopX: 893,
-            //     rightTopX: 1125,
-            //     leftBottomX: 400,
-            //     rightBottomX: 1125,
-            // },
-
             walkArea: {
                 zones: [
                     { xMin: 300, xMax: 600, yMin: 650, yMax: 1000 },
                     { xMin: 100, xMax: 1300, yMin: 700, yMax: 900 },
                     { xMin: 300, xMax: 600, yMin: 650, yMax: 1000 },
                     { xMin: 50, xMax: 1920, yMin: 990, yMax: 1080 },
-
-
                 ],
                 topY: 700,
                 bottomY: 1080
             },
 
-
-            // perfect scaling values found via tracker:
             scaleFar: 0.75,
             scaleNear: 1.45,
-            // Add this if you use Option 1:
-            scaleTopOffset: 20,
-
-            // perfect scaling values found via tracker:
-            scaleFar: 0.75,
-            scaleNear: 1.45,
-            // Add this if you use Option 1:
             scaleTopOffset: 20,
 
             player: {
-                x: 1125,        // Change this to your desired horizontal start
-                y: 1077,        // Change this to your desired vertical start
-                key: "ladyy",  // Your sprite texture key
-                frame: "frame1.png"
+                x: 1125,
+                y: 1077,
+                key: "ladyy",
+                frame: "frame1. png"
             },
 
-
-            // ✅ door (swap texture/x/y to match your artwork)
             door: {
                 x: 243,
                 y: 597,
                 w: 120,
                 h: 220,
-                texture: "bgClassroom2Door", // <-- replace (or reuse a generic door)
+                texture: "bgClassroom2Door",
             },
-
 
             npcs: [
                 {
                     name: "professor",
-                    texture: "professor",   // <-- replace
+                    texture: "professor",
                     x: 470,
                     y: 680,
-                    scale: 0.45,
-                    dialogueId: "ch3_s2_professor_start", // <-- replace
+                    dialogueId: "ch3_s2_professor_start",
+                    inspectDialogueId: "inspect_professor",
+                },
+                {
+                    name: "screen",
+                    texture: "screen",
+                    x: 710,
+                    y: 407,
+                    scale: 0.98,
+                    dialogueId: "ch3_s2_screen_read",
+                    inspectDialogueId: "inspect_screen",
                 }
             ],
         });
 
-
         // objectives
-        this.objectiveStep = 1;         // 1 = talk, 2 = posters
+        this.objectiveStep = 1;
         this.objectiveCompleted = false;
-
-        // local state just for posters
-        this.posterFound = 0;
-        this.posterGoal = 3;
+        this.professorTalked = false;
         this._chapterCompleted = false;
-
-        // bind storage route
     }
 
     create() {
         super.create();
 
-        // ✅ Store current scene (NO SPACE in key)
-        localStorage.setItem("sdgExplorer:lastRoute", "/game");  // ← Remove space
+        localStorage.setItem("sdgExplorer: lastRoute", "/game");
         localStorage.setItem("currentChapter", 3);
         localStorage.setItem("currentScene", "Chapter3Scene2");
 
-        // ✅ Store scene before unload
         window.addEventListener("beforeunload", () => {
             localStorage.setItem("currentScene", "Chapter3Scene2");
         });
@@ -112,57 +88,86 @@ export default class Chapter3Scene2 extends BaseStoryScene {
     // --------------------------------
     // Called after BaseStoryScene.create()
     // --------------------------------
+    // --------------------------------
+    // Called after BaseStoryScene. create()
+    // --------------------------------
     _customCreate() {
-        // Primary: talk to friend
+        console.log("🎬 Chapter3Scene2 _customCreate called");
+
+        // Primary:   talk to professor (REQUIRED)
         emit("updateObjective", {
             slot: "primary",
             collected: 0,
             goal: 1,
-            description: "Talk to your friends in the cafeteria.",
+            description: "Talk to the professor.",
             complete: false,
         });
 
-        // Secondary: trash (preview only until step 2)
+        // Secondary: talk to screen NPC (OPTIONAL)
         emit("updateObjective", {
             slot: "secondary",
-            preview: true,
-            active: false,
+            preview: false,
+            active: true,
             collected: 0,
-            goal: this.posterGoal,
-            description: "Optional: Collect all the posters in the cafeteria.",
+            goal: 1,
+            description: "Talk to the person at the screen.",
         });
 
-        this._createPosters();
-        // Door starts locked until JSON unlock event fires
+        // Door starts locked
         this.doorUnlocked = false;
+        this.screenDialogueViewed = false;
 
-        // Listen once for JSON unlock flag
+        // ✅ Listen for professor dialogue completion
         this._onSceneExitUnlocked = (payload) => {
             const { sceneId, exitFlag } = payload || {};
+            console.log(`📤 sceneExitUnlocked - sceneId: ${sceneId}, exitFlag: ${exitFlag}`);
+
             if (sceneId !== "classroom2") return;
             if (exitFlag !== "chapter3_scene2_exit_unlocked") return;
 
-            if (this.objectiveStep === 1 && !this.objectiveCompleted) {
-                this._completeStep1AndUnlock();
-            }
+            console.log("✅ Professor dialogue complete!");
+            this._completeStep1AndUnlock();
         };
 
         on("sceneExitUnlocked", this._onSceneExitUnlocked);
 
-        // Cleanup (only if your bus supports off())
+        // ✅ Listen for screen dialogue flag
+        this._onFlagsUpdated = (flags) => {
+            console.log(`🚩 Flags updated: `, flags);
+
+            if (flags && flags.includes("screen_dialogue_viewed") && !this.screenDialogueViewed) {
+                this.screenDialogueViewed = true;
+                console.log("✅ Screen dialogue completed!");
+
+                emit("updateObjective", {
+                    slot: "secondary",
+                    delta: 1,
+                    complete: true,
+                });
+                emit("updateSDGPoints", 5);
+                emit("badgeEarned", "Screen Info Read!  📺");
+            }
+        };
+
+        on("flagsUpdated", this._onFlagsUpdated);
+
+        // Cleanup
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-            // if (typeof off === "function") off("sceneExitUnlocked", this._onSceneExitUnlocked);
+            off("sceneExitUnlocked", this._onSceneExitUnlocked);
+            off("flagsUpdated", this._onFlagsUpdated);
         });
-
-
     }
 
     // --------------------------------
-    // Step 1 -> Step 2 transition
+    // Unlock door when PRIMARY objective is met
     // --------------------------------
     _completeStep1AndUnlock() {
+        if (this.objectiveCompleted) return;
         this.objectiveCompleted = true;
 
+        console.log("🔓 Primary objective complete! Unlocking door.");
+
+        // Mark PRIMARY objective complete
         emit("updateObjective", {
             slot: "primary",
             delta: 1,
@@ -170,98 +175,22 @@ export default class Chapter3Scene2 extends BaseStoryScene {
         });
 
         emit("updateSDGPoints", 10);
-        emit("badgeEarned", "Food Bank Unlocked! 🔓");
+        emit("badgeEarned", "Professor Conversation! 💬");
 
-        // unlock door visuals + logic (BaseStoryScene has the glow helper)
+        // Unlock door visuals
         this.doorUnlocked = true;
-        this._unlockDoorGlow?.();
 
-        // Step 2: posters becomes active
         this.objectiveStep = 2;
-        this.objectiveCompleted = false;
-        this.posterCollected = 0;
-
-        emit("updateObjective", {
-            slot: "secondary",
-            active: true,
-            preview: false,
-            collected: 0,
-            goal: this.posterGoal,
-            description: "Optional: Collect all the posters in the cafeteria.",
-        });
     }
 
     // --------------------------------
-    // Posters
+    // Door click override
     // --------------------------------
-    _createPosters() {
-        this.poster1 = this.add.image(614, 885, "table").setInteractive({ useHandCursor: true }).setScale(1.05);
-        this.poster1.on("pointerdown", () => this._handlePosterClick(this.poster1));
-    }
-
-    _handlePosterClick(posterItem) {
-        if (!posterItem?.scene) return;
-
-        // poster only active in step 2
-        if (this.objectiveStep !== 2) return;
-
-        const points = 3;
-        addSDGPoints(points);
-        emit("updateSDGPoints", points);
-        emit("badgeEarned", `Found a poster! (+${posterItem.reward})`);
-
-        // small floating text
-        const msg = this.add.text(posterItem.x, posterItem.y - 40, `+${points}`, {
-            font: "16px Arial",
-            fill: "#0f0",
-        }).setOrigin(0.5);
-
-        this.tweens.add({
-            targets: msg,
-            y: msg.y - 40,
-            alpha: 0,
-            duration: 700,
-            onComplete: () => msg.destroy(),
-        });
-
-        posterItem.destroy();
-
-
-        this.posterCollected += 1;
-
-        emit("updateObjective", {
-            slot: "secondary",
-            delta: 1,
-        });
-
-        if (!this.objectiveCompleted && this.posterCollected >= this.posterGoal) {
-            this.objectiveCompleted = true;
-            emit("badgeEarned", "Poster Hunter 2! 🏅");
-            emit("updateObjective", { slot: "secondary", complete: true });
-        }
-    }
-
-    // --------------------------------
-    // Door click override: locked until unlocked
-    // --------------------------------
-    // _onDoorClicked() {
-    //     if (!this.doorUnlocked) {
-    //         console.log("Door locked. Talk to your professor first.");
-    //         return;
-    //     }
-
-    //     if (this.playerInExitZone) {
-    //         this._onChapterComplete(); // ✅ Show summary instead of going directly
-    //     } else {
-    //         console.log("Too far from the door.");
-    //     }
-    // }
-    // ✅ OVERRIDE:  Show chapter summary when clicking door
     _onDoorClicked() {
         console.log("🚪 Door clicked!  doorUnlocked:", this.doorUnlocked);
 
         if (!this.doorUnlocked) {
-            console.log("❌ Door is locked");
+            console.log("❌ Door is locked.  Talk to the professor first.");
             return;
         }
 
@@ -278,26 +207,16 @@ export default class Chapter3Scene2 extends BaseStoryScene {
 
         console.log("🎉 Chapter 3 Complete!");
 
-        // Mark chapter as complete
         localStorage.setItem("chapter3_completed", "true");
         emit("updateChapterProgress");
 
-        // Freeze the player
+        this.input.enabled = false;
         if (this.ladyPlayer) {
             this.ladyPlayer.setVelocity(0, 0);
+            this.ladyPlayer.body.enable = false;
             this.ladyPlayer.anims?.play("idle", true);
         }
-        this.input.enabled = false;
 
-        // Show chapter summary
-        console.log("📤 Emitting ui:showChapterSummary for chapter 3...");
-        emit("ui:showChapterSummary", { chapter: 3 });
+        emit("ui: showChapterSummary", { chapter: 3 });
     }
-}
-
-// Helper to add SDG points (session-based)
-function addSDGPoints(points) {
-    const currentPoints = Number(localStorage.getItem("sessionSDGPoints")) || 0;
-    const newTotal = currentPoints + points;
-    localStorage.setItem("sessionSDGPoints", String(newTotal));
 }

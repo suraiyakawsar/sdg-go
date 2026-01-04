@@ -47,6 +47,7 @@ export default class DialogueManager {
     this._skipRequested = false;
     this.choices = [];
     this._pendingChoices = null;
+    this.isInspectMode = false;
   }
 
   // ============================================================
@@ -150,7 +151,7 @@ export default class DialogueManager {
     const visibleChoices = choicesData.slice(0, maxChoices);
 
     // Position choices above the panel
-    const y = -this.panelHeight / 2 - 50;
+    const y = -this.panelHeight / 2 - 80;
     const horizontalGap = 20;
 
     const keyMap = [
@@ -165,12 +166,14 @@ export default class DialogueManager {
         fontFamily: "'Roboto', 'Segoe UI', Arial, sans-serif",
         fontSize: "25px",
         color: "#ffffff",
-        fontStyle: "bold"
+        fontStyle: "bold",
+        wordWrap: { width: 450 },  // ← Add this line for text wrapping
+        align: "center"             // ← Add this for centered alignment
       }).setOrigin(0.5).setScrollFactor(0);
 
       const bounds = txt.getBounds();
       const width = bounds.width + 80; // Extra padding for Key Icon
-      const height = 50;
+      const height = 65;
       return { choice, txt, width, height };
     });
 
@@ -308,25 +311,61 @@ export default class DialogueManager {
     this.keyQ = this.scene.input.keyboard.addKey(KeyCodes.Q);
     this.keyE = this.scene.input.keyboard.addKey(KeyCodes.E);
     this.keyR = this.scene.input.keyboard.addKey(KeyCodes.R);
+
+    // ✅ ADD SPACEBAR & ENTER LISTENERS
+    const spaceKey = this.scene.input.keyboard.addKey(KeyCodes.SPACE);
+    const enterKey = this.scene.input.keyboard.addKey(KeyCodes.ENTER);
+
+    spaceKey.on("down", () => this._onSpacePressed());
+    enterKey.on("down", () => this._onSpacePressed());
+
+    window.addEventListener("keydown", this._onKeyDown);
   }
+
+  // ✅ ADD NEW METHOD
+  _onSpacePressed() {
+    if (!this.dialogueVisible) return;
+
+    if (this._isTyping) {
+      this._skipRequested = true;
+    } else if (!this.choices.length) {
+      // Works for BOTH talk and inspect! 
+      this._advanceFromCurrentNode();
+    }
+  }
+
 
   _onKeyDown(event) {
     if (!this.dialogueVisible) return;
 
-    if (event.code === "Space" || event.code === "Enter") {
-      if (this._isTyping) {
-        this._skipRequested = true;
-      } else if (!this.choices.length) {
-        this._advanceFromCurrentNode();
-      }
+    // if (event.code === "Space" || event.code === "Enter") {
+    //   if (this._isTyping) {
+    //     this._skipRequested = true;
+    //   } else if (!this.choices.length) {
+    //     // ✅ Check if we're in inspect mode
+    //     if (this.isInspectMode) {
+    //       this._closeInspectDialogue();
+    //     } else {
+    //       this._advanceFromCurrentNode();
+    //     }
+    //   }
 
-      // --- NEW: Inspectable trigger ---
-      if (event.code === "KeyE") {
-        // Emit an event to let the scene handle what is being inspected
-        emit("inspectTriggered");
-      }
+    // --- NEW: Inspectable trigger ---
+    if (event.code === "KeyE") {
+      // Emit an event to let the scene handle what is being inspected
+      emit("inspectTriggered");
     }
   }
+
+
+  // ✅ ADD THIS NEW METHOD
+  _closeInspectDialogue() {
+    this.dialogueVisible = false;
+    this.container.setVisible(false);
+    this.isInspectMode = false;
+    console.log("[DialogueManager] Inspect dialogue closed");
+  }
+
 
   startInspectDialogue(inspectId) {
     if (!inspectId) return console.warn("[DialogueManager] No inspectDialogueId provided.");
@@ -337,6 +376,7 @@ export default class DialogueManager {
     this.currentNodeId = node.id;
     this.currentNode = node;
     this.dialogueVisible = true;
+    this.isInspectMode = true;
 
     this.container.setVisible(true);
     this.container.setScale(0).setAlpha(0);
@@ -616,6 +656,8 @@ export default class DialogueManager {
     if (this.typeTimer) this.typeTimer.remove();
     this._clearChoices();
     this.container?.destroy();
-    this.scene.input.keyboard.off("keydown", this._onKeyDown);
+    // this.scene.input.keyboard.off("keydown", this._onKeyDown);
+    window.removeEventListener("keydown", this._onKeyDown);
+
   }
 }
