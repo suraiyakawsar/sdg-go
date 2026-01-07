@@ -1,167 +1,155 @@
-// src/game/scenes/Chapter3/Chapter3Scene2.js
+// src/scenes/chapter2/Chapter2Scene3.js
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { saveChapterStats } from "../../../utils/gameSummary";
-
+import { title } from "framer-motion/client";
 
 export default class Chapter3Scene2 extends BaseStoryScene {
     constructor() {
         super("Chapter3Scene2", {
-            sceneId: "classroom2",
+            sceneId: "garden",
             jsonKey: "chapter3Data",
             jsonPath: "data/dialogues/chapters/chapter3_script.json",
 
-            backgroundKey: "bgClassroom2",
+            backgroundKey: "bgCampusGarden",
             startNodeId: "ch3_s2_intro",
             exitUnlockedFlag: "chapter3_scene2_exit_unlocked",
 
             walkArea: {
-                topY: 840,
+                topY: 844,
                 bottomY: 1077,
-                leftTopX: 500,
-                rightTopX: 1000,
-                leftBottomX: 160,
-                rightBottomX: 1070,
+                leftTopX: 480,
+                rightTopX: 980,
+                leftBottomX: 250,
+                rightBottomX: 1000,
             },
 
-            scaleFar: 0.83,
-            scaleNear: 1.45,
+            // perfect scaling values found via tracker:
+            scaleFar: 0.7,
+            scaleNear: 1.6,
+            // Add this if you use Option 1:
             scaleTopOffset: 20,
 
-            player: {
-                x: 1000,
-                y: 1077,
-                key: "ladyy",
-                frame: "frame1.png"
-            },
-
+            // ✅ door (swap texture/x/y to match your artwork)
             door: {
-                x: 243,
-                y: 597,
-                w: 120,
-                h: 220,
-                texture: "bgClassroom2Door",
+                x: 192,
+                y: 558,
+                w: 198,
+                h: 399,
+                texture: "gardenDoor",
             },
 
             npcs: [
                 {
-                    name: "professor",
-                    texture: "professor",
-                    x: 470,
-                    y: 680,
-                    dialogueId: "ch3_s2_professor_start",
-                    inspectDialogueId: "inspect_professor",
+                    name: "gardener",
+                    texture: "gardener",
+                    x: 1060,
+                    y: 650,
+                    scale: 1.5,
+                    dialogueId: "ch3_s2_gardener",
+                    inspectDialogueId: "inspect_gardener",
                 },
                 {
-                    name: "screen",
-                    texture: "screen",
-                    x: 710,
-                    y: 407,
-                    scale: 0.98,
-                    dialogueId: "ch3_s2_screen_read",
-                    inspectDialogueId: "inspect_screen",
-                }
+                    name: "cat",
+                    texture: "cat",
+                    x: 700,
+                    y: 900,
+                    scale: 0.6,
+                    dialogueId: "cat", inspectDialogueId: "inspect_cat"
+                },
+                {
+                    name: "tools",
+                    texture: "gardeningTools",
+                    x: 755,
+                    y: 700,
+                    scale: 0.7,
+                    dialogueId: "ch3_s2_tools_interact",
+                    inspectDialogueId: "inspect_tools"
+                },
             ],
         });
 
         // objectives
         this.objectiveStep = 1;
         this.objectiveCompleted = false;
-        this.professorTalked = false;
+        this.tableTalked = false;
         this._chapterCompleted = false;
+
+        // bind storage route
+
     }
 
     create() {
-        console.log("🎮 Chapter3Scene2.create() - BEFORE super. create()");
-        console.log("Session values on boot:", {
-            sessionSDGPoints: localStorage.getItem("sessionSDGPoints"),
-            sessionGoodChoices: localStorage.getItem("sessionGoodChoices"),
-            sessionBadChoices: localStorage.getItem("sessionBadChoices"),
-        });
-
-
         super.create();
 
-        console.log("🎮 Chapter3Scene2.create() - AFTER super.create()");
-        console.log("Session values after super:", {
-            sessionSDGPoints: localStorage.getItem("sessionSDGPoints"),
-            sessionGoodChoices: localStorage.getItem("sessionGoodChoices"),
-            sessionBadChoices: localStorage.getItem("sessionBadChoices"),
-        });
 
-
-
+        // ✅ Store current scene
         localStorage.setItem("sdgo:lastRoute", "/game");
         localStorage.setItem("currentChapter", 3);
         localStorage.setItem("currentScene", "Chapter3Scene2");
 
+        // ✅ Store scene before unload
         window.addEventListener("beforeunload", () => {
-            localStorage.setItem("currentScene", "Chapter3Scene2");
+            localStorage.setItem("currentScene", "Chapter3Scene2 ");
         });
 
-        emit("updateChapterScene", { title: "Classroom · Chapter 3" });
+        emit("updateChapterScene", { title: "Garden · Chapter 3" });
     }
 
-    // --------------------------------
-    // Called after BaseStoryScene.create()
-    // --------------------------------
-    // --------------------------------
-    // Called after BaseStoryScene. create()
-    // --------------------------------
+    // Runs after base create()
     _customCreate() {
-        console.log("🎬 Chapter3Scene2 _customCreate called");
-
-        // Primary:   talk to professor (REQUIRED)
+        // objectives for this scene
         emit("updateObjective", {
             slot: "primary",
             collected: 0,
             goal: 1,
-            description: "Talk to the professor.",
+            title: "Learn Through Practice",
+            description: "Talk to the gardener to understand composting and climate action.",
             complete: false,
         });
 
-        // Secondary: talk to screen NPC (OPTIONAL)
         emit("updateObjective", {
             slot: "secondary",
             preview: false,
             active: true,
             collected: 0,
             goal: 1,
-            description: "Talk to the person at the screen.",
+            title: "Understand the Process",
+            description: "Optional: Interact with the composting table to learn how it works.",
         });
 
-        // Door starts locked
+        // this._createPosters();
+        // Door starts locked until JSON unlock event fires
         this.doorUnlocked = false;
-        this.screenDialogueViewed = false;
+        this.compostTableInteracted = false;
 
-        // ✅ Listen for professor dialogue completion
+        // Listen once for JSON unlock flag
         this._onSceneExitUnlocked = (payload) => {
             const { sceneId, exitFlag } = payload || {};
-            console.log(`📤 sceneExitUnlocked - sceneId: ${sceneId}, exitFlag: ${exitFlag}`);
-
-            if (sceneId !== "classroom2") return;
+            if (sceneId !== "garden") return;
             if (exitFlag !== "chapter3_scene2_exit_unlocked") return;
 
-            console.log("✅ Professor dialogue complete!");
-            this._completeStep1AndUnlock();
+            if (this.objectiveStep === 1 && !this.objectiveCompleted) {
+                this._completeStep1AndUnlock();
+            }
         };
 
         on("sceneExitUnlocked", this._onSceneExitUnlocked);
 
-        // ✅ Listen for screen dialogue flag
         this._onFlagsUpdated = (flags) => {
             console.log(`🚩 Flags updated: `, flags);
 
-            if (flags && flags.includes("screen_dialogue_viewed") && !this.screenDialogueViewed) {
-                this.screenDialogueViewed = true;
-                console.log("✅ Screen dialogue completed!");
+            if (flags && flags.includes("compost_table_interacted") && !this.compostTableInteracted) {
+                this.compostTableInteracted = true;
+                console.log("✅ Compost table interaction completed!");
 
                 emit("updateObjective", {
                     slot: "secondary",
                     delta: 1,
                     complete: true,
                 });
-                emit("badgeEarned", "Screen Info Read!  📺");
+
+                emit("badgeEarned", { name: "Composting Basics", icon: "♻️", subtitle: "Waste can be part of the solution." });
             }
         };
 
@@ -175,7 +163,7 @@ export default class Chapter3Scene2 extends BaseStoryScene {
     }
 
     // --------------------------------
-    // Unlock door when PRIMARY objective is met
+    // Step 1 -> Step 2 transition
     // --------------------------------
     _completeStep1AndUnlock() {
         if (this.objectiveCompleted) return;
@@ -183,33 +171,30 @@ export default class Chapter3Scene2 extends BaseStoryScene {
 
         console.log("🔓 Primary objective complete! Unlocking door.");
 
-        // Mark PRIMARY objective complete
         emit("updateObjective", {
             slot: "primary",
             delta: 1,
             complete: true,
         });
 
-        emit("badgeEarned", "Professor Conversation! 💬");
 
-        // Unlock door visuals
+        emit("badgeEarned", { name: "Climate in Action", icon: "🧤", subtitle: "You learned how everyday actions affect the environment." });
+
+        // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
 
         this.objectiveStep = 2;
     }
 
-    // --------------------------------
-    // Door click override
-    // --------------------------------
-    _onDoorClicked() {
-        console.log("🚪 Door clicked!  doorUnlocked:", this.doorUnlocked);
 
+    _onDoorClicked() {
         if (!this.doorUnlocked) {
-            console.log("❌ Door is locked.  Talk to the professor first.");
+            console.log("Door locked. Talk to your professor first.");
             return;
         }
 
         this._onChapterComplete();
+
     }
 
     // ✅ Chapter complete handler

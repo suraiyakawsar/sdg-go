@@ -60,7 +60,7 @@ export default class BaseStoryScene extends Phaser.Scene {
 
         this._registerGlobalUIListeners();
 
-        this._debugWalkArea();
+        // this._debugWalkArea();
 
         // this._createDebugGraphics();
 

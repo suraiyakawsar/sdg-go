@@ -115,12 +115,12 @@ function ChapterHeader({ title }) {
                     <div className="absolute inset-0 rounded-xl bg-emerald-400/20 blur-md opacity-0 transition" />
 
                     <motion.div
-                        className="relative h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/10 border border-emerald-400/40 flex items-center justify-center"
+                        className="relative h-9 w-11 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/10 border border-emerald-400/40 flex items-center justify-center"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         transition={{ type: "spring", stiffness: 400, damping: 17 }}
                     >
-                        <span className="text-emerald-300 text-xs font-bold">SDG</span>
+                        <span className="text-emerald-300 text-xs font-bold">SDGo!</span>
 
                         {/* Subtle shine effect */}
                         <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-white/0 via-white/5 to-white/0" />

@@ -2,7 +2,7 @@ import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
 import { saveChapterStats } from "../../../utils/gameSummary";
-
+import { title } from "framer-motion/client";
 
 export default class Chapter1Scene3 extends BaseStoryScene {
   constructor() {
@@ -60,8 +60,6 @@ export default class Chapter1Scene3 extends BaseStoryScene {
     this.posterFound = 0;
     this.posterGoal = 3;
     this._chapterCompleted = false; // ✅ Add flag
-
-    // bind storage route
   }
 
   create() {
@@ -90,18 +88,20 @@ export default class Chapter1Scene3 extends BaseStoryScene {
       slot: "primary",
       collected: 0,
       goal: 1,
-      description: "Talk to your friends in the cafeteria.",
+      title: "Figure Out the Next Move",
+      description: "Talk to your classmates to decide what to do next",
       complete: false,
     });
 
-    // Secondary: trash (preview only until step 2)
+    // Secondary: poster (preview only until step 2)
     emit("updateObjective", {
       slot: "secondary",
       preview: true,
       active: false,
       collected: 0,
       goal: this.posterGoal,
-      description: "Optional: Collect all the posters in the cafeteria.",
+      title: "Keep the Message Alive",
+      description: "Optional: Collect SDG posters around the cafeteria",
     });
 
     this._createPosters();
@@ -122,7 +122,7 @@ export default class Chapter1Scene3 extends BaseStoryScene {
 
     on("sceneExitUnlocked", this._onSceneExitUnlocked);
 
-    // Cleanup (only if your bus supports off())
+    // Cleanup (only if bus supports off())
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       // if (typeof off === "function") off("sceneExitUnlocked", this._onSceneExitUnlocked);
     });
@@ -140,11 +140,10 @@ export default class Chapter1Scene3 extends BaseStoryScene {
       complete: true,
     });
 
-    emit("badgeEarned", "Food Bank Unlocked! 🔓");
+    emit("badgeEarned", { name: "On the Right Track", icon: "🧭", subtitle: "You’re no longer just aware, you’re moving forward." });
 
     // unlock door visuals + logic (BaseStoryScene has the glow helper)
     this.doorUnlocked = true;
-    this._unlockDoorGlow?.();
 
     // Step 2: posters becomes active
     this.objectiveStep = 2;
@@ -157,7 +156,8 @@ export default class Chapter1Scene3 extends BaseStoryScene {
       preview: false,
       collected: 0,
       goal: this.posterGoal,
-      description: "Optional: Collect all the posters in the cafeteria.",
+      title: "Keep the Message Alive",
+      description: "Optional: Collect SDG posters around the cafeteria",
     });
   }
 
@@ -185,7 +185,6 @@ export default class Chapter1Scene3 extends BaseStoryScene {
 
     const points = 3;
     addSDGPoints(points);
-    emit("badgeEarned", `Found a poster! (+${posterItem.reward})`);
 
     // small floating text
     const msg = this.add.text(posterItem.x, posterItem.y - 40, `+${points}`, {
@@ -213,7 +212,7 @@ export default class Chapter1Scene3 extends BaseStoryScene {
 
     if (!this.objectiveCompleted && this.posterCollected >= this.posterGoal) {
       this.objectiveCompleted = true;
-      emit("badgeEarned", "Poster Hunter 2! 🏅");
+      emit("badgeEarned", { name: "Hungry But Aware", icon: "🍒", subtitle: "Sustainability exists even when you're starving." });
       emit("updateObjective", { slot: "secondary", complete: true });
     }
   }
@@ -286,9 +285,11 @@ export default class Chapter1Scene3 extends BaseStoryScene {
 
     console.log("🎉 Chapter 1 Complete!  Showing summary.. .");
 
+    saveChapterStats(1);
+
     // Mark chapter as complete
-    localStorage.setItem("chapter1_completed", "true");
-    emit("updateChapterProgress");
+    // localStorage.setItem("chapter1_completed", "true");
+    // emit("updateChapterProgress");
 
     // Freeze the player
     this.input.enabled = false;

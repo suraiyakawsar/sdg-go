@@ -347,8 +347,8 @@ export default function Profile() {
                             {/* Top meta bar */}
                             <div className="flex items-center justify-between px-5 h-12 border-b border-white/5 bg-gradient-to-r from-slate-950/80 via-slate-900/70 to-slate-950/80">
                                 <div className="flex items-center gap-2">
-                                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/50 text-emerald-300 text-sm font-semibold">
-                                        SDG
+                                    <span className="inline-flex h-9 w-13 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/50 text-emerald-300 text-sm font-semibold">
+                                        SDGo!
                                     </span>
                                     <div className="flex flex-col">
                                         <span className="text-xs uppercase tracking-[0.18em] text-slate-400">

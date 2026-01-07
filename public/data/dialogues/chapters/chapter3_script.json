@@ -2,13 +2,191 @@
     "chapterId": "chapter3",
     "scenes": [
         {
-            "id": "garden",
-            "backgroundKey": "bgCampusGarden",
+            "id": "classroom2",
+            "backgroundKey": "bgClassroom2",
             "startNodeId": "ch3_s1_intro",
             "exitUnlockedFlag": "chapter3_scene1_exit_unlocked",
             "nodes": [
                 {
                     "id": "ch3_s1_intro",
+                    "speaker": "narrator",
+                    "text": "After class, Prof Danny asks you to stay back.  The lecture hall empties, leaving just the two of you in the afternoon light.  You notice a large projection screen behind the professor displaying 'Sustainable Campus Initiatives. '"
+                },
+                {
+                    "id": "inspect_professor",
+                    "speaker": "narrator",
+                    "text": "Prof Danny is organizing his notes. He seems to have something important to discuss."
+                },
+                {
+                    "id": "inspect_screen",
+                    "speaker": "narrator",
+                    "text": "A projection screen displays information about various sustainable campus initiatives — renewable energy projects, waste management programs, water conservation efforts, and student-led sustainability clubs.  Each initiative shows both the goals and current progress."
+                },
+                {
+                    "id": "ch3_s1_screen_read",
+                    "speaker": "narrator",
+                    "text": "As you look at the screen, you read about the different programs:\n\n• Solar Panel Installation Project (40% complete) — Installing solar panels on campus buildings to reduce carbon emissions.\n\n• Zero Waste Canteen Program (Active) — Incentivizing students to bring reusable containers instead of using disposables.\n\n• Campus Water Harvest Initiative (Ongoing) — Collecting rainwater for landscaping and cleaning.\n\n• Student Sustainability Network (250 members) — A student-led organization advocating for campus-wide sustainable practices.\n\nEach program shows that change is possible when people commit to it.",
+                    "choices": [
+                        {
+                            "id": "ch3_s1_screen_choice_impressed",
+                            "text": "This is impressive.  I didn't know there was so much happening on campus.",
+                            "sdgDelta": 2,
+                            "nextNodeId": "ch3_s1_screen_end"
+                        },
+                        {
+                            "id": "ch3_s1_screen_choice_overwhelmed",
+                            "text": "This is a lot.  I'm not sure where I could fit in to help.",
+                            "sdgDelta": 0,
+                            "nextNodeId": "ch3_s1_screen_end"
+                        },
+                        {
+                            "id": "ch3_s1_screen_choice_motivate",
+                            "text": "Seeing all this makes me want to get involved immediately.",
+                            "sdgDelta": 3,
+                            "setFlags": [
+                                "screen_dialogue_viewed"
+                            ],
+                            "nextNodeId": "ch3_s1_screen_end"
+                        }
+                    ]
+                },
+                {
+                    "id": "ch3_s1_screen_end",
+                    "speaker": "narrator",
+                    "text": "You finish reading the screen and turn your attention back to the classroom.",
+                    "onComplete": {
+                        "setFlags": [
+                            "screen_dialogue_viewed"
+                        ]
+                    }
+                },
+                {
+                    "id": "ch3_s1_professor_start",
+                    "speaker": "Prof Danny",
+                    "text": "I see you've been looking at our campus initiatives.   I've noticed you've been quite involved lately — the food bank, the sustainability fair.   Tell me, what has all of this actually taught you?  ",
+                    "choices": [
+                        {
+                            "id": "ch3_s1_choice_action",
+                            "text": "That small, consistent actions matter more than just understanding theory.",
+                            "sdgDelta": 4,
+                            "nextNodeId": "ch3_s1_professor_action",
+                            "onChoose": {
+                                "setFlags": [
+                                    "ch3_reflection_action"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "ch3_s1_choice_awareness",
+                            "text": "That sustainability is more complex than I realized. Everything is connected.",
+                            "sdgDelta": 2,
+                            "nextNodeId": "ch3_s1_professor_awareness"
+                        },
+                        {
+                            "id": "ch3_s1_choice_cynical",
+                            "text": "Honestly Prof?   That change is slow and most people don't care.",
+                            "sdgDelta": -2,
+                            "isCareless": true,
+                            "nextNodeId": "ch3_s1_professor_cynical"
+                        }
+                    ]
+                },
+                {
+                    "id": "ch3_s1_professor_action",
+                    "speaker": "Prof Danny",
+                    "text": "That's exactly right.   Awareness without action changes nothing.  What matters is what you choose to do when it's inconvenient — when no one is watching.",
+                    "autoNext": "ch3_s1_challenge"
+                },
+                {
+                    "id": "ch3_s1_professor_awareness",
+                    "speaker": "Prof Danny",
+                    "text": "Understanding the complexity is important.   But the harder part is deciding where you're willing to take personal responsibility.  Not everything, but something.",
+                    "autoNext": "ch3_s1_challenge"
+                },
+                {
+                    "id": "ch3_s1_professor_cynical",
+                    "speaker": "Prof Danny",
+                    "text": "I understand that frustration.  But here's the thing — every movement starts with people who refused to accept 'most people don't care.' Will you be one of them?",
+                    "autoNext": "ch3_s1_challenge"
+                },
+                {
+                    "id": "ch3_s1_challenge",
+                    "speaker": "Prof Danny",
+                    "text": "I have a challenge for you.  For the rest of the semester, I want you to lead a small SDG initiative.  It doesn't have to be big.  Just consistent.",
+                    "autoNext": "ch3_s1_challenge_options"
+                },
+                {
+                    "id": "ch3_s1_challenge_options",
+                    "speaker": "Prof Danny",
+                    "text": "It could be weekly volunteering, starting a recycling program in your hostel, or even just documenting your sustainable choices on social media.  What interests you?  ",
+                    "choices": [
+                        {
+                            "id": "ch3_s1_accept_volunteer",
+                            "text": "I'll commit to the food bank.   Weekly, no excuses.",
+                            "sdgDelta": 5,
+                            "setFlags": [
+                                "ch3_committed_foodbank"
+                            ],
+                            "nextNodeId": "ch3_s1_accept_response"
+                        },
+                        {
+                            "id": "ch3_s1_accept_create",
+                            "text": "I want to start something new in my hostel — maybe a recycling corner.",
+                            "sdgDelta": 5,
+                            "setFlags": [
+                                "ch3_committed_create"
+                            ],
+                            "nextNodeId": "ch3_s1_accept_response"
+                        },
+                        {
+                            "id": "ch3_s1_hesitate",
+                            "text": "I'm not sure I'm ready to lead something, Prof.",
+                            "sdgDelta": -1,
+                            "isCareless": true,
+                            "nextNodeId": "ch3_s1_hesitate_response"
+                        }
+                    ]
+                },
+                {
+                    "id": "ch3_s1_accept_response",
+                    "speaker": "Prof Danny",
+                    "text": "Excellent!  That's leadership.  Not waiting for permission, but taking responsibility.  I'll be watching your progress.   Make me proud.",
+                    "autoNext": "ch3_s1_guidance"
+                },
+                {
+                    "id": "ch3_s1_hesitate_response",
+                    "speaker": "Prof Danny",
+                    "text": "Leadership isn't about being ready. It's about starting before you feel ready. But I won't force you. The choice is yours.",
+                    "autoNext": "ch3_s1_guidance"
+                },
+                {
+                    "id": "ch3_s1_guidance",
+                    "speaker": "Prof Danny",
+                    "text": "Remember this: look closely at everyday life — how people handle waste, water, food, transport. Change doesn't start with grand gestures.   It starts with daily choices.",
+                    "autoNext": "ch3_s1_wrapup"
+                },
+                {
+                    "id": "ch3_s1_wrapup",
+                    "speaker": "system",
+                    "text": "End of Chapter 3: Deepening Understanding.  Prof Danny has challenged you to take ownership of your sustainability journey. What will you do next? ",
+                    "onComplete": {
+                        "setFlags": [
+                            "chapter3_completed",
+                            "chapter3_scene1_decision_done"
+                        ],
+                        "unlockExit": true
+                    }
+                }
+            ]
+        },
+        {
+            "id": "garden",
+            "backgroundKey": "bgCampusGarden",
+            "startNodeId": "ch3_s2_intro",
+            "exitUnlockedFlag": "chapter3_scene2_exit_unlocked",
+            "nodes": [
+                {
+                    "id": "ch3_s2_intro",
                     "speaker": "narrator",
                     "text": "The campus community garden behind the Engineering block.   What was once an abandoned lot is now a green oasis — vegetable plots, herb gardens, and a small composting area."
                 },
@@ -30,162 +208,37 @@
                 {
                     "id": "cat",
                     "speaker": "narrator",
-                    "text": "The cat yawns at you.  Gardening is apparently exhausting work...   for cats."
+                    "text": "The cat yawns at you.  Gardening is apparently exhausting work...for cats."
                 },
                 {
-                    "id": "tools",
+                    "id": "inspect_tools",
                     "speaker": "narrator",
-                    "text": "Well-maintained gardening equipment. A sign says 'Tolong pulangkan selepas guna.   Jaga barang bersama.  '"
+                    "text": "Well-maintained gardening equipment. A sign says 'Tolong pulangkan selepas guna.   Jaga barang bersama.' (Please return after use. Take care of shared items.)"
                 },
                 {
-                    "id": "ch3_s1_gardener",
-                    "speaker": "Pakcik Halim",
-                    "text": "Ah, pengunjung baru! Welcome to Kebun Komuniti USM.  Are you here to help out or just exploring? ",
+                    "id": "ch3_s2_tools_interact",
+                    "speaker": "narrator",
+                    "text": "You pick up a trowel.  It's surprisingly light and well-balanced.  Clearly, these tools are cared for by the community.",
                     "choices": [
                         {
-                            "id": "ch3_s1_choice_help",
-                            "text": "I'd like to help, Pakcik. I've been trying to get more involved in sustainability efforts.",
-                            "sdgDelta": 4,
-                            "nextNodeId": "ch3_s1_help_confirm",
-                            "onChoose": {
-                                "setFlags": [
-                                    "ch3_took_initiative"
-                                ]
-                            }
+                            "id": "ch3_s2_tools_choice_use",
+                            "text": "I should help out.  Maybe Pakcik Halim needs an extra hand.",
+                            "sdgDelta": 3,
+                            "nextNodeId": "ch3_s2_screen_end"
                         },
                         {
-                            "id": "ch3_s1_choice_observe",
-                            "text": "Just looking around first, Pakcik. I want to understand how this works.",
+                            "id": "ch3_s2_tools_choice_leave",
+                            "text": "I'll just observe for now.  I want to understand how this all works first.",
                             "sdgDelta": 0,
-                            "nextNodeId": "ch3_s1_observe_confirm"
+                            "nextNodeId": "ch3_s2_screen_end"
                         },
                         {
-                            "id": "ch3_s1_choice_leave",
-                            "text": "Actually I'm just passing through. Taking a shortcut to the library.",
+                            "id": "ch3_s2_tools_choice_ignore",
+                            "text": "Actually, I have other things to do.  I'll just take a shortcut through.",
                             "sdgDelta": -3,
                             "isCareless": true,
-                            "nextNodeId": "ch3_s1_leave_confirm"
-                        }
-                    ]
-                },
-                {
-                    "id": "ch3_s1_help_confirm",
-                    "speaker": "Pakcik Halim",
-                    "text": "Bagus! That mindset is more valuable than people think. Consistency beats grand gestures.   Come, I'll show you how we turn food waste into compost.",
-                    "autoNext": "ch3_s1_lesson"
-                },
-                {
-                    "id": "ch3_s1_observe_confirm",
-                    "speaker": "Pakcik Halim",
-                    "text": "That's fair. Understanding comes before action.  Take your time.  But don't be a stranger — hands-on learning is the best teacher!  ",
-                    "autoNext": "ch3_s1_lesson"
-                },
-                {
-                    "id": "ch3_s1_leave_confirm",
-                    "speaker": "Pakcik Halim",
-                    "text": "Ah, the busy life of students. But remember — even 10 minutes in nature can change your perspective.  The garden will be here when you're ready.",
-                    "autoNext": "ch3_s1_lesson"
-                },
-                {
-                    "id": "ch3_s1_lesson",
-                    "speaker": "Pakcik Halim",
-                    "text": "You know, this garden produces about 50kg of vegetables monthly. All goes to Pantri Siswa and Dewan Makan. Nothing wasted, everything connected.",
-                    "autoNext": "ch3_s1_reflection"
-                },
-                {
-                    "id": "ch3_s1_reflection",
-                    "speaker": "narrator",
-                    "text": "You spend time observing the garden's ecosystem — composting food waste, growing vegetables, feeding students.  A complete cycle of sustainability.",
-                    "autoNext": "ch3_s1_pakcik_wisdom"
-                },
-                {
-                    "id": "ch3_s1_pakcik_wisdom",
-                    "speaker": "Pakcik Halim",
-                    "text": "The SDGs...   they're not just about big policies. They're about everyday choices.  What you eat, what you throw away, how you treat the earth.   It starts small.",
-                    "choices": [
-                        {
-                            "id": "ch3_s1_wisdom_agree",
-                            "text": "I'm starting to see that now, Pakcik. Small actions do add up.",
-                            "sdgDelta": 3,
-                            "nextNodeId": "ch3_s1_wisdom_response"
-                        },
-                        {
-                            "id": "ch3_s1_wisdom_question",
-                            "text": "But can individual actions really make a difference against big corporations? ",
-                            "sdgDelta": 1,
-                            "nextNodeId": "ch3_s1_wisdom_deeper"
-                        }
-                    ]
-                },
-                {
-                    "id": "ch3_s1_wisdom_response",
-                    "speaker": "Pakcik Halim",
-                    "text": "That's the first step.   Awareness becomes habit, habit becomes culture, culture becomes change.  You're on the right path.",
-                    "autoNext": "ch3_s1_wrapup"
-                },
-                {
-                    "id": "ch3_s1_wisdom_deeper",
-                    "speaker": "Pakcik Halim",
-                    "text": "Good question!   Individual action creates demand for change. When enough people act, systems follow. Don't underestimate your power as a consumer and citizen.",
-                    "autoNext": "ch3_s1_wrapup"
-                },
-                {
-                    "id": "ch3_s1_wrapup",
-                    "speaker": "system",
-                    "text": "You've experienced the campus community garden and learned about sustainable food systems. (SDG 2: Zero Hunger, SDG 12: Responsible Consumption, SDG 15: Life on Land)",
-                    "onComplete": {
-                        "setFlags": [
-                            "chapter3_scene1_done"
-                        ],
-                        "unlockExit": true
-                    }
-                }
-            ]
-        },
-        {
-            "id": "classroom2",
-            "backgroundKey": "bgClassroom2",
-            "startNodeId": "ch3_s2_intro",
-            "exitUnlockedFlag": "chapter3_scene2_exit_unlocked",
-            "nodes": [
-                {
-                    "id": "ch3_s2_intro",
-                    "speaker": "narrator",
-                    "text": "After class, Prof Razak asks you to stay back.  The lecture hall empties, leaving just the two of you in the afternoon light.  You notice a large projection screen behind the professor displaying 'Sustainable Campus Initiatives. '"
-                },
-                {
-                    "id": "inspect_professor",
-                    "speaker": "narrator",
-                    "text": "Prof Razak is organizing his notes. He seems to have something important to discuss."
-                },
-                {
-                    "id": "inspect_screen",
-                    "speaker": "narrator",
-                    "text": "A projection screen displays information about various sustainable campus initiatives — renewable energy projects, waste management programs, water conservation efforts, and student-led sustainability clubs.  Each initiative shows both the goals and current progress."
-                },
-                {
-                    "id": "ch3_s2_screen_read",
-                    "speaker": "narrator",
-                    "text": "As you look at the screen, you read about the different programs:\n\n• Solar Panel Installation Project (40% complete) — Installing solar panels on campus buildings to reduce carbon emissions.\n\n• Zero Waste Canteen Program (Active) — Incentivizing students to bring reusable containers instead of using disposables.\n\n• Campus Water Harvest Initiative (Ongoing) — Collecting rainwater for landscaping and cleaning.\n\n• Student Sustainability Network (250 members) — A student-led organization advocating for campus-wide sustainable practices.\n\nEach program shows that change is possible when people commit to it.",
-                    "choices": [
-                        {
-                            "id": "ch3_s2_screen_choice_impressed",
-                            "text": "This is impressive.  I didn't know there was so much happening on campus.",
-                            "sdgDelta": 2,
-                            "nextNodeId": "ch3_s2_screen_end"
-                        },
-                        {
-                            "id": "ch3_s2_screen_choice_overwhelmed",
-                            "text": "This is a lot.  I'm not sure where I could fit in to help.",
-                            "sdgDelta": 0,
-                            "nextNodeId": "ch3_s2_screen_end"
-                        },
-                        {
-                            "id": "ch3_s2_screen_choice_motivate",
-                            "text": "Seeing all this makes me want to get involved immediately.",
-                            "sdgDelta": 3,
                             "setFlags": [
-                                "screen_dialogue_viewed"
+                                "compost_table_interacted"
                             ],
                             "nextNodeId": "ch3_s2_screen_end"
                         }
@@ -194,126 +247,112 @@
                 {
                     "id": "ch3_s2_screen_end",
                     "speaker": "narrator",
-                    "text": "You finish reading the screen and turn your attention back to the classroom.",
+                    "text": "You put down the trowel and decide to leave the garden for now.",
                     "onComplete": {
                         "setFlags": [
-                            "screen_dialogue_viewed"
+                            "compost_table_interacted"
                         ]
                     }
                 },
                 {
-                    "id": "ch3_s2_professor_start",
-                    "speaker": "Prof Razak",
-                    "text": "I see you've been looking at our campus initiatives.   I've noticed you've been quite involved lately — the food bank, the sustainability fair.   Tell me, what has all of this actually taught you?  ",
+                    "id": "ch3_s2_gardener",
+                    "speaker": "Pakcik Halim",
+                    "text": "Ah, pengunjung baru! Welcome to Kebun Komuniti USM.  Are you here to help out or just exploring? ",
                     "choices": [
                         {
-                            "id": "ch3_s2_choice_action",
-                            "text": "That small, consistent actions matter more than just understanding theory.",
+                            "id": "ch3_s2_choice_help",
+                            "text": "I'd like to help, Pakcik. I've been trying to get more involved in sustainability efforts.",
                             "sdgDelta": 4,
-                            "nextNodeId": "ch3_s2_professor_action",
+                            "nextNodeId": "ch3_s2_help_confirm",
                             "onChoose": {
                                 "setFlags": [
-                                    "ch3_reflection_action"
+                                    "ch3_took_initiative"
                                 ]
                             }
                         },
                         {
-                            "id": "ch3_s2_choice_awareness",
-                            "text": "That sustainability is more complex than I realized. Everything is connected.",
-                            "sdgDelta": 2,
-                            "nextNodeId": "ch3_s2_professor_awareness"
+                            "id": "ch3_s2_choice_observe",
+                            "text": "Just looking around first, Pakcik. I want to understand how this works.",
+                            "sdgDelta": 0,
+                            "nextNodeId": "ch3_s2_observe_confirm"
                         },
                         {
-                            "id": "ch3_s2_choice_cynical",
-                            "text": "Honestly Prof?   That change is slow and most people don't care.",
-                            "sdgDelta": -2,
+                            "id": "ch3_s2_choice_leave",
+                            "text": "Actually I'm just passing through. Taking a shortcut to the library.",
+                            "sdgDelta": -3,
                             "isCareless": true,
-                            "nextNodeId": "ch3_s2_professor_cynical"
+                            "nextNodeId": "ch3_s2_leave_confirm"
                         }
                     ]
                 },
                 {
-                    "id": "ch3_s2_professor_action",
-                    "speaker": "Prof Razak",
-                    "text": "That's exactly right.   Awareness without action changes nothing.  What matters is what you choose to do when it's inconvenient — when no one is watching.",
-                    "autoNext": "ch3_s2_challenge"
+                    "id": "ch3_s2_help_confirm",
+                    "speaker": "Pakcik Halim",
+                    "text": "Bagus! That mindset is more valuable than people think. Consistency beats grand gestures.   Come, I'll show you how we turn food waste into compost.",
+                    "autoNext": "ch3_s2_lesson"
                 },
                 {
-                    "id": "ch3_s2_professor_awareness",
-                    "speaker": "Prof Razak",
-                    "text": "Understanding the complexity is important.   But the harder part is deciding where you're willing to take personal responsibility.  Not everything, but something.",
-                    "autoNext": "ch3_s2_challenge"
+                    "id": "ch3_s2_observe_confirm",
+                    "speaker": "Pakcik Halim",
+                    "text": "That's fair. Understanding comes before action.  Take your time.  But don't be a stranger — hands-on learning is the best teacher!  ",
+                    "autoNext": "ch3_s2_lesson"
                 },
                 {
-                    "id": "ch3_s2_professor_cynical",
-                    "speaker": "Prof Razak",
-                    "text": "I understand that frustration.  But here's the thing — every movement starts with people who refused to accept 'most people don't care.' Will you be one of them?",
-                    "autoNext": "ch3_s2_challenge"
+                    "id": "ch3_s2_leave_confirm",
+                    "speaker": "Pakcik Halim",
+                    "text": "Ah, the busy life of students. But remember — even 10 minutes in nature can change your perspective.  The garden will be here when you're ready.",
+                    "autoNext": "ch3_s2_lesson"
                 },
                 {
-                    "id": "ch3_s2_challenge",
-                    "speaker": "Prof Razak",
-                    "text": "I have a challenge for you.  For the rest of the semester, I want you to lead a small SDG initiative.  It doesn't have to be big.  Just consistent.",
-                    "autoNext": "ch3_s2_challenge_options"
+                    "id": "ch3_s2_lesson",
+                    "speaker": "Pakcik Halim",
+                    "text": "You know, this garden produces about 50kg of vegetables monthly. All goes to Pantri Siswa and Dewan Makan. Nothing wasted, everything connected.",
+                    "autoNext": "ch3_s2_reflection"
                 },
                 {
-                    "id": "ch3_s2_challenge_options",
-                    "speaker": "Prof Razak",
-                    "text": "It could be weekly volunteering, starting a recycling program in your hostel, or even just documenting your sustainable choices on social media.  What interests you?  ",
+                    "id": "ch3_s2_reflection",
+                    "speaker": "narrator",
+                    "text": "You spend time observing the garden's ecosystem — composting food waste, growing vegetables, feeding students.  A complete cycle of sustainability.",
+                    "autoNext": "ch3_s2_pakcik_wisdom"
+                },
+                {
+                    "id": "ch3_s2_pakcik_wisdom",
+                    "speaker": "Pakcik Halim",
+                    "text": "The SDGs...   they're not just about big policies. They're about everyday choices.  What you eat, what you throw away, how you treat the earth.   It starts small.",
                     "choices": [
                         {
-                            "id": "ch3_s2_accept_volunteer",
-                            "text": "I'll commit to the food bank.   Weekly, no excuses.",
-                            "sdgDelta": 5,
-                            "setFlags": [
-                                "ch3_committed_foodbank"
-                            ],
-                            "nextNodeId": "ch3_s2_accept_response"
+                            "id": "ch3_s2_wisdom_agree",
+                            "text": "I'm starting to see that now, Pakcik. Small actions do add up.",
+                            "sdgDelta": 3,
+                            "nextNodeId": "ch3_s2_wisdom_response"
                         },
                         {
-                            "id": "ch3_s2_accept_create",
-                            "text": "I want to start something new in my hostel — maybe a recycling corner.",
-                            "sdgDelta": 5,
-                            "setFlags": [
-                                "ch3_committed_create"
-                            ],
-                            "nextNodeId": "ch3_s2_accept_response"
-                        },
-                        {
-                            "id": "ch3_s2_hesitate",
-                            "text": "I'm not sure I'm ready to lead something, Prof.",
-                            "sdgDelta": -1,
-                            "isCareless": true,
-                            "nextNodeId": "ch3_s2_hesitate_response"
+                            "id": "ch3_s2_wisdom_question",
+                            "text": "But can individual actions really make a difference against big corporations? ",
+                            "sdgDelta": 1,
+                            "nextNodeId": "ch3_s2_wisdom_deeper"
                         }
                     ]
                 },
                 {
-                    "id": "ch3_s2_accept_response",
-                    "speaker": "Prof Razak",
-                    "text": "Excellent!  That's leadership.  Not waiting for permission, but taking responsibility.  I'll be watching your progress.   Make me proud.",
-                    "autoNext": "ch3_s2_guidance"
+                    "id": "ch3_s2_wisdom_response",
+                    "speaker": "Pakcik Halim",
+                    "text": "That's the first step.   Awareness becomes habit, habit becomes culture, culture becomes change.  You're on the right path.",
+                    "autoNext": "ch3_s2_wrapup"
                 },
                 {
-                    "id": "ch3_s2_hesitate_response",
-                    "speaker": "Prof Razak",
-                    "text": "Leadership isn't about being ready. It's about starting before you feel ready. But I won't force you. The choice is yours.",
-                    "autoNext": "ch3_s2_guidance"
-                },
-                {
-                    "id": "ch3_s2_guidance",
-                    "speaker": "Prof Razak",
-                    "text": "Remember this: look closely at everyday life — how people handle waste, water, food, transport. Change doesn't start with grand gestures.   It starts with daily choices.",
+                    "id": "ch3_s2_wisdom_deeper",
+                    "speaker": "Pakcik Halim",
+                    "text": "Good question!   Individual action creates demand for change. When enough people act, systems follow. Don't underestimate your power as a consumer and citizen.",
                     "autoNext": "ch3_s2_wrapup"
                 },
                 {
                     "id": "ch3_s2_wrapup",
                     "speaker": "system",
-                    "text": "End of Chapter 3: Deepening Understanding.  Prof Razak has challenged you to take ownership of your sustainability journey. What will you do next? ",
+                    "text": "You've experienced the campus community garden and learned about sustainable food systems. (SDG 2: Zero Hunger, SDG 12: Responsible Consumption, SDG 15: Life on Land)",
                     "onComplete": {
                         "setFlags": [
-                            "chapter3_completed",
-                            "chapter3_scene2_decision_done"
+                            "chapter3_scene2_done"
                         ],
                         "unlockExit": true
                     }

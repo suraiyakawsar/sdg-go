@@ -3,6 +3,7 @@ import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
 import { saveChapterStats } from "../../../utils/gameSummary";
+import { title } from "framer-motion/client";
 export default class Chapter4Scene1 extends BaseStoryScene {
     constructor() {
         super("Chapter4Scene1", {
@@ -99,7 +100,9 @@ export default class Chapter4Scene1 extends BaseStoryScene {
             slot: "primary",
             collected: 0,
             goal: 1,
+            title: "Meet the Volunteer",
             description: "Help clean the pond and reflect on environmental impact.",
+            // Talk to the volunteer and learn why he helps clean up the area.
             complete: false,
         });
 
@@ -110,7 +113,8 @@ export default class Chapter4Scene1 extends BaseStoryScene {
             active: false,
             collected: 0,
             goal: this.trashGoal,
-            description: "Optional: Collect all the trash.",
+            title: "Lend a Hand",
+            description: "Optional: Help clean up trash around the pond.",
         });
 
         this._createTrash();
@@ -130,7 +134,7 @@ export default class Chapter4Scene1 extends BaseStoryScene {
 
         on("sceneExitUnlocked", this._onSceneExitUnlocked);
 
-        // Cleanup (only if your bus supports off())
+        // Cleanup on scene shutdown
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
             // if (typeof off === "function") off("sceneExitUnlocked", this._onSceneExitUnlocked);
         });
@@ -149,7 +153,7 @@ export default class Chapter4Scene1 extends BaseStoryScene {
             complete: true,
         });
 
-        emit("badgeEarned", { name: "Bus Stop Unlocked!", icon: "🔓" });
+        emit("badgeEarned", { name: "Hands-On Help", icon: "🧤", subtitle: "You learned from someone who leads by example." });
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
@@ -207,7 +211,6 @@ export default class Chapter4Scene1 extends BaseStoryScene {
         });
 
         trashItem.destroy();
-
         this.trashCollected += 1;
 
         emit("updateObjective", {
@@ -217,8 +220,16 @@ export default class Chapter4Scene1 extends BaseStoryScene {
 
         if (!this.objectiveCompleted && this.trashCollected >= this.trashGoal) {
             this.objectiveCompleted = true;
-            emit("badgeEarned", { name: "Eco Warrior!", icon: "🏅" });
+            emit("badgeEarned", { name: "Leave It Better", icon: "🧤", subtitle: "You improved a shared space through action." });
             emit("updateObjective", { slot: "secondary", complete: true });
+
+
+            // Save chapter stats in profile
+            const completedChapters = JSON.parse(localStorage.getItem("completedChapters") || "[]");
+            if (!completedChapters.includes(4)) {
+                completedChapters.push(4);
+                localStorage.setItem("completedChapters", JSON.stringify(completedChapters));
+            }
         }
     }
 

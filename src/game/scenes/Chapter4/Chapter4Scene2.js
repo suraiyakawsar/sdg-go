@@ -3,7 +3,6 @@ import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { saveChapterStats } from "../../../utils/gameSummary";
 import { addSDGPoints } from "../../../utils/sdgPoints";
-
 export default class Chapter4Scene2 extends BaseStoryScene {
     constructor() {
         super("Chapter4Scene2", {
@@ -56,13 +55,10 @@ export default class Chapter4Scene2 extends BaseStoryScene {
         this.posterCollected = 0;
         this.posterGoal = 2;
         this._chapterCompleted = false;
-        this._chapterCompleted = false;
-
     }
 
     create() {
         super.create();
-
 
         // 🔥 Scene-specific door scaling
         if (this.door) {
@@ -95,7 +91,8 @@ export default class Chapter4Scene2 extends BaseStoryScene {
             slot: "primary",
             collected: 0,
             goal: 1,
-            description: "Interact with the person at the bus stop and reflect on the day's actions.",
+            title: "Rethink Your Commute",
+            description: "Talk to the commuter to learn how public transport helps the environment.",
             complete: false,
         });
 
@@ -105,7 +102,8 @@ export default class Chapter4Scene2 extends BaseStoryScene {
             active: false,
             collected: 0,
             goal: this.posterGoal,
-            description: "Optional: Find and click hidden bus stop posters.",
+            title: "Everyday Climate Choices",
+            description: "Optional: Explore the posters at the bus stop.",
         });
 
         this._createPosters();
@@ -125,7 +123,7 @@ export default class Chapter4Scene2 extends BaseStoryScene {
 
         on("sceneExitUnlocked", this._onSceneExitUnlocked);
 
-        // Cleanup (only if your bus supports off())
+        // Cleanup (only if bus supports off())
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
             // if (typeof off === "function") off("sceneExitUnlocked", this._onSceneExitUnlocked);
         });
@@ -143,11 +141,10 @@ export default class Chapter4Scene2 extends BaseStoryScene {
             complete: true,
         });
 
-        emit("badgeEarned", "Professor Unlocked! 🔓");
+        emit("badgeEarned", { name: "Greener Commute", icon: "🚌", subtitle: "Small transport choices have big impact." });
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
-        this._unlockDoorGlow?.();
 
         // Step 2: trash becomes active
         this.objectiveStep = 2;
@@ -160,14 +157,15 @@ export default class Chapter4Scene2 extends BaseStoryScene {
             preview: false,
             collected: 0,
             goal: this.posterGoal,
-            description: "Find and click hidden classroom posters.",
+            title: "Bus Stop Posters",
+            description: "Optional: Explore the posters at the bus stop.",
         });
     }
 
 
     _createPosters() {
-        this.poster1 = this.add.image(600, 400, "busStopPoster1").setInteractive({ useHandCursor: true }).setScale(1.5); //volunteers
-        this.poster2 = this.add.image(1200, 400, "busStopPoster2").setInteractive({ useHandCursor: true }).setScale(1.5); //volunteers
+        this.poster1 = this.add.image(580, 380, "busStopPoster1").setInteractive({ useHandCursor: true }).setScale(1.5); //volunteers
+        this.poster2 = this.add.image(1230, 380, "busStopPoster2").setInteractive({ useHandCursor: true }).setScale(1.5); //volunteers
         this.poster1.on("pointerdown", () => this._handlePosterClick(this.poster1));
         this.poster2.on("pointerdown", () => this._handlePosterClick(this.poster2));
     }
@@ -205,7 +203,7 @@ export default class Chapter4Scene2 extends BaseStoryScene {
 
         if (!this.objectiveCompleted && this.posterCollected >= this.posterGoal) {
             this.objectiveCompleted = true;
-            emit("badgeEarned", "Eco Warrior! 🏅");
+            emit("badgeEarned", { name: "Everyday Awareness", icon: "🚌", subtitle: "Sustainability exists in ordinary spaces." });
             emit("updateObjective", { slot: "secondary", complete: true });
         }
     }

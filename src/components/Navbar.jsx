@@ -20,7 +20,7 @@ export default function Navbar() {
     // ✅ Then use profile for derived values
     const avatarUri = getAvatarUri(profile?.avatar)
         || profile?.avatar?.uri
-        || "assets/images/characters/ladyy. png"; // fallback
+        || "assets/guest.jpg"; // fallback
 
 
     const displayName = profile?.name || "Guest";

@@ -25,7 +25,7 @@
                 {
                     "id": "ch4_s1_npc",
                     "speaker": "Iman",
-                    "text": "Oh hey! You're from Prof Razak's class right? I'm doing a solo cleanup.  Every Tuesday I come here.  Sad seeing sampah end up in the water.",
+                    "text": "Oh hey! You're from Prof Danny's class right? I'm doing a solo cleanup.  Every Tuesday I come here.  Sad seeing sampah end up in the water.",
                     "autoNext": "ch4_s1_ask_help"
                 },
                 {
@@ -214,19 +214,19 @@
                 {
                     "id": "ch4_s2_aisyah_arrives",
                     "speaker": "narrator",
-                    "text": "Aisyah and Danial appear, also waiting for the bus. They look tired but satisfied after a long semester.",
+                    "text": "Aisyah and Chai Lam appear, also waiting for the bus. They look tired but satisfied after a long semester.",
                     "autoNext": "ch4_s2_friends_reunion"
                 },
                 {
                     "id": "ch4_s2_friends_reunion",
                     "speaker": "Aisyah",
                     "text": "Eh!  There you are!  Wah, one whole semester of SDG adventures.  Remember when you didn't even know what SDG was? Now look at you — cleaning ponds, packing food boxes! ",
-                    "autoNext": "ch4_s2_danial_joke"
+                    "autoNext": "ch4_s2_Chai Lam_joke"
                 },
                 {
-                    "id": "ch4_s2_danial_joke",
-                    "speaker": "Danial",
-                    "text": "Betul tu! From 'aiya, extra work' to actually leading initiatives. Prof Razak would be proud.  Character development sia!",
+                    "id": "ch4_s2_Chai Lam_joke",
+                    "speaker": "Chai Lam",
+                    "text": "Betul tu! From 'aiya, extra work' to actually leading initiatives. Prof Danny would be proud.  Character development sia!",
                     "autoNext": "ch4_s2_reflection_prompt"
                 },
                 {
@@ -250,7 +250,7 @@
                             "setFlags": [
                                 "ch4_reflection_connected"
                             ],
-                            "nextNodeId": "ch4_s2_danial_agree"
+                            "nextNodeId": "ch4_s2_Chai Lam_agree"
                         },
                         {
                             "id": "ch4_s2_reflect_uncertain",
@@ -263,7 +263,7 @@
                             "text": "Hmm, not sure lah. It was interesting but I don't know if I'll continue.",
                             "sdgDelta": -2,
                             "isCareless": true,
-                            "nextNodeId": "ch4_s2_danial_challenge"
+                            "nextNodeId": "ch4_s2_Chai Lam_challenge"
                         }
                     ]
                 },
@@ -274,8 +274,8 @@
                     "autoNext": "ch4_s2_future_plans"
                 },
                 {
-                    "id": "ch4_s2_danial_agree",
-                    "speaker": "Danial",
+                    "id": "ch4_s2_Chai Lam_agree",
+                    "speaker": "Chai Lam",
                     "text": "Same feeling here bro. Before this, uni was just classes and assignments. Now it feels like we're actually part of a community. Different vibes.",
                     "autoNext": "ch4_s2_future_plans"
                 },
@@ -286,15 +286,15 @@
                     "autoNext": "ch4_s2_future_plans"
                 },
                 {
-                    "id": "ch4_s2_danial_challenge",
-                    "speaker": "Danial",
+                    "id": "ch4_s2_Chai Lam_challenge",
+                    "speaker": "Chai Lam",
                     "text": "Hmm, that's a bit sad to hear. But hey, maybe next sem something will click?  Don't close the door completely lah.",
                     "autoNext": "ch4_s2_future_plans"
                 },
                 {
                     "id": "ch4_s2_future_plans",
                     "speaker": "Aisyah",
-                    "text": "So, what's the plan for next semester? Prof Razak mentioned the SDG Campus Challenge — teams compete to create the best sustainability project. We should join!",
+                    "text": "So, what's the plan for next semester? Prof Danny mentioned the SDG Campus Challenge — teams compete to create the best sustainability project. We should join!",
                     "choices": [
                         {
                             "id": "ch4_s2_plan_lead",
@@ -321,7 +321,7 @@
                 },
                 {
                     "id": "ch4_s2_team_form",
-                    "speaker": "Danial",
+                    "speaker": "Chai Lam",
                     "text": "Wooo! That's what I'm talking about!  Okay okay, I'll handle logistics, Aisyah does outreach, you lead the vision.  Dream team confirmed!",
                     "autoNext": "ch4_s2_bus_arrives"
                 },
@@ -345,7 +345,7 @@
                 },
                 {
                     "id": "ch4_s2_final_words",
-                    "speaker": "Danial",
+                    "speaker": "Chai Lam",
                     "text": "You know what? This semester started with us dragging you to learn about SDGs. Now you're the one inspiring juniors.  Full circle, bro.",
                     "autoNext": "ch4_s2_aisyah_closing"
                 },

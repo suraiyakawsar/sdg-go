@@ -10,12 +10,12 @@
                 {
                     "id": "h_intro_narration",
                     "speaker": "narrator",
-                    "text": "First day of the new semester at Universiti Sains Malaysia. The hallway buzzes with students catching up after the holidays.  Colourful posters line the walls — something about 'Sustainability Week'."
+                    "text": "First day of the new semester at the APU. The hallway buzzes with students catching up after the holidays.  Colourful posters line the walls...something about 'Sustainability Week'."
                 },
                 {
                     "id": "h_noticeboard",
                     "speaker": "narrator",
-                    "text": "MINGGU KELESTARIAN USM — Talks, gotong-royong, food bank volunteering. Sign up at the cafeteria or scan the QR code!"
+                    "text": "MINGGU KELESTARIAN APU — Talks, gotong-royong, food bank volunteering. Sign up at the cafeteria or scan the QR code!"
                 },
                 {
                     "id": "inspect_npcboy",
@@ -25,7 +25,7 @@
                 {
                     "id": "inspect_npcgirl",
                     "speaker": "narrator",
-                    "text": "Your coursemate, Aisyah.  She's always involved in campus activities."
+                    "text": "Your coursemate, Sara.  She's always involved in campus activities."
                 },
                 {
                     "id": "inspect_noticeboard",
@@ -34,13 +34,13 @@
                 },
                 {
                     "id": "h_friends_start",
-                    "speaker": "Aisyah",
-                    "text": "Eh, kau!  Over here lah!  You saw all the new posters around campus or not? ",
+                    "speaker": "Sara",
+                    "text": "Eh, hi!  Over here lah!  You saw all the new posters around campus or not? ",
                     "choices": [
                         {
                             "id": "h_choice_seen_posters",
                             "text": "Yeah, something about SDGs right? Looks interesting.",
-                            "sdgDelta": 5,
+                            "sdgDelta": 3,
                             "setFlags": [
                                 "interest_sdg_positive"
                             ],
@@ -69,50 +69,50 @@
                 },
                 {
                     "id": "h_explain_positive",
-                    "speaker": "Aisyah",
+                    "speaker": "Sara",
                     "text": "Ha ah!  Sustainable Development Goals.  The uni is doing a whole week about it. Got 17 goals covering everything from poverty to climate change.",
                     "autoNext": "h_explain_positive_b"
                 },
                 {
                     "id": "h_explain_positive_b",
-                    "speaker": "Danial",
+                    "speaker": "Zheng Lam",
                     "text": "Best part is they're connecting it to stuff we can actually do on campus. Not just theory theory only.",
                     "autoNext": "h_friends_wrapup"
                 },
                 {
                     "id": "h_explain_neutral",
-                    "speaker": "Danial",
-                    "text": "Wah, you don't know meh? SDG is Sustainable Development Goals lah. Like education equality, clean water, climate action...  big stuff.",
+                    "speaker": "Zheng Lam",
+                    "text": "Wah, you don't know meh? SDG is Sustainable Development Goals lah. Like education equality, clean water, climate action... big stuff.",
                     "autoNext": "h_explain_neutral_b"
                 },
                 {
                     "id": "h_explain_neutral_b",
-                    "speaker": "Aisyah",
+                    "speaker": "Sara",
                     "text": "Don't worry, I also blur blur at first. But apparently even small things we do on campus can contribute.  Interesting right?",
                     "autoNext": "h_friends_wrapup"
                 },
                 {
                     "id": "h_explain_pushback",
-                    "speaker": "Aisyah",
-                    "text": "Haiya, I know lah you busy.  But think about it — we already spending time here, might as well do something meaningful kan? ",
+                    "speaker": "Sara",
+                    "text": "Haiya, I know lah you busy.  But think about it. We already spending time here, might as well do something meaningful kan? ",
                     "autoNext": "h_explain_pushback_b"
                 },
                 {
                     "id": "h_explain_pushback_b",
-                    "speaker": "Danial",
+                    "speaker": "Zheng Lam",
                     "text": "Betul tu.  You don't have to save the whole world.  Just do sikit sikit. Small actions also count what.",
                     "autoNext": "h_friends_wrapup"
                 },
                 {
                     "id": "h_friends_wrapup",
-                    "speaker": "Aisyah",
-                    "text": "Anyway, Prof Razak's class today is about this SDG thing. Jom, later we kena tegur for being late pulak.",
+                    "speaker": "Sara",
+                    "text": "Anyway, Prof Riza's class today is about this SDG thing. Jom, later we kena tegur for being late.",
                     "autoNext": "h_objective_update"
                 },
                 {
                     "id": "h_objective_update",
                     "speaker": "system",
-                    "text": "New objective: Attend Prof Razak's class to learn how SDGs connect to campus life.",
+                    "text": "New objective: Attend Prof Riza's class to learn how SDGs connect to campus life.",
                     "onComplete": {
                         "setFlags": [
                             "chapter1_scene1_dialogue_done"
@@ -132,12 +132,12 @@
                 {
                     "id": "c_intro_prof",
                     "speaker": "narrator",
-                    "text": "The lecture hall fills up quickly. Prof Razak, known for his passionate teaching style, adjusts his microphone."
+                    "text": "The lecture class fills up quickly. Prof Riza, known for her passionate teaching style, stands at the front."
                 },
                 {
                     "id": "inspect_professor",
                     "speaker": "narrator",
-                    "text": "Prof Razak has been teaching Sustainability Studies for 15 years. Students say his classes change perspectives."
+                    "text": "Prof Riza has been teaching Sustainability Studies for 15 years. Students say her classes change perspectives."
                 },
                 {
                     "id": "inspect_student",
@@ -146,26 +146,26 @@
                 },
                 {
                     "id": "c_prof_start",
-                    "speaker": "Prof Razak",
-                    "text": "Selamat pagi, everyone. Today we're going to talk about something bigger than your CGPA — the Sustainable Development Goals.",
+                    "speaker": "Prof Riza",
+                    "text": "Selamat pagi, everyone. Today we're going to talk about something bigger than your CGPA, the Sustainable Development Goals.",
                     "autoNext": "c_prof_explain"
                 },
                 {
                     "id": "c_prof_explain",
-                    "speaker": "Prof Razak",
-                    "text": "Ada 17 SDGs.  They cover kemiskinan, pendidikan, climate change, kesaksamaan...  and we'll connect them to your lives right here in USM.",
+                    "speaker": "Prof Riza",
+                    "text": "Ada 17 SDGs.  They cover poverty, education, climate change, equality, and we'll connect them to your lives right here in APU.",
                     "autoNext": "c_prof_example"
                 },
                 {
                     "id": "c_prof_example",
-                    "speaker": "Prof Razak",
+                    "speaker": "Prof Riza",
                     "text": "Last semester, some seniors worked with the campus food bank. They helped redistribute surplus food from Dewan Makan to students yang memerlukan.",
                     "autoNext": "c_prof_question"
                 },
                 {
                     "id": "c_prof_question",
-                    "speaker": "Prof Razak",
-                    "text": "Now, be honest with me.  How many of you actually believe students like you boleh buat perubahan? ",
+                    "speaker": "Prof Riza",
+                    "text": "Now, be honest with me. How many of you actually believe students like you can make a change? ",
                     "choices": [
                         {
                             "id": "c_choice_confident",
@@ -187,7 +187,7 @@
                         },
                         {
                             "id": "c_choice_dismissive",
-                            "text": "Susah lah Prof. We got assignments, exams...  where got time? ",
+                            "text": "Susah lah Prof. We got assignments, exams...where got time? ",
                             "sdgDelta": -5,
                             "isCareless": true,
                             "setFlags": [
@@ -199,32 +199,32 @@
                 },
                 {
                     "id": "c_prof_answer_confident",
-                    "speaker": "Prof Razak",
-                    "text": "Bagus!  That's the spirit. Change always starts with a small group of people who take things seriously.  Campus is the perfect place to experiment.",
+                    "speaker": "Prof Riza",
+                    "text": "Bagus! That's the spirit. Change always starts with a small group of people who take things seriously. Campus is the perfect place to experiment.",
                     "autoNext": "c_prof_foodbank"
                 },
                 {
                     "id": "c_prof_answer_unsure",
-                    "speaker": "Prof Razak",
-                    "text": "I understand that feeling. That's exactly why your projects this semester will focus on real issues around you.  Make it personal.",
+                    "speaker": "Prof Riza",
+                    "text": "I understand that feeling. That's exactly why your projects this semester will focus on real issues around you. Make it personal.",
                     "autoNext": "c_prof_foodbank"
                 },
                 {
                     "id": "c_prof_answer_dismissive",
-                    "speaker": "Prof Razak",
-                    "text": "I hear this every semester. But you know what? By the end of this course, I hope you'll surprise yourself.  Give yourself a chance.",
+                    "speaker": "Prof Riza",
+                    "text": "I hear this every semester. But you know what? By the end of this course, I hope you'll surprise yourself. Give yourself a chance.",
                     "autoNext": "c_prof_foodbank"
                 },
                 {
                     "id": "c_prof_foodbank",
-                    "speaker": "Prof Razak",
-                    "text": "The food bank I mentioned tadi — they're looking for volunteers this week. Sorting, packing, distributing.  Siapa interested, sign up at the caf.",
+                    "speaker": "Prof Riza",
+                    "text": "The food bank I mentioned tadi, they're looking for volunteers this week. Sorting, packing, distributing. Siapa interested, sign up at the caf.",
                     "autoNext": "c_friend_whisper"
                 },
                 {
                     "id": "c_friend_whisper",
-                    "speaker": "Aisyah",
-                    "text": "(bisik) Eh, food bank tu sounds interesting kan? Real hands-on experience, not just sitting in class.",
+                    "speaker": "Sara",
+                    "text": "(whispers) Eh, food bank kinda sounds interesting kan? Real hands-on experience, not just sitting in class.",
                     "autoNext": "c_system_idea"
                 },
                 {
@@ -242,17 +242,7 @@
                 {
                     "id": "c_bench_1",
                     "speaker": "Student",
-                    "text": "Honestly...  I thought SDGs were just another poster thing. But the food bank example tu real lah.  Students helping students."
-                },
-                {
-                    "id": "c_poster_sdg4",
-                    "speaker": "system",
-                    "text": "Poster:  SDG 4 — Quality Education.  'Pendidikan bukan sekadar peperiksaan.  It's about access, support, and equal opportunity for all. '"
-                },
-                {
-                    "id": "c_poster_sdg13",
-                    "speaker": "system",
-                    "text": "Poster:  SDG 13 — Climate Action. 'Tabiat kecil di kampus jadi besar:  penggunaan tenaga, sisa makanan, pilihan pengangkutan. '"
+                    "text": "Honestly...I thought SDGs were just another poster thing. But the food bank example tu real lah. Students helping students."
                 }
             ]
         },
@@ -265,22 +255,22 @@
                 {
                     "id": "f_intro_narration",
                     "speaker": "narrator",
-                    "text": "The cafeteria is busy with the lunch crowd. You spot Aisyah and Danial at your usual table near the SDG poster wall."
+                    "text": "The cafeteria is busy with the lunch crowd. You spot your classmates at a table near the Fire Exit."
                 },
                 {
                     "id": "inspect_friends",
                     "speaker": "narrator",
-                    "text": "Aisyah and Danial are deep in conversation, pointing at something on Aisyah's phone."
+                    "text": "Your classmates are deep in conversation, pointing at something on Sara's phone."
                 },
                 {
                     "id": "inspect_alice",
                     "speaker": "narrator",
-                    "text": "Mei Ling from the Student Council.  She's always organizing something."
+                    "text": "Sara, again.  She's always organizing something. Not sure why she is here though."
                 },
                 {
                     "id": "friend_looking_posters",
-                    "speaker": "Danial",
-                    "text": "Eh, you checking out those SDG posters too? They actually put some effort into these designs ah.",
+                    "speaker": "Chai Lam",
+                    "text": "Eh, you checking out those SDG posters too? They actually put some effort into these designs leh.",
                     "choices": [
                         {
                             "text": "Yeah, quite informative actually.",
@@ -291,23 +281,23 @@
                 },
                 {
                     "id": "alice_npc",
-                    "speaker": "Mei Ling",
-                    "text": "Oh, hi!  You're in Prof Razak's class right? The food bank sign-up is over there if you're interested!"
+                    "speaker": "Sara",
+                    "text": "Oh, hi! You're in Prof Riza's class right? The food bank sign-up is over there if you're interested!"
                 },
                 {
                     "id": "f_intro_friends",
-                    "speaker": "Aisyah",
-                    "text": "Finally!  Sini sini.  How was the rest of class? Prof Razak always goes overtime one.",
+                    "speaker": "Chai Lam",
+                    "text": "Walao, finally! Did Prof Riza drag the class overtime again?",
                     "choices": [
                         {
                             "id": "f_choice_interesting",
-                            "text": "Actually quite eye-opening. Never thought about SDGs that way before.",
+                            "text": "Honestly? It was eye-opening. Totally new perspective.",
                             "sdgDelta": 2,
                             "nextNodeId": "f_friend_react_interesting"
                         },
                         {
                             "id": "f_choice_intense",
-                            "text": "Intense lah, but at least it's about something real. Not just memorizing facts.",
+                            "text": "Intense lah, but at least it's real issues. Not just theory.",
                             "sdgDelta": 1,
                             "nextNodeId": "f_friend_react_intense"
                         },
@@ -322,36 +312,36 @@
                 },
                 {
                     "id": "f_friend_react_interesting",
-                    "speaker": "Danial",
-                    "text": "Right? ! The SDG stuff makes everything feel...  bigger than just chasing grades.  Like we're part of something.",
+                    "speaker": "Chai Lam",
+                    "text": "Right? ! The SDG stuff makes everything feel...bigger than just chasing grades. Like we're part of something.",
                     "autoNext": "f_friend_foodbank_intro"
                 },
                 {
                     "id": "f_friend_react_intense",
-                    "speaker": "Danial",
-                    "text": "At least it's not just theory theory. Prof Razak always brings real examples.  The food bank thing quite inspiring.",
+                    "speaker": "Zheng Lam",
+                    "text": "At least it's not just theory. Prof Riza always brings real examples. That food bank idea stuck with me.",
                     "autoNext": "f_friend_foodbank_intro"
                 },
                 {
                     "id": "f_friend_react_boring",
-                    "speaker": "Aisyah",
-                    "text": "Aiya, you ah.  Always like that. But seriously, the food bank part was good. You should have paid attention.",
+                    "speaker": "Jason",
+                    "text": "Aiyo, typical you. But seriously, the food bank part was legit. You missed out lah.",
                     "autoNext": "f_friend_foodbank_intro"
                 },
                 {
                     "id": "f_friend_foodbank_intro",
-                    "speaker": "Aisyah",
-                    "text": "Anyway, we were just talking about that food bank. They're asking for student helpers this week.  Sorting and packing food after classes.",
+                    "speaker": "Zheng Lam",
+                    "text": "Anyway, speaking of food banks, I actually checked online for Dewan Makan in Sungai Besi. They need helpers this week. Just sorting and packing after class. Nearby only.",
                     "autoNext": "f_friend_question"
                 },
                 {
                     "id": "f_friend_question",
-                    "speaker": "Danial",
-                    "text": "It's at the old surau building, you know the one near Desasiswa? Only 2-3 hours.  What do you think?  Nak join tak? ",
+                    "speaker": "Zheng Lam",
+                    "text": "It's behind the Golf place, you know the one near Selangor Turf Club? Only 10 minutes to go there, help out for 2-3 hours. Got time before next class. What do you think? Wanna join us?",
                     "choices": [
                         {
                             "id": "f_choice_join_yes",
-                            "text": "Count me in.  I want to see how it actually works.",
+                            "text": "Count me in. I want to see how it actually works.",
                             "sdgDelta": 5,
                             "setFlags": [
                                 "initiative_foodbank"
@@ -381,8 +371,8 @@
                 },
                 {
                     "id": "f_friend_join_yes",
-                    "speaker": "Aisyah",
-                    "text": "Yes! Best lah.  We go together. I'll add you to the WhatsApp group. They got free milo after volunteering also tau! ",
+                    "speaker": "Sara",
+                    "text": "Yes! Best lah. We go together. I'll add you to the WhatsApp group. They got free milo after volunteering also tau! ",
                     "onComplete": {
                         "points": 5,
                         "setFlags": [
@@ -393,19 +383,19 @@
                 },
                 {
                     "id": "f_friend_join_maybe",
-                    "speaker": "Danial",
-                    "text": "Okay okay, no pressure. But even one day also helps. Just let us know.  We go every Thursday after 4.",
+                    "speaker": "Chai Lam",
+                    "text": "Okay okay, no pressure. But even one day also helps. Just let us know. We go every Thursday after 4.",
                     "autoNext": "f_friend_closing"
                 },
                 {
                     "id": "f_friend_join_no",
-                    "speaker": "Aisyah",
+                    "speaker": "Sara",
                     "text": "Hmm, okay lah. But think about it?  You don't have to be perfect for this. Just show up and help sikit.  That's already a lot.",
                     "autoNext": "f_friend_closing"
                 },
                 {
                     "id": "f_friend_closing",
-                    "speaker": "Danial",
+                    "speaker": "Chai Lam",
                     "text": "Alright, enough serious talk.  Jom makan dulu, saving the world later. The nasi lemak here today quite sedap.",
                     "autoNext": "f_system_end"
                 },

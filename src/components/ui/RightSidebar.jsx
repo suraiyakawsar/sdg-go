@@ -6,7 +6,6 @@ import { on, off } from "../../utils/eventBus";
 
 export default function RightSidebar() {
     // ⭐ SDG STATE
-    // ✅ NEW (RightSidebar.jsx)
     const [sdgPoints, setSdgPoints] = useState(() => {
         return Number(localStorage.getItem("sdgPoints")) || 0;  // Loads on mount
     });
@@ -15,6 +14,7 @@ export default function RightSidebar() {
     const [primaryObj, setPrimaryObj] = useState({
         collected: 0,
         goal: 1,
+        title: "",
         description: "",
         complete: false,
     });
@@ -23,12 +23,13 @@ export default function RightSidebar() {
     const [secondaryObj, setSecondaryObj] = useState({
         collected: 0,
         goal: 0,
+        title: "",
         description: "",
         active: false,   // becomes true when it actually starts
         preview: false,  // true = "Next objective" teaser
     });
 
-    // ⭐ CHAPTER PROGRESSION (0–5)
+    // ⭐ CHAPTER PROGRESSION (0–4)
     const [chapterProgress, setChapterProgress] = useState(() => {
         try {
             // ✅ Check for actual chapter completion flags
@@ -69,7 +70,9 @@ export default function RightSidebar() {
     const secondaryComplete =
         secondaryObj.active && secondaryObj.collected >= secondarySafeGoal;
 
-    const sdgBarPercent = Math.max(0, Math.min(sdgPoints * 0.5, 100));
+    const SDG_BAR_MAX = 100; // visual cap only
+    const sdgBarPercent = Math.min(sdgPoints, SDG_BAR_MAX);
+
 
     // FLOATING TEXT & PARTICLES
     const [floatingText, setFloatingText] = useState(null); // { text, label } | null
@@ -109,22 +112,6 @@ export default function RightSidebar() {
     // ============================================================
     // SDG UPDATES (delta)
     // ============================================================
-    // useEffect(() => {
-    //     const handleSdgUpdate = (delta) => {
-    //         if (typeof delta !== "number" || isNaN(delta)) return;
-
-    //         setSdgPoints((prev) => {
-    //             const next = prev + delta;
-    //             if (delta !== 0) {
-    //                 triggerEffects(formatDelta(delta), "SDG", "sdg");
-    //             }
-    //             return next;
-    //         });
-    //     };
-
-    //     on("updateSDGPoints", handleSdgUpdate);
-    //     return () => off("updateSDGPoints", handleSdgUpdate);
-    // }, []);
     useEffect(() => {
         const handleSdgUpdate = (delta) => {
             setSdgPoints((prev) => prev + delta);
@@ -172,6 +159,7 @@ export default function RightSidebar() {
                     // direct fields (overwrite)
                     if ("collected" in data) next.collected = data.collected;
                     if ("goal" in data) next.goal = data.goal;
+                    if ("title" in data) next.title = data.title;
                     if ("description" in data || "text" in data) {
                         next.description = data.description || data.text || "";
                     }
@@ -197,6 +185,7 @@ export default function RightSidebar() {
                     }
                     if ("collected" in data) next.collected = data.collected;
                     if ("goal" in data) next.goal = data.goal;
+                    if ("title" in data) next.title = data.title;
                     if ("description" in data || "text" in data) {
                         next.description = data.description || data.text || "";
                     }
@@ -216,40 +205,6 @@ export default function RightSidebar() {
         on("updateObjective", handleObjectiveUpdate);
         return () => off("updateObjective", handleObjectiveUpdate);
     }, []);
-
-    // ============================================================
-    // CHAPTER PROGRESSION
-    // ============================================================
-    // useEffect(() => {
-    //     const handleChapterProgressUpdate = (data) => {
-    //         let value = 0;
-
-    //         if (typeof data === "number") {
-    //             value = data;
-    //         } else if (data && typeof data === "object") {
-    //             value = Number(data.completed ?? data.chapter ?? 0) || 0;
-    //         }
-
-    //         value = Math.max(0, Math.min(5, value));
-    //         setChapterProgress(value);
-    //     };
-
-    //     on("updateChapterProgress", handleChapterProgressUpdate);
-    //     return () => off("updateChapterProgress", handleChapterProgressUpdate);
-    // }, []);
-
-
-    // useEffect(() => {
-    //     const handleChapterProgressUpdate = () => {
-    //         try {
-    //             const completed = JSON.parse(localStorage.getItem("completedChapters") || "[]");
-    //             const count = Array.isArray(completed) ? completed.length : 0;
-    //             setChapterProgress(count);
-    //             console.log("✅ Chapter progress updated:", count);
-    //         } catch {
-    //             setChapterProgress(0);
-    //         }
-    //     };
 
     // ============================================================
     // CHAPTER PROGRESSION - Listen for updates
@@ -297,22 +252,6 @@ export default function RightSidebar() {
     return (
         <div className="h-full w-full flex items-center justify-center pointer-events-none">
             <div className="relative z-[99] w-full max-w-xs sm:max-w-sm md:max-w-sm lg:max-w-md">
-                {/* FLOATING TEXT
-                {floatingText && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 16, x: 0 }}
-                        animate={{ opacity: 1, y: -8, x: 0 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.8 }}
-                        className="absolute -top-16 left-2 z-[9999] text-yellow-300 font-bold drop-shadow-[0_0_10px_rgba(250,250,150,0.9)]"
-                    >
-
-                        <span className="block text-[10px] text-gray-200 uppercase tracking-wide">
-                            {floatingText.label}
-                        </span>
-                        <span className="text-xl">{floatingText.text}</span>
-                    </motion.div>
-                )} */}
 
                 {/* PARTICLES */}
                 {particles.map((p) => (
@@ -367,7 +306,9 @@ export default function RightSidebar() {
                         </div>
 
                         {/* SDG section */}
-                        <div className="mb-3 rounded-xl p-2 -m-2">
+                        <div className="mb-3 rounded-xl p-2 -m-2" title="SDG points are cumulative across the entire game and reflect long-term sustainable choices."
+                        >
+
                             <div className="flex items-center justify-between mb-1">
                                 <div className="flex items-center gap-2">
                                     <div className="w-6 h-6 rounded-full bg-yellow-400/20 border border-yellow-300/60 flex items-center justify-center">
@@ -430,12 +371,35 @@ export default function RightSidebar() {
                                         )}
                                     </div>
 
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-[10px] uppercase tracking-wide text-gray-400">
-                                            Primary Objective
-                                        </span>
+                                    <div className="flex items-start gap-2">
+                                        <div
+                                            className="flex flex-col"
+                                            title={
+                                                primaryObj.description
+                                                    ? primaryObj.description
+                                                    : "This is the main objective required to progress the story."
+                                            }
+                                        >
+                                            <span className="text-[10px] uppercase tracking-wide text-gray-400">
+                                                Primary Objective
+                                            </span>
+
+                                            <span className="text-[12px] uppercase tracking-wide text-cyan-400">
+                                                {primaryObj.title?.trim() || "No primary objective set yet"}
+                                            </span>
+                                        </div>
+
                                         {primaryComplete && (
-                                            <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/60 text-emerald-200">
+                                            <span className="
+      text-[9px]
+      px-1.5 py-0.5
+      rounded-full
+      bg-emerald-500/15
+      border border-emerald-400/60
+      text-emerald-200
+      leading-none
+      mt-[2px]
+    ">
                                                 Done
                                             </span>
                                         )}
@@ -478,7 +442,14 @@ export default function RightSidebar() {
 
                         {/* SECONDARY / NEXT OBJECTIVE */}
                         {secondaryObj.description && (
-                            <div className="mt-3 rounded-xl p-2 -m-2 min-h-[85px]">
+                            <div
+                                className="mt-3 rounded-xl p-2 -m-2 min-h-[85px]"
+                                title={
+                                    secondaryObj.active
+                                        ? secondaryObj.description
+                                        : "This objective will unlock after completing the primary objective."
+                                }
+                            >
                                 <div className="flex items-center justify-between mb-1">
                                     <div className="flex items-center gap-2">
                                         <div className="w-6 h-6 rounded-full bg-purple-400/20 border border-purple-300/60 flex items-center justify-center">
@@ -495,10 +466,9 @@ export default function RightSidebar() {
 
                                         <div className="flex flex-col">
                                             <span className="text-[10px] uppercase tracking-wide text-gray-400">
-                                                {secondaryObj.active
-                                                    ? "Secondary Objective"
-                                                    : "Next Objective"}
+                                                {secondaryObj.active ? "Secondary Objective" : "Upcoming Objective"}
                                             </span>
+
                                             {!secondaryObj.active && (
                                                 <span className="text-[9px] text-purple-200">
                                                     Unlocks after primary is done
@@ -548,13 +518,13 @@ export default function RightSidebar() {
                     </div>
 
                     {/* FOOTER – CHAPTER PROGRESS (STICK TO BOTTOM) */}
-                    <div className="mt-35 border-t border-white/5 pt-3">
+                    <div className="mt-20 border-t border-white/5 pt-3">
                         <div className="flex items-center justify-between mb-2">
                             <span className="text-xs text-gray-300 uppercase tracking-wide">
                                 Chapter Progress
                             </span>
                             <span className="text-[11px] text-gray-400">
-                                {chapterProgress}/5 completed
+                                {chapterProgress}/4 completed
                             </span>
                         </div>
 
