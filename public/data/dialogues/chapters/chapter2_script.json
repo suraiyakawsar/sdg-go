@@ -9,44 +9,44 @@
             "nodes": [
                 {
                     "id": "ch2_s1_intro",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "The campus food bank operates from a converted store room near the mosque. Inside, shelves are stacked with donated groceries, and students sort items into boxes."
                 },
                 {
                     "id": "inspect_staff",
-                    "speaker": "narrator",
-                    "text": "Kak Sarah, the food bank coordinator.  She's been running this for 3 years, entirely volunteer-based."
+                    "speaker": "Narrator",
+                    "text": "Abang Ibrahim, the food bank coordinator. He's been running this for 3 years, entirely volunteer-based."
                 },
                 {
                     "id": "inspect_volunteer",
-                    "speaker": "narrator",
-                    "text": "A senior student labeling boxes. His shirt says 'USM Volunteer Corps'."
+                    "speaker": "Narrator",
+                    "text": "A senior student labeling boxes. His shirt says 'APU Volunteer Corps'."
                 },
                 {
                     "id": "inspect_shelves",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "Shelves filled with rice, instant noodles, canned food, and basic necessities. Everything is organized by expiry date."
                 },
                 {
                     "id": "ch2_s1_staff",
-                    "speaker": "Kak Sarah",
-                    "text": "Assalamualaikum!  You must be the new volunteers from Prof Riza's class. Welcome to Pantri Siswa USM!",
+                    "speaker": "Abang Ibrahim",
+                    "text": "Assalamualaikum! You must be the new volunteer from Prof Riza's class. Welcome to Dewan Makan!",
                     "autoNext": "ch2_s1_staff_explain"
                 },
                 {
                     "id": "ch2_s1_staff_explain",
-                    "speaker": "Kak Sarah",
-                    "text": "We collect surplus food from Dewan Makan and donations, then distribute to students yang memerlukan. Every week, we help around 50 students.",
+                    "speaker": "Abang Ibrahim",
+                    "text": "We collect surplus food from donations, then distribute to students yang memerlukan. Every week, we help around 50 students.",
                     "autoNext": "ch2_s1_staff_ask"
                 },
                 {
                     "id": "ch2_s1_staff_ask",
-                    "speaker": "Kak Sarah",
-                    "text": "Today we're packing care packages.  Rice, milo, instant noodles, eggs — the basics. Can you help sort and pack?  It's simple but meaningful work.",
+                    "speaker": "Abang Ibrahim",
+                    "text": "Today we're packing care packages. Rice, milo, instant noodles, eggs, the basics. Can you help sort and pack? It's simple but meaningful work.",
                     "choices": [
                         {
                             "id": "ch2_s1_choice_help_yes",
-                            "text": "Of course, Kak.  Show me what to do.",
+                            "text": "Of course, Abang. Show me what to do.",
                             "sdgDelta": 5,
                             "setFlags": [
                                 "foodbank_helped_positive"
@@ -56,7 +56,7 @@
                         {
                             "id": "ch2_s1_choice_help_maybe",
                             "text": "I'll try lah, but I'm not sure how much help I can be.",
-                            "sdgDelta": 0,
+                            "sdgDelta": 2,
                             "setFlags": [
                                 "foodbank_helped_neutral"
                             ],
@@ -65,7 +65,7 @@
                         {
                             "id": "ch2_s1_choice_help_no",
                             "text": "Actually I thought I'd just observe first. Not ready to commit yet.",
-                            "sdgDelta": -4,
+                            "sdgDelta": -2,
                             "isCareless": true,
                             "setFlags": [
                                 "foodbank_helped_decline"
@@ -76,32 +76,32 @@
                 },
                 {
                     "id": "ch2_s1_help_confirm",
-                    "speaker": "Kak Sarah",
-                    "text": "Alhamdulillah!  That's the spirit. Every pair of hands makes a difference. Come, I show you the system.",
+                    "speaker": "Abang Ibrahim",
+                    "text": "Alhamdulillah! That's the spirit. Every pair of hands makes a difference. Come, I show you the system.",
                     "autoNext": "ch2_s1_work_montage"
                 },
                 {
                     "id": "ch2_s1_help_maybe_confirm",
-                    "speaker": "Kak Sarah",
+                    "speaker": "Abang Ibrahim",
                     "text": "Don't worry, everyone starts somewhere. Just follow Hafiz there, he'll guide you. You'll get the hang of it quickly.",
                     "autoNext": "ch2_s1_work_montage"
                 },
                 {
                     "id": "ch2_s1_help_decline",
-                    "speaker": "Kak Sarah",
-                    "text": "Hmm, okay. You can watch first lah. But honestly, the best way to understand is to just try.  No pressure though.",
+                    "speaker": "Abang Ibrahim",
+                    "text": "Hmm, okay. You can watch first lah. But honestly, the best way to understand is to just try. No pressure though.",
                     "autoNext": "ch2_s1_work_montage"
                 },
                 {
                     "id": "ch2_s1_work_montage",
-                    "speaker": "narrator",
-                    "text": "For the next hour, you help sort donations, check expiry dates, and pack care packages. The work is simple but strangely fulfilling.",
+                    "speaker": "Narrator",
+                    "text": "For the next hour, you either help sort donations...or observe how volunteers work together.",
                     "autoNext": "ch2_s1_hafiz_chat"
                 },
                 {
                     "id": "ch2_s1_hafiz_chat",
                     "speaker": "Hafiz",
-                    "text": "Not bad for first time!  You know, I started just like you.  Came once to fill my co-curricular hours. Now I'm here every week.",
+                    "text": "Not bad for first time! You know, I started just like you. Came once to fill my co-curricular hours. Now I'm here every week.",
                     "choices": [
                         {
                             "id": "ch2_s1_hafiz_why",
@@ -111,7 +111,7 @@
                         },
                         {
                             "id": "ch2_s1_hafiz_hours",
-                            "text": "How many hours you get for this? ",
+                            "text": "How many hours you get for this?",
                             "sdgDelta": -1,
                             "isCareless": true,
                             "nextNodeId": "ch2_s1_hafiz_answer_hours"
@@ -121,19 +121,19 @@
                 {
                     "id": "ch2_s1_hafiz_answer",
                     "speaker": "Hafiz",
-                    "text": "I met a student once who said this was his only proper meal that week. Changed everything for me. Suddenly it wasn't about hours anymore.",
+                    "text": "I met a student once who said this was his only proper meal that week. Changed everything for me. Suddenly it wasn't about hours anymore. You don`t always see who you`re helping...but they`re around us every day.",
                     "autoNext": "ch2_s1_wrapup"
                 },
                 {
                     "id": "ch2_s1_hafiz_answer_hours",
                     "speaker": "Hafiz",
-                    "text": "Haha, I knew you'd ask. 2 hours per session.  But honestly ah, after a while you stop counting. The experience is worth more.",
+                    "text": "Haha, I knew you'd ask. 2 hours per session. But honestly ah, after a while you stop counting. The experience is worth more.",
                     "autoNext": "ch2_s1_wrapup"
                 },
                 {
                     "id": "ch2_s1_wrapup",
                     "speaker": "system",
-                    "text": "Objective completed:  Experience hands-on volunteering at the campus food bank. (SDG 2: Zero Hunger)",
+                    "text": "Objective completed: Experience hands-on volunteering at the campus food bank. (SDG 2: Zero Hunger)",
                     "onComplete": {
                         "setFlags": [
                             "chapter2_scene1_dialogue_done"
@@ -152,139 +152,320 @@
             "nodes": [
                 {
                     "id": "ch2_s2_intro",
-                    "speaker": "narrator",
-                    "text": "Outside the Student Union building, a small SDG awareness booth has been set up.  Colorful banners flutter in the breeze, and students mill about curiously."
+                    "speaker": "Narrator",
+                    "text": "Later that afternoon, outside the Student Union building, a small SDG awareness booth has been set up. Colorful banners flutter in the breeze, and students mill about curiously. The images from the food bank linger in your mind as you walk across campus."
                 },
                 {
                     "id": "inspect_organizer",
-                    "speaker": "narrator",
-                    "text": "April from the Environmental Club.  She's been organizing campus sustainability events since Year 1."
+                    "speaker": "Narrator",
+                    "text": "April from the Environmental Club is setting up a station for sustainability activities. She's been organizing events like this since Year 1."
                 },
                 {
                     "id": "inspect_matthew",
-                    "speaker": "narrator",
-                    "text": "Matthew, an international student from Indonesia.  He's helping distribute eco-friendly tote bags."
+                    "speaker": "Narrator",
+                    "text": "Matthew, an international student from Indonesia, is setting up interactive demos to teach practical sustainability hacks."
                 },
                 {
                     "id": "inspect_group",
-                    "speaker": "narrator",
-                    "text": "A group of students learning how to make enzyme cleaner from fruit peels.  Practical sustainability in action."
+                    "speaker": "Narrator",
+                    "text": "A small group of students are learning to make enzyme cleaner from fruit peels. Practical sustainability in action."
                 },
                 {
                     "id": "inspect_squirrel",
-                    "speaker": "narrator",
-                    "text": "A brave squirrel eyeing the free snacks at the booth. Even wildlife is interested in sustainability events."
+                    "speaker": "Narrator",
+                    "text": "A brave squirrel eyes the free snacks at the booth. Even wildlife seems curious about sustainability."
                 },
                 {
                     "id": "ch2_s2_organizer",
                     "speaker": "April",
-                    "text": "Hey there! We're from Kelab Alam Sekitar. Today we're teaching simple sustainable practices — making enzyme cleaner, proper recycling, reducing food waste.  Want to join? ",
+                    "text": "Hey! We’re setting up some small sustainability stuff today. Nothing too heavy — just things students actually do day to day. If you’ve got a few minutes, you can check it out.",
                     "choices": [
                         {
                             "id": "ch2_s2_choice_join_yes",
-                            "text": "Sure! I just came from the food bank, so I'm already in the mood.",
+                            "text": "Sure! I just came from the food bank, so I’m really eager.",
                             "sdgDelta": 4,
                             "setFlags": [
                                 "street_activity_participated"
                             ],
-                            "nextNodeId": "ch2_s2_participate"
+                            "nextNodeId": "ch2_s2_april_activity"
                         },
                         {
                             "id": "ch2_s2_choice_join_later",
                             "text": "Interesting, but I need to rush for class. Maybe next time?",
-                            "sdgDelta": 0,
+                            "sdgDelta": 1,
                             "setFlags": [
                                 "street_activity_later"
                             ],
-                            "nextNodeId": "ch2_s2_later"
+                            "nextNodeId": "ch2_s2_april_skip"
                         },
                         {
                             "id": "ch2_s2_choice_join_no",
-                            "text": "Nah, I don't think this environmental stuff is for me.",
+                            "text": "Nah, I don’t think this environmental stuff is for me.",
                             "sdgDelta": -3,
                             "isCareless": true,
                             "setFlags": [
                                 "street_activity_skipped"
                             ],
-                            "nextNodeId": "ch2_s2_skip"
+                            "nextNodeId": "ch2_s2_april_skip"
                         }
                     ]
                 },
                 {
-                    "id": "ch2_s2_participate",
+                    "id": "ch2_s2_april_activity",
                     "speaker": "April",
-                    "text": "Awesome! Here, try making this enzyme cleaner. Just orange peels, brown sugar, and water.  After 3 months, you can use it to clean anything! ",
-                    "autoNext": "ch2_s2_participate_learn"
+                    "text": "Nice. Since you were just at the food bank, this one might hit a bit closer. We’re showing how food scraps and leftovers can be handled better instead of just throwing everything away. Let’s start with making enzyme cleaner from food scraps. How should we start preparing the orange peels for the mix?",
+                    "choices": [
+                        {
+                            "id": "enzyme_peel_correct",
+                            "text": "Peel the oranges carefully to avoid the white pith",
+                            "sdgDelta": 3,
+                            "nextNodeId": "ch2_s2_enzyme_feedback_correct"
+                        },
+                        {
+                            "id": "enzyme_blend_wrong",
+                            "text": "Throw everything in the blender",
+                            "sdgDelta": 1,
+                            "nextNodeId": "ch2_s2_enzyme_feedback_incorrect"
+                        },
+                        {
+                            "id": "enzyme_ignore",
+                            "text": "Skip the prep and just add sugar and water",
+                            "sdgDelta": 0,
+                            "nextNodeId": "ch2_s2_enzyme_feedback_ignore"
+                        }
+                    ]
                 },
                 {
-                    "id": "ch2_s2_participate_learn",
-                    "speaker": "narrator",
-                    "text": "You spend 20 minutes learning about enzyme cleaners, proper waste separation, and how small daily choices impact the environment.",
-                    "autoNext": "ch2_s2_matthew"
+                    "id": "ch2_s2_enzyme_feedback_correct",
+                    "speaker": "April",
+                    "text": "Exactly! Removing the pith prevents bitterness and ensures the cleaner is effective. Small careful actions like this reduce chemical waste in your home.",
+                    "autoNext": "ch2_s2_wrapup"
                 },
                 {
-                    "id": "ch2_s2_later",
+                    "id": "ch2_s2_enzyme_feedback_incorrect",
                     "speaker": "April",
-                    "text": "No problem!  Take this pamphlet. We're here every Wednesday.  And follow our Insta @usm_alamhijau for tips! ",
-                    "autoNext": "ch2_s2_matthew"
+                    "text": "Hmm...blending everything may work, but the cleaner won’t be as effective. Still, you’re learning how little details matter in sustainable practices.",
+                    "autoNext": "ch2_s2_wrapup"
                 },
                 {
-                    "id": "ch2_s2_skip",
+                    "id": "ch2_s2_enzyme_feedback_ignore",
                     "speaker": "April",
-                    "text": "That's okay!  But you know, environmental issues affect everyone. Maybe just take a look? No commitment needed.",
-                    "autoNext": "ch2_s2_matthew"
+                    "text": "Skipping preparation will reduce effectiveness. But even trying teaches you that sustainable actions need some care and attention.",
+                    "autoNext": "ch2_s2_wrapup"
+                },
+                {
+                    "id": "ch2_s2_april_skip",
+                    "speaker": "April",
+                    "text": "No worries lah. Even just seeing it once helps. You’ll start noticing these things around campus after a while. Take this pamphlet and follow us on Insta @APU_alamhijau. Even small awareness matters.",
+                    "autoNext": "ch2_s2_wrapup"
                 },
                 {
                     "id": "ch2_s2_matthew",
                     "speaker": "Matthew",
-                    "text": "Hey!  Thanks for stopping by. You know, back in Jakarta the pollution is really bad. Coming here made me appreciate clean air more.",
+                    "text": "Hey. I help out here because back home, food waste and pollution are...bad. When I came here, I realised we still waste a lot, just less visibly.",
+                    "autoNext": "ch2_s2_matthew_continue"
+                },
+                {
+                    "id": "ch2_s2_matthew_continue",
+                    "speaker": "Matthew",
+                    "text": "Since you were helping at the food bank, let’s explore food waste reduction. Small actions here can make a big difference. Ready to try?",
                     "choices": [
                         {
-                            "id": "ch2_s2_matthew_agree",
-                            "text": "Yeah, we should protect what we have before it's gone.",
-                            "sdgDelta": 2,
-                            "nextNodeId": "ch2_s2_matthew_respond"
+                            "id": "matthew_yes",
+                            "text": "Yes, let’s do it!",
+                            "sdgDelta": 4,
+                            "setFlags": [
+                                "street_activity_matthew_participated"
+                            ],
+                            "nextNodeId": "ch2_s2_matthew_sort"
                         },
                         {
-                            "id": "ch2_s2_matthew_dismiss",
-                            "text": "Malaysia also got pollution what.  KL haze every year.",
-                            "sdgDelta": -1,
-                            "isCareless": true,
-                            "nextNodeId": "ch2_s2_matthew_respond_negative"
+                            "id": "matthew_later",
+                            "text": "Maybe later, I’ll just observe.",
+                            "sdgDelta": 1,
+                            "setFlags": [
+                                "street_activity_matthew_skipped"
+                            ],
+                            "nextNodeId": "ch2_s2_group_intro"
                         }
                     ]
                 },
                 {
-                    "id": "ch2_s2_matthew_respond",
+                    "id": "ch2_s2_matthew_sort",
                     "speaker": "Matthew",
-                    "text": "Exactly! That's why I volunteer here. Every small action counts. Today we taught 30 students how to recycle properly. Imagine if they all do it!",
-                    "autoNext": "ch2_s2_wrapup"
+                    "text": "We’re not doing anything fancy. Just practical stuff, how students store food, what gets wasted, and what actually ends up helping places like the food bank. First, let’s sort leftover meals from the food bank. Which method ensures freshness and safety for donation?",
+                    "choices": [
+                        {
+                            "id": "sort_label",
+                            "text": "Store in containers and label with dates",
+                            "sdgDelta": 3,
+                            "nextNodeId": "ch2_s2_matthew_feedback_donate",
+                            "setFlags": [
+                                "screen_dialogue_viewed"
+                            ]
+                        },
+                        {
+                            "id": "sort_tray",
+                            "text": "Leave them uncovered in trays",
+                            "sdgDelta": -1,
+                            "nextNodeId": "ch2_s2_matthew_feedback_throw",
+                            "setFlags": [
+                                "screen_dialogue_viewed"
+                            ]
+                        },
+                        {
+                            "id": "sort_mix",
+                            "text": "Mix all leftovers together",
+                            "sdgDelta": -2,
+                            "nextNodeId": "ch2_s2_matthew_feedback_keep",
+                            "setFlags": [
+                                "screen_dialogue_viewed"
+                            ]
+                        }
+                    ]
                 },
                 {
-                    "id": "ch2_s2_matthew_respond_negative",
+                    "id": "ch2_s2_matthew_feedback_donate",
                     "speaker": "Matthew",
-                    "text": "True, but that's exactly why we need to act now right?  If we all just complain and do nothing, it'll only get worse.",
-                    "autoNext": "ch2_s2_wrapup"
+                    "text": "Yeah, that’s the better option. When food’s stored properly, it lasts longer, and less ends up in the bin. That’s fewer emissions, less waste, and fewer people needing emergency help.",
+                    "autoNext": "null"
                 },
                 {
-                    "id": "ch2_s2_student",
+                    "id": "ch2_s2_matthew_feedback_throw",
                     "speaker": "Matthew",
-                    "text": "Thanks for being here!  Every person who learns spreads the knowledge. That's how change happens — one conversation at a time."
+                    "text": "Hmm...throwing away extra food wastes resources and misses the chance to help someone in need. But even this shows why we need awareness about food waste.",
+                    "autoNext": "null"
                 },
                 {
-                    "id": "ch2_s2_group_help",
+                    "id": "ch2_s2_matthew_feedback_keep",
+                    "speaker": "Matthew",
+                    "text": "Keeping it for yourself prevents others from benefiting, but it’s a good lesson on why sharing surplus food matters for the community and environment.",
+                    "autoNext": "null"
+                },
+                {
+                    "id": "ch2_s2_group_intro",
                     "speaker": "Student Group",
-                    "text": "We're learning to make enzyme cleaner!  Apparently you can clean drains with this. No more chemical cleaners!"
+                    "text": "Hey! We have two mini activities: reducing food waste in your dorm or upcycling old items. You can try one or just observe. Which do you want?",
+                    "choices": [
+                        {
+                            "id": "group_foodwaste",
+                            "text": "Reduce food waste in my dorm",
+                            "sdgDelta": 2,
+                            "setFlags": [
+                                "street_activity_group_foodwaste"
+                            ],
+                            "nextNodeId": "ch2_s2_group_foodwaste_activity"
+                        },
+                        {
+                            "id": "group_upcycle",
+                            "text": "Try upcycling old items",
+                            "sdgDelta": 2,
+                            "setFlags": [
+                                "street_activity_group_upcycle"
+                            ],
+                            "nextNodeId": "ch2_s2_group_upcycle_activity"
+                        },
+                        {
+                            "id": "group_skip",
+                            "text": "Maybe later, I’ll just watch.",
+                            "sdgDelta": 0,
+                            "setFlags": [
+                                "street_activity_group_skipped"
+                            ],
+                            "nextNodeId": "null"
+                        }
+                    ]
                 },
                 {
-                    "id": "ch2_s2_squirrel",
-                    "speaker": "narrator",
-                    "text": "The squirrel seems to approve of your sustainability journey. Or maybe it just wants the free kuih."
+                    "id": "ch2_s2_group_foodwaste_activity",
+                    "speaker": "Student Group",
+                    "text": "Let’s reduce food waste! You found leftover meals in your dorm fridge. What’s the safest way to store them?",
+                    "choices": [
+                        {
+                            "id": "dorm_sort_label",
+                            "text": "Use containers and label with dates",
+                            "sdgDelta": 3,
+                            "nextNodeId": "ch2_s2_group_foodwaste_feedback_correct"
+                        },
+                        {
+                            "id": "dorm_leave_open",
+                            "text": "Leave meals on the counter",
+                            "sdgDelta": -2,
+                            "nextNodeId": "ch2_s2_group_foodwaste_feedback_wrong"
+                        },
+                        {
+                            "id": "dorm_freeze_all",
+                            "text": "Freeze all leftovers without sorting",
+                            "sdgDelta": 1,
+                            "nextNodeId": "ch2_s2_group_foodwaste_feedback_partial"
+                        }
+                    ]
+                },
+                {
+                    "id": "ch2_s2_group_foodwaste_feedback_correct",
+                    "speaker": "Student Group",
+                    "text": "Excellent! Proper storage keeps food edible longer, reduces waste, and helps your campus community.",
+                    "autoNext": "ch2_s2_group_upcycle_activity"
+                },
+                {
+                    "id": "ch2_s2_group_foodwaste_feedback_wrong",
+                    "speaker": "Student Group",
+                    "text": "Leaving food exposed can spoil it quickly. You’ll see why safe storage matters for food security and climate impact.",
+                    "autoNext": "ch2_s2_group_upcycle_activity"
+                },
+                {
+                    "id": "ch2_s2_group_foodwaste_feedback_partial",
+                    "speaker": "Student Group",
+                    "text": "Freezing helps preserve, but unsorted food may confuse donation or use. Learning to organize is key for responsible consumption.",
+                    "autoNext": "ch2_s2_group_upcycle_activity"
+                },
+                {
+                    "id": "ch2_s2_group_upcycle_activity",
+                    "speaker": "Student Group",
+                    "text": "Now let’s upcycle! You have empty bottles and old packaging. What’s the first thing to do?",
+                    "choices": [
+                        {
+                            "id": "upcycle_planter",
+                            "text": "Make mini planters",
+                            "sdgDelta": 3,
+                            "nextNodeId": "ch2_s2_group_upcycle_feedback_planter"
+                        },
+                        {
+                            "id": "upcycle_snackbag",
+                            "text": "Make reusable snack bags",
+                            "sdgDelta": 3,
+                            "nextNodeId": "ch2_s2_group_upcycle_feedback_snackbag"
+                        },
+                        {
+                            "id": "upcycle_watch",
+                            "text": "Watch first and learn",
+                            "sdgDelta": 1,
+                            "nextNodeId": "ch2_s2_group_upcycle_feedback_watch"
+                        }
+                    ]
+                },
+                {
+                    "id": "ch2_s2_group_upcycle_feedback_planter",
+                    "speaker": "Student Group",
+                    "text": "Perfect! Turning bottles into planters shows how waste can have a second life. Creative reuse reduces consumption and carbon footprint.",
+                    "autoNext": "null"
+                },
+                {
+                    "id": "ch2_s2_group_upcycle_feedback_snackbag",
+                    "speaker": "Student Group",
+                    "text": "Great! Reusable snack bags cut single-use waste. Every small innovation adds up to big environmental impact.",
+                    "autoNext": "null"
+                },
+                {
+                    "id": "ch2_s2_group_upcycle_feedback_watch",
+                    "speaker": "Student Group",
+                    "text": "Watching is a good first step. Understanding the process helps you plan real actions to reduce waste and reuse creatively.",
+                    "autoNext": "null"
                 },
                 {
                     "id": "ch2_s2_wrapup",
                     "speaker": "system",
-                    "text": "You've engaged with the campus sustainability community. (SDG 12: Responsible Consumption, SDG 13: Climate Action)",
+                    "text": "You’ve engaged with the campus sustainability community. (SDG 12: Responsible Consumption, SDG 13: Climate Action)",
                     "onComplete": {
                         "setFlags": [
                             "chapter2_scene2_dialogue_done"
@@ -303,51 +484,56 @@
             "nodes": [
                 {
                     "id": "ch2_s3_intro",
-                    "speaker": "narrator",
-                    "text": "Near the bus stop, you notice someone sitting alone on a bench, looking at a care package from the food bank — the same one you helped pack earlier."
+                    "speaker": "Narrator",
+                    "text": "As the day winds down, near the food bank, you notice someone sitting alone on a bench, looking at a care package from the food bank, the same one you helped pack earlier."
                 },
                 {
                     "id": "inspect_beneficiary",
-                    "speaker": "narrator",
-                    "text": "A student you don't recognize.  She seems tired but relieved, holding the food package carefully."
+                    "speaker": "Narrator",
+                    "text": "A student you don't recognize yet. She seems tired but relieved, holding the food package carefully."
                 },
                 {
                     "id": "inspect_cat",
-                    "speaker": "narrator",
-                    "text": "A campus cat lounging nearby.  USM is famous for its friendly cats."
+                    "speaker": "Narrator",
+                    "text": "A campus cat lounging nearby. APU is famous for its friendly cats."
                 },
                 {
                     "id": "cat",
-                    "speaker": "narrator",
-                    "text": "The cat meows at you.  Probably hoping for some of those biscuits in the care package."
+                    "speaker": "Narrator",
+                    "text": "The cat meows at you. Probably hoping for some of those biscuits in the care package.",
+                    "onComplete": {
+                        "setFlags": [
+                            "interacted_with_cat"
+                        ]
+                    }
                 },
                 {
                     "id": "ch2_s3_beneficiary_notice",
-                    "speaker": "Nurul",
-                    "text": "Oh!  Aren't you one of the volunteers from Pantri Siswa?  I saw you there earlier. I...  I just picked up my package.",
+                    "speaker": "Sara",
+                    "text": "Oh! Hey! I honestly did not expect to run into you here. Uh, I...I just picked up my package.",
                     "autoNext": "ch2_s3_player_react"
                 },
                 {
                     "id": "ch2_s3_player_react",
                     "speaker": "Player",
-                    "text": "Yeah, that was my first time helping out. I didn't expect to...  I mean, are you okay? ",
+                    "text": "Yeah, that was my first time helping out. I didn't expect to...I mean, are you okay?",
                     "autoNext": "ch2_s3_beneficiary_story"
                 },
                 {
                     "id": "ch2_s3_beneficiary_story",
-                    "speaker": "Nurul",
-                    "text": "I'm okay now. My parents' kedai makan closed during COVID and never recovered.  Scholarship covers tuition but not much else. Sometimes by end of month...  it's hard.",
+                    "speaker": "Sara",
+                    "text": "I'm okay now. My parents' kedai makan closed during COVID and never recovered. Scholarship covers tuition but not much else. Sometimes by end of month... it's hard.",
                     "autoNext": "ch2_s3_story_continue"
                 },
                 {
                     "id": "ch2_s3_story_continue",
-                    "speaker": "Nurul",
-                    "text": "I was so malu at first to come. But Kak Sarah said 'there's no shame in needing help — one day you'll help others too.' That changed how I see it.",
+                    "speaker": "Sara",
+                    "text": "I was so malu at first to come. But Abang Ibrahim said 'There's no shame in needing help, one day you'll help others too.' That changed how I see it.",
                     "choices": [
                         {
                             "id": "ch2_s3_choice_empathy",
-                            "text": "I never realized students around me might be going through this.  Thank you for sharing.",
-                            "sdgDelta": 5,
+                            "text": "Sara, I had no idea you were going through this. I'm glad I could help.",
+                            "sdgDelta": 4,
                             "setFlags": [
                                 "empathy_shown"
                             ],
@@ -355,14 +541,14 @@
                         },
                         {
                             "id": "ch2_s3_choice_practical",
-                            "text": "Is there enough support?  Maybe the uni should do more.",
+                            "text": "Is there enough support? Maybe the uni should do more.",
                             "sdgDelta": 2,
                             "nextNodeId": "ch2_s3_practical_response"
                         },
                         {
                             "id": "ch2_s3_choice_awkward",
-                            "text": "Oh...  that's tough. Um, I should probably go.. .",
-                            "sdgDelta": -3,
+                            "text": "Ah, I did not expect this, maybe I should leave you some space.",
+                            "sdgDelta": -4,
                             "isCareless": true,
                             "nextNodeId": "ch2_s3_awkward_response"
                         }
@@ -370,32 +556,38 @@
                 },
                 {
                     "id": "ch2_s3_empathy_response",
-                    "speaker": "Nurul",
-                    "text": "Most people don't know.  We look the same as everyone else kan? But seeing volunteers like you... it really means a lot.  You make us feel less alone.",
+                    "speaker": "Sara",
+                    "text": "Most people don't know. We look the same as everyone else kan? But seeing volunteers like you... it really means a lot. You make us feel less alone.",
                     "autoNext": "ch2_s3_closing"
                 },
                 {
                     "id": "ch2_s3_practical_response",
-                    "speaker": "Nurul",
-                    "text": "There are programs, but not everyone knows about them. That's why what you're doing — spreading awareness — is so important.  Keep going, okay?",
+                    "speaker": "Sara",
+                    "text": "There are programs, but not everyone knows about them. That's why what you're doing, spreading awareness, is so important. Keep going, okay?",
                     "autoNext": "ch2_s3_closing"
                 },
                 {
                     "id": "ch2_s3_awkward_response",
-                    "speaker": "Nurul",
+                    "speaker": "Sara",
                     "text": "It's okay. I understand it's awkward. Just... remember that your help today really matters to people like me. Even if you don't see us.",
                     "autoNext": "ch2_s3_closing"
                 },
                 {
                     "id": "ch2_s3_closing",
-                    "speaker": "Nurul",
-                    "text": "Anyway, I should head back to my room. Thanks for listening.  And thanks for volunteering today. It makes more difference than you know.",
+                    "speaker": "Sara",
+                    "text": "Anyway, I should head back to my room. Thanks for listening. And thanks for volunteering today. It makes more difference than you know.",
+                    "autoNext": "ch2_s3_addup"
+                },
+                {
+                    "id": "ch2_s3_addup",
+                    "speaker": "Narrator",
+                    "text": "Watching Sara walk away with the care package, it hits you how easy it is to overlook people like her on campus. Not because they are invisible, but because they quietly carry their struggles alone.",
                     "autoNext": "ch2_s3_wrapup"
                 },
                 {
                     "id": "ch2_s3_wrapup",
                     "speaker": "system",
-                    "text": "End of Chapter 2: Taking Action. You've seen how student initiatives directly impact lives.  The SDGs aren't just goals — they're about real people.",
+                    "text": "End of Chapter 2: Taking Action. You've seen how student initiatives directly impact lives. The SDGs aren't just goals — they're about real people.",
                     "onComplete": {
                         "setFlags": [
                             "chapter2_completed",

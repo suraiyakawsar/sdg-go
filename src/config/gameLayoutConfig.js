@@ -8,7 +8,7 @@ export const GAME_LAYOUT = {
     gameMaxWidth: 1100,  // was 900; bump if you want the game larger on big screens
 
     // Left/right sidebar (rail) width, used in Game.jsx
-    sideRailWidth: 112,  // px – your existing value
+    sideRailWidth: 112,  // px – existing value
 
     // Aspect ratio for the game viewport React wrapper
     aspectRatio: 16 / 9,

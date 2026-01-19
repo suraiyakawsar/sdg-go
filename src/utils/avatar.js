@@ -12,7 +12,7 @@ import {
     pixelArt,
 } from "@dicebear/collection";
 
-// Must match the order in AvatarPicker. jsx
+// Must match the order in AvatarPicker.jsx
 const STYLES = [
     adventurer,
     adventurerNeutral,

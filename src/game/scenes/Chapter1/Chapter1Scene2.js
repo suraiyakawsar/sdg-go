@@ -3,6 +3,7 @@ import BaseStoryScene from "../BaseStoryScene";
 import { emit, on } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
 import { unlockBadge } from "../../../utils/unlockBadge"; // ← ADD THIS
+import { title } from "framer-motion/client";
 
 
 export default class Chapter1Scene2 extends BaseStoryScene {
@@ -44,19 +45,16 @@ export default class Chapter1Scene2 extends BaseStoryScene {
             npcs: [
                 { name: "teacher", texture: "teacher", x: 950, y: 630, scale: 0.37, dialogueId: "c_prof_start", inspectDialogueId: "inspect_professor" },
                 { name: "students", texture: "students", x: 940, y: 770, dialogueId: "c_bench_1", tooltip: { offsetX: 60, offsetY: 50 }, inspectDialogueId: "inspect_student" },
-                // { name: "bench2", texture: "crystal_npc", x: 1210, y: 825, scale: 1.35, dialogueId: "c_bench_2" },
-                // { name: "bench3", texture: "elvis_npc", x: 740, y: 725, scale: 1.3, dialogueId: "c_bench_3" },
-                // { name: "bench4", texture: "zahir_npc", x: 1120, y: 735, scale: 1.4, dialogueId: "c_bench_4" },
             ],
 
         });
 
         // objectives
-        this.objectiveStep = 1;         // 1 = talk, 2 = posters
+        this.objectiveStep = 1;
         this.objectiveCompleted = false;
 
         // local state just for posters
-        this.posterFound = 0;
+        this.posterCollected = 0;
         this.posterGoal = 2;
     }
 
@@ -65,7 +63,7 @@ export default class Chapter1Scene2 extends BaseStoryScene {
 
         localStorage.setItem("sdgo:lastRoute", "/game");
         localStorage.setItem("currentChapter", 1);
-        localStorage.setItem("currentScene", "Chapter1Scene2"); // Different scene key
+        localStorage.setItem("currentScene", "Chapter1Scene2");
 
         // ✅ Store scene before unload
         window.addEventListener("beforeunload", () => {
@@ -82,7 +80,8 @@ export default class Chapter1Scene2 extends BaseStoryScene {
             slot: "primary",
             collected: 0,
             goal: 1,
-            description: "Finish talking to your Professor to continue.",
+            title: "Understand the Bigger Picture",
+            description: "Talk to Miss Riza and learn what the SDGs are.",
             complete: false,
         });
 
@@ -92,7 +91,8 @@ export default class Chapter1Scene2 extends BaseStoryScene {
             active: false,
             collected: 0,
             goal: this.posterGoal,
-            description: "Optional: Find and click hidden classroom posters.",
+            title: "Spread the Word",
+            description: "Optional: Collect all SDG posters in the classroom.",
         });
 
         this._createPosters();
@@ -112,7 +112,7 @@ export default class Chapter1Scene2 extends BaseStoryScene {
 
         on("sceneExitUnlocked", this._onSceneExitUnlocked);
 
-        // Cleanup (only if your bus supports off())
+        // Cleanup (only if bus supports off())
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
             // if (typeof off === "function") off("sceneExitUnlocked", this._onSceneExitUnlocked);
         });
@@ -130,14 +130,13 @@ export default class Chapter1Scene2 extends BaseStoryScene {
             complete: true,
         });
 
-        emit("badgeEarned", "Cafeteria Unlocked! 🔓");
+        emit("badgeEarned", { name: "SDG 101", icon: "🚌", subtitle: "You’ve been formally introduced to the SDGs." });
 
         // ← UNLOCK BADGE HERE
         unlockBadge("water-saver");
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
-        this._unlockDoorGlow?.();
 
         // Step 2: trash becomes active
         this.objectiveStep = 2;
@@ -150,7 +149,8 @@ export default class Chapter1Scene2 extends BaseStoryScene {
             preview: false,
             collected: 0,
             goal: this.posterGoal,
-            description: "Find and click hidden classroom posters.",
+            title: "Spread the Word",
+            description: "Optional: Collect all SDG posters in the classroom.",
         });
     }
 
@@ -174,18 +174,12 @@ export default class Chapter1Scene2 extends BaseStoryScene {
     }
 
     _handlePosterClick(posterItem) {
-        // if (this.posterFound.has(p.id)) return;
-        // this.posterFound.add(p.id);
-
-
         if (!posterItem?.scene) return;
-
         // poster only active in step 2
         if (this.objectiveStep !== 2) return;
 
         const points = 3;
         addSDGPoints(points);
-        emit("badgeEarned", `Found a poster! (+${posterItem.reward})`);
 
         // small floating text
         const msg = this.add.text(posterItem.x, posterItem.y - 40, `+${points}`, {
@@ -204,8 +198,6 @@ export default class Chapter1Scene2 extends BaseStoryScene {
         posterItem.destroy();
         this.posterCollected += 1;
 
-        // emit("updateSDGPoints", p.reward);
-        // emit("badgeEarned", `Found a poster! (+${p.reward})`);
         emit("updateObjective", {
             slot: "secondary",
             delta: 1
@@ -214,6 +206,8 @@ export default class Chapter1Scene2 extends BaseStoryScene {
         if (!this.objectiveCompleted && this.posterCollected >= this.posterGoal) {
             this.objectiveCompleted = true;
             unlockBadge("water-saver");
+
+            emit("badgeEarned", { name: "Awareness Advocate", icon: "📣", subtitle: "Sustainability exists in ordinary spaces." });
             emit("updateObjective", { slot: "secondary", complete: true });
         }
     }

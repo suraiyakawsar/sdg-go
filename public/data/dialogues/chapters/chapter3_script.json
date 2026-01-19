@@ -9,51 +9,54 @@
             "nodes": [
                 {
                     "id": "ch3_s1_intro",
-                    "speaker": "narrator",
-                    "text": "After class, Prof Danny asks you to stay back.  The lecture hall empties, leaving just the two of you in the afternoon light.  You notice a large projection screen behind the professor displaying 'Sustainable Campus Initiatives. '"
+                    "speaker": "Narrator",
+                    "text": "After class, Prof Danny asks you to stay back. The lecture hall empties, leaving just the two of you in the afternoon light. You notice a large projection screen behind the professor displaying 'Sustainable Campus Initiatives.'"
                 },
                 {
                     "id": "inspect_professor",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "Prof Danny is organizing his notes. He seems to have something important to discuss."
                 },
                 {
                     "id": "inspect_screen",
-                    "speaker": "narrator",
-                    "text": "A projection screen displays information about various sustainable campus initiatives — renewable energy projects, waste management programs, water conservation efforts, and student-led sustainability clubs.  Each initiative shows both the goals and current progress."
+                    "speaker": "Narrator",
+                    "text": "A projection screen displays information about various sustainable campus initiatives: renewable energy projects, waste management programs, water conservation efforts, and student-led sustainability clubs. Each initiative shows both the goals and current progress."
                 },
                 {
                     "id": "ch3_s1_screen_read",
-                    "speaker": "narrator",
-                    "text": "As you look at the screen, you read about the different programs:\n\n• Solar Panel Installation Project (40% complete) — Installing solar panels on campus buildings to reduce carbon emissions.\n\n• Zero Waste Canteen Program (Active) — Incentivizing students to bring reusable containers instead of using disposables.\n\n• Campus Water Harvest Initiative (Ongoing) — Collecting rainwater for landscaping and cleaning.\n\n• Student Sustainability Network (250 members) — A student-led organization advocating for campus-wide sustainable practices.\n\nEach program shows that change is possible when people commit to it.",
+                    "speaker": "Narrator",
+                    "text": "As you look at the screen, you read about the different programs:\n\n• Solar Panel Installation Project (40% complete) — Installing solar panels on campus buildings to reduce carbon emissions. • Zero Waste Canteen Program (Active) — Incentivizing students to bring reusable containers instead of using disposables.",
+                    "autoNext": "ch3_s1_screen_continue"
+                },
+                {
+                    "id": "ch3_s1_screen_continue",
+                    "speaker": "Narrator",
+                    "text": "• Campus Water Harvest Initiative (Ongoing) — Collecting rainwater for landscaping and cleaning.\n\n• Student Sustainability Network (250 members) — A student-led organization advocating for campus-wide sustainable practices.\n\nEach program shows that change is possible when people commit to it.",
                     "choices": [
                         {
                             "id": "ch3_s1_screen_choice_impressed",
-                            "text": "This is impressive.  I didn't know there was so much happening on campus.",
-                            "sdgDelta": 2,
+                            "text": "This is impressive. I didn't know there was so much happening on campus.",
+                            "sdgDelta": 1,
                             "nextNodeId": "ch3_s1_screen_end"
                         },
                         {
                             "id": "ch3_s1_screen_choice_overwhelmed",
-                            "text": "This is a lot.  I'm not sure where I could fit in to help.",
+                            "text": "This is a lot. I'm not sure where I could fit in to help.",
                             "sdgDelta": 0,
                             "nextNodeId": "ch3_s1_screen_end"
                         },
                         {
                             "id": "ch3_s1_screen_choice_motivate",
                             "text": "Seeing all this makes me want to get involved immediately.",
-                            "sdgDelta": 3,
-                            "setFlags": [
-                                "screen_dialogue_viewed"
-                            ],
+                            "sdgDelta": 2,
                             "nextNodeId": "ch3_s1_screen_end"
                         }
                     ]
                 },
                 {
                     "id": "ch3_s1_screen_end",
-                    "speaker": "narrator",
-                    "text": "You finish reading the screen and turn your attention back to the classroom.",
+                    "speaker": "Narrator",
+                    "text": "You finish reading the screen and turn your attention back to Prof Danny.",
                     "onComplete": {
                         "setFlags": [
                             "screen_dialogue_viewed"
@@ -63,7 +66,7 @@
                 {
                     "id": "ch3_s1_professor_start",
                     "speaker": "Prof Danny",
-                    "text": "I see you've been looking at our campus initiatives.   I've noticed you've been quite involved lately — the food bank, the sustainability fair.   Tell me, what has all of this actually taught you?  ",
+                    "text": "I've noticed you've been quite involved lately, the food bank, the sustainability fair. Tell me, what has all of this actually taught you?",
                     "choices": [
                         {
                             "id": "ch3_s1_choice_action",
@@ -84,8 +87,8 @@
                         },
                         {
                             "id": "ch3_s1_choice_cynical",
-                            "text": "Honestly Prof?   That change is slow and most people don't care.",
-                            "sdgDelta": -2,
+                            "text": "Honestly Prof? That change is slow and most people don't care.",
+                            "sdgDelta": -3,
                             "isCareless": true,
                             "nextNodeId": "ch3_s1_professor_cynical"
                         }
@@ -94,35 +97,35 @@
                 {
                     "id": "ch3_s1_professor_action",
                     "speaker": "Prof Danny",
-                    "text": "That's exactly right.   Awareness without action changes nothing.  What matters is what you choose to do when it's inconvenient — when no one is watching.",
+                    "text": "That's exactly right. Awareness without action changes nothing. What matters is what you choose to do when it's inconvenient, when no one is watching.",
                     "autoNext": "ch3_s1_challenge"
                 },
                 {
                     "id": "ch3_s1_professor_awareness",
                     "speaker": "Prof Danny",
-                    "text": "Understanding the complexity is important.   But the harder part is deciding where you're willing to take personal responsibility.  Not everything, but something.",
+                    "text": "Understanding the complexity is important. But the harder part is deciding where you're willing to take personal responsibility. Not everything, but something.",
                     "autoNext": "ch3_s1_challenge"
                 },
                 {
                     "id": "ch3_s1_professor_cynical",
                     "speaker": "Prof Danny",
-                    "text": "I understand that frustration.  But here's the thing — every movement starts with people who refused to accept 'most people don't care.' Will you be one of them?",
+                    "text": "I understand that frustration. But here's the thing, every movement starts with people who refused to accept 'most people don't care.' Will you be one of them?",
                     "autoNext": "ch3_s1_challenge"
                 },
                 {
                     "id": "ch3_s1_challenge",
                     "speaker": "Prof Danny",
-                    "text": "I have a challenge for you.  For the rest of the semester, I want you to lead a small SDG initiative.  It doesn't have to be big.  Just consistent.",
+                    "text": "I have a challenge for you. For the rest of the semester, I want you to lead a small SDG initiative. It doesn't have to be big. Just consistent.",
                     "autoNext": "ch3_s1_challenge_options"
                 },
                 {
                     "id": "ch3_s1_challenge_options",
                     "speaker": "Prof Danny",
-                    "text": "It could be weekly volunteering, starting a recycling program in your hostel, or even just documenting your sustainable choices on social media.  What interests you?  ",
+                    "text": "It could be weekly volunteering, starting a recycling program in your hostel, or even just documenting your sustainable choices on social media. What interests you?",
                     "choices": [
                         {
                             "id": "ch3_s1_accept_volunteer",
-                            "text": "I'll commit to the food bank.   Weekly, no excuses.",
+                            "text": "I'll commit to the food bank. Weekly, no excuses.",
                             "sdgDelta": 5,
                             "setFlags": [
                                 "ch3_committed_foodbank"
@@ -131,7 +134,7 @@
                         },
                         {
                             "id": "ch3_s1_accept_create",
-                            "text": "I want to start something new in my hostel — maybe a recycling corner.",
+                            "text": "I want to start something new in my hostel, maybe a recycling corner.",
                             "sdgDelta": 5,
                             "setFlags": [
                                 "ch3_committed_create"
@@ -141,7 +144,7 @@
                         {
                             "id": "ch3_s1_hesitate",
                             "text": "I'm not sure I'm ready to lead something, Prof.",
-                            "sdgDelta": -1,
+                            "sdgDelta": -3,
                             "isCareless": true,
                             "nextNodeId": "ch3_s1_hesitate_response"
                         }
@@ -150,7 +153,7 @@
                 {
                     "id": "ch3_s1_accept_response",
                     "speaker": "Prof Danny",
-                    "text": "Excellent!  That's leadership.  Not waiting for permission, but taking responsibility.  I'll be watching your progress.   Make me proud.",
+                    "text": "Excellent! That's leadership. Not waiting for permission, but taking responsibility. I’ll check in with you later in the semester. Let’s see how it goes.",
                     "autoNext": "ch3_s1_guidance"
                 },
                 {
@@ -162,16 +165,15 @@
                 {
                     "id": "ch3_s1_guidance",
                     "speaker": "Prof Danny",
-                    "text": "Remember this: look closely at everyday life — how people handle waste, water, food, transport. Change doesn't start with grand gestures.   It starts with daily choices.",
+                    "text": "Remember this: look closely at everyday life, how people handle waste, water, food, transport. Change doesn't start with grand gestures. It starts with daily choices.",
                     "autoNext": "ch3_s1_wrapup"
                 },
                 {
                     "id": "ch3_s1_wrapup",
                     "speaker": "system",
-                    "text": "End of Chapter 3: Deepening Understanding.  Prof Danny has challenged you to take ownership of your sustainability journey. What will you do next? ",
+                    "text": "End of Chapter 3: Deepening Understanding. Prof Danny has challenged you to take ownership of your sustainability journey. What will you do next? ",
                     "onComplete": {
                         "setFlags": [
-                            "chapter3_completed",
                             "chapter3_scene1_decision_done"
                         ],
                         "unlockExit": true
@@ -187,54 +189,49 @@
             "nodes": [
                 {
                     "id": "ch3_s2_intro",
-                    "speaker": "narrator",
-                    "text": "The campus community garden behind the Engineering block.   What was once an abandoned lot is now a green oasis — vegetable plots, herb gardens, and a small composting area."
+                    "speaker": "Narrator",
+                    "text": "Behind the Engineering block, you step into the campus community garden. What used to be an empty patch of land is now full of life, vegetable beds, herbs, compost bins."
                 },
                 {
                     "id": "inspect_gardener",
-                    "speaker": "narrator",
-                    "text": "Pakcik Halim, the garden caretaker.   He's a retired lecturer who now dedicates his time to teaching students about sustainable gardening."
+                    "speaker": "Narrator",
+                    "text": "Pakcik Halim, the garden caretaker. A retired lecturer who now spends his days guiding students through sustainable food systems."
+                },
+                {
+                    "id": "inspect_tools",
+                    "speaker": "Narrator",
+                    "text": "Gardening tools neatly arranged on a rack. Shovels, trowels, watering cans, all shared among volunteers. A sign says 'Tolong pulangkan selepas guna. Jaga barang bersama.' (Please return after use. Take care of shared items.)"
                 },
                 {
                     "id": "inspect_cat",
-                    "speaker": "narrator",
-                    "text": "A ginger cat lounging between the tomato plants.  It seems very comfortable here."
-                },
-                {
-                    "id": "inspect_tools",
-                    "speaker": "narrator",
-                    "text": "Gardening tools neatly arranged on a rack.  Shovels, trowels, watering cans — all shared among volunteers."
+                    "speaker": "Narrator",
+                    "text": "A ginger campus cat naps between the tomato plants, completely unbothered by sustainability efforts."
                 },
                 {
                     "id": "cat",
-                    "speaker": "narrator",
-                    "text": "The cat yawns at you.  Gardening is apparently exhausting work...for cats."
-                },
-                {
-                    "id": "inspect_tools",
-                    "speaker": "narrator",
-                    "text": "Well-maintained gardening equipment. A sign says 'Tolong pulangkan selepas guna.   Jaga barang bersama.' (Please return after use. Take care of shared items.)"
+                    "speaker": "Narrator",
+                    "text": "The cat yawns at you. Gardening is apparently exhausting work...for cats."
                 },
                 {
                     "id": "ch3_s2_tools_interact",
-                    "speaker": "narrator",
-                    "text": "You pick up a trowel.  It's surprisingly light and well-balanced.  Clearly, these tools are cared for by the community.",
+                    "speaker": "Narrator",
+                    "text": "You pick up a trowel. It's surprisingly light and well-balanced. Clearly, these tools are cared for by the community.",
                     "choices": [
                         {
                             "id": "ch3_s2_tools_choice_use",
-                            "text": "I should help out.  Maybe Pakcik Halim needs an extra hand.",
+                            "text": "I should help out. Maybe Pakcik Halim needs an extra hand.",
                             "sdgDelta": 3,
                             "nextNodeId": "ch3_s2_screen_end"
                         },
                         {
                             "id": "ch3_s2_tools_choice_leave",
-                            "text": "I'll just observe for now.  I want to understand how this all works first.",
+                            "text": "I'll just observe for now. I want to understand how this all works first.",
                             "sdgDelta": 0,
                             "nextNodeId": "ch3_s2_screen_end"
                         },
                         {
                             "id": "ch3_s2_tools_choice_ignore",
-                            "text": "Actually, I have other things to do.  I'll just take a shortcut through.",
+                            "text": "Actually, I have other things to do. I'll just take a shortcut through.",
                             "sdgDelta": -3,
                             "isCareless": true,
                             "setFlags": [
@@ -246,7 +243,7 @@
                 },
                 {
                     "id": "ch3_s2_screen_end",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "You put down the trowel and decide to leave the garden for now.",
                     "onComplete": {
                         "setFlags": [
@@ -257,7 +254,7 @@
                 {
                     "id": "ch3_s2_gardener",
                     "speaker": "Pakcik Halim",
-                    "text": "Ah, pengunjung baru! Welcome to Kebun Komuniti USM.  Are you here to help out or just exploring? ",
+                    "text": "Ah, student baru. You’re just in time, I was sorting compost and harvesting for Pantri Siswa today. What brings you here?",
                     "choices": [
                         {
                             "id": "ch3_s2_choice_help",
@@ -273,13 +270,13 @@
                         {
                             "id": "ch3_s2_choice_observe",
                             "text": "Just looking around first, Pakcik. I want to understand how this works.",
-                            "sdgDelta": 0,
+                            "sdgDelta": 1,
                             "nextNodeId": "ch3_s2_observe_confirm"
                         },
                         {
                             "id": "ch3_s2_choice_leave",
-                            "text": "Actually I'm just passing through. Taking a shortcut to the library.",
-                            "sdgDelta": -3,
+                            "text": "Actually I'm just passing through. Taking a shortcut to the pond.",
+                            "sdgDelta": -2,
                             "isCareless": true,
                             "nextNodeId": "ch3_s2_leave_confirm"
                         }
@@ -288,19 +285,19 @@
                 {
                     "id": "ch3_s2_help_confirm",
                     "speaker": "Pakcik Halim",
-                    "text": "Bagus! That mindset is more valuable than people think. Consistency beats grand gestures.   Come, I'll show you how we turn food waste into compost.",
+                    "text": "Bagus! That mindset is more valuable than people think. Consistency beats grand gestures. Come, I'll show you how we turn food waste into compost.",
                     "autoNext": "ch3_s2_lesson"
                 },
                 {
                     "id": "ch3_s2_observe_confirm",
                     "speaker": "Pakcik Halim",
-                    "text": "That's fair. Understanding comes before action.  Take your time.  But don't be a stranger — hands-on learning is the best teacher!  ",
+                    "text": "That's fair. Understanding comes before action. Take your time. But don't be a stranger, hands-on learning is the best teacher!",
                     "autoNext": "ch3_s2_lesson"
                 },
                 {
                     "id": "ch3_s2_leave_confirm",
                     "speaker": "Pakcik Halim",
-                    "text": "Ah, the busy life of students. But remember — even 10 minutes in nature can change your perspective.  The garden will be here when you're ready.",
+                    "text": "Ah, the busy life of students. But remember, even 10 minutes in nature can change your perspective. The garden will be here when you're ready.",
                     "autoNext": "ch3_s2_lesson"
                 },
                 {
@@ -311,14 +308,14 @@
                 },
                 {
                     "id": "ch3_s2_reflection",
-                    "speaker": "narrator",
-                    "text": "You spend time observing the garden's ecosystem — composting food waste, growing vegetables, feeding students.  A complete cycle of sustainability.",
+                    "speaker": "Narrator",
+                    "text": "You spend time observing the garden's ecosystem; composting food waste, growing vegetables, feeding students. A complete cycle of sustainability.",
                     "autoNext": "ch3_s2_pakcik_wisdom"
                 },
                 {
                     "id": "ch3_s2_pakcik_wisdom",
                     "speaker": "Pakcik Halim",
-                    "text": "The SDGs...   they're not just about big policies. They're about everyday choices.  What you eat, what you throw away, how you treat the earth.   It starts small.",
+                    "text": "The SDGs...they're not just about big policies. They're about everyday choices. What you eat, what you throw away, how you treat the earth. It starts small.",
                     "choices": [
                         {
                             "id": "ch3_s2_wisdom_agree",
@@ -337,14 +334,36 @@
                 {
                     "id": "ch3_s2_wisdom_response",
                     "speaker": "Pakcik Halim",
-                    "text": "That's the first step.   Awareness becomes habit, habit becomes culture, culture becomes change.  You're on the right path.",
+                    "text": "That's the first step. Awareness becomes habit, habit becomes culture, culture becomes change. You're on the right path.",
                     "autoNext": "ch3_s2_wrapup"
                 },
                 {
                     "id": "ch3_s2_wisdom_deeper",
                     "speaker": "Pakcik Halim",
-                    "text": "Good question!   Individual action creates demand for change. When enough people act, systems follow. Don't underestimate your power as a consumer and citizen.",
-                    "autoNext": "ch3_s2_wrapup"
+                    "text": "Good question! Individual action creates demand for change. When enough people act, systems follow. Don't underestimate your power as a consumer and citizen.",
+                    "autoNext": "ch3_s2_pond_choice"
+                },
+                {
+                    "id": "ch3_s2_pond_choice",
+                    "speaker": "Narrator",
+                    "text": "The garden connects food, people, and waste. But you realize something else keeps it all alive, water.",
+                    "choices": [
+                        {
+                            "id": "ch3_s2_pond_follow",
+                            "text": "I should check out the pond before heading back.",
+                            "sdgDelta": 2,
+                            "setFlags": [
+                                "noticed_water_system"
+                            ],
+                            "nextNodeId": "ch3_s2_wrapup"
+                        },
+                        {
+                            "id": "ch3_s2_pond_later",
+                            "text": "I’ll think about this later. There’s a lot to process already.",
+                            "sdgDelta": 0,
+                            "nextNodeId": "ch3_s2_wrapup"
+                        }
+                    ]
                 },
                 {
                     "id": "ch3_s2_wrapup",
@@ -352,7 +371,8 @@
                     "text": "You've experienced the campus community garden and learned about sustainable food systems. (SDG 2: Zero Hunger, SDG 12: Responsible Consumption, SDG 15: Life on Land)",
                     "onComplete": {
                         "setFlags": [
-                            "chapter3_scene2_done"
+                            "chapter3_scene2_done",
+                            "chapter3_completed"
                         ],
                         "unlockExit": true
                     }

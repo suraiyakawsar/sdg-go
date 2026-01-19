@@ -1,6 +1,7 @@
-// src/scenes/chapter2/Chapter2Scene3.js
+// src/scenes/chapter3/Chapter3Scene2.js
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
+import { addSDGPoints } from "../../../utils/sdgPoints";
 import { saveChapterStats } from "../../../utils/gameSummary";
 import { title } from "framer-motion/client";
 
@@ -30,7 +31,7 @@ export default class Chapter3Scene2 extends BaseStoryScene {
             // Add this if you use Option 1:
             scaleTopOffset: 20,
 
-            // ✅ door (swap texture/x/y to match your artwork)
+            // ✅ door (swap texture/x/y to match artwork)
             door: {
                 x: 192,
                 y: 558,
@@ -90,7 +91,7 @@ export default class Chapter3Scene2 extends BaseStoryScene {
 
         // ✅ Store scene before unload
         window.addEventListener("beforeunload", () => {
-            localStorage.setItem("currentScene", "Chapter3Scene2 ");
+            localStorage.setItem("currentScene", "Chapter3Scene2");
         });
 
         emit("updateChapterScene", { title: "Garden · Chapter 3" });
@@ -110,10 +111,10 @@ export default class Chapter3Scene2 extends BaseStoryScene {
 
         emit("updateObjective", {
             slot: "secondary",
-            preview: false,
-            active: true,
+            preview: true,
+            active: false,
             collected: 0,
-            goal: 1,
+            // goal: 1,
             title: "Understand the Process",
             description: "Optional: Interact with the composting table to learn how it works.",
         });
@@ -155,11 +156,11 @@ export default class Chapter3Scene2 extends BaseStoryScene {
 
         on("flagsUpdated", this._onFlagsUpdated);
 
-        // Cleanup
-        this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-            off("sceneExitUnlocked", this._onSceneExitUnlocked);
-            off("flagsUpdated", this._onFlagsUpdated);
-        });
+        // // Cleanup
+        // this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+        //     off("sceneExitUnlocked", this._onSceneExitUnlocked);
+        //     off("flagsUpdated", this._onFlagsUpdated);
+        // });
     }
 
     // --------------------------------
@@ -206,17 +207,8 @@ export default class Chapter3Scene2 extends BaseStoryScene {
         }
         this._chapterCompleted = true;
 
-        console.log("🏁 _onChapterComplete called!");
         console.log("🎉 Chapter 3 Complete!");
 
-        // ✅ Log BEFORE
-        console.log("Session values BEFORE saveChapterStats:", {
-            sessionSDGPoints: localStorage.getItem("sessionSDGPoints"),
-            sessionGoodChoices: localStorage.getItem("sessionGoodChoices"),
-            sessionBadChoices: localStorage.getItem("sessionBadChoices"),
-        });
-
-        // ✅ Save chapter stats (this resets session counters)
         saveChapterStats(3);
 
         // ✅ Log AFTER

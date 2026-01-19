@@ -138,7 +138,7 @@ const CHAPTER_INFO = {
     4: { name: "Pond", scene: "Pond", description: "Clean up the pond and reflect on environmental impact." },
 };
 
-const TOTAL_CHAPTERS = 4; // Update this to match your actual chapter count
+const TOTAL_CHAPTERS = 4; // Update this to match actual chapter count
 
 export default function Profile() {
     const reduceMotion = useReducedMotion();

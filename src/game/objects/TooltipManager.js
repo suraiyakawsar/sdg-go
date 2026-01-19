@@ -33,7 +33,7 @@ export default class TooltipManager {
         const talkBtn = this._createKeyHint("Q", "Talk");
         const inspectBtn = this._createKeyHint("E", "Inspect");
 
-        // stack them like your old one, but a bit tighter
+        // stack them like the old one, but a bit tighter
         talkBtn.y = -18;
         inspectBtn.y = 18;
 

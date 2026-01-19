@@ -10,11 +10,11 @@ export const SceneManager = {
         "Chapter3Scene1",
         "Chapter3Scene2",
         "Chapter4Scene1",
-        "Chapter4Scene2", // ✅ Add if missing
+        "Chapter4Scene2",
     ],
     currentIndex: 0,
 
-    // ✅ NEW: Set currentIndex based on current scene name
+    //Set currentIndex based on current scene name
     setCurrentScene(sceneName) {
         const index = this.scenes.indexOf(sceneName);
         if (index !== -1) {

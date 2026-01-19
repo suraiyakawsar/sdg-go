@@ -1,6 +1,7 @@
 // src/game/scenes/Chapter3/Chapter3Scene2.js
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
+import { addSDGPoints } from "../../../utils/sdgPoints";
 
 export default class Chapter3Scene1 extends BaseStoryScene {
     constructor() {
@@ -70,24 +71,7 @@ export default class Chapter3Scene1 extends BaseStoryScene {
     }
 
     create() {
-        // console.log("🎮 Chapter3Scene2.create() - BEFORE super. create()");
-        // console.log("Session values on boot:", {
-        //     sessionSDGPoints: localStorage.getItem("sessionSDGPoints"),
-        //     sessionGoodChoices: localStorage.getItem("sessionGoodChoices"),
-        //     sessionBadChoices: localStorage.getItem("sessionBadChoices"),
-        // });
-
-
         super.create();
-
-        // console.log("🎮 Chapter3Scene2.create() - AFTER super.create()");
-        // console.log("Session values after super:", {
-        //     sessionSDGPoints: localStorage.getItem("sessionSDGPoints"),
-        //     sessionGoodChoices: localStorage.getItem("sessionGoodChoices"),
-        //     sessionBadChoices: localStorage.getItem("sessionBadChoices"),
-        // });
-
-
 
         // ✅ Reset session counters at the START of chapter 3
         localStorage.setItem("sessionSDGPoints", "0");
@@ -184,8 +168,6 @@ export default class Chapter3Scene1 extends BaseStoryScene {
         if (this.objectiveCompleted) return;
         this.objectiveCompleted = true;
 
-        console.log("🔓 Primary objective complete! Unlocking door.");
-
         // Mark PRIMARY objective complete
         emit("updateObjective", {
             slot: "primary",
@@ -214,7 +196,5 @@ export default class Chapter3Scene1 extends BaseStoryScene {
 
         if (this.playerInExitZone) this.goToNextScene();
         else console.log("Too far from the door.");
-
-
     }
 }

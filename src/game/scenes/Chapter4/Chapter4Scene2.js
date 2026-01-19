@@ -3,6 +3,9 @@ import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { saveChapterStats } from "../../../utils/gameSummary";
 import { addSDGPoints } from "../../../utils/sdgPoints";
+import { unlockBadge } from "../../../utils/unlockBadge"; // ← ADD THIS
+
+
 export default class Chapter4Scene2 extends BaseStoryScene {
     constructor() {
         super("Chapter4Scene2", {
@@ -49,7 +52,7 @@ export default class Chapter4Scene2 extends BaseStoryScene {
             ],
         });
         // objectives
-        this.objectiveStep = 1;         // 1 = talk, 2 = posters
+        this.objectiveStep = 1;
         this.objectiveCompleted = false;
 
         this.posterCollected = 0;
@@ -73,7 +76,7 @@ export default class Chapter4Scene2 extends BaseStoryScene {
         }
 
         // ✅ Store current scene (NO SPACE in key)
-        localStorage.setItem("sdgo:lastRoute", "/game");  // ← Remove space
+        localStorage.setItem("sdgo:lastRoute", "/game");
         localStorage.setItem("currentChapter", 4);
         localStorage.setItem("currentScene", "Chapter4Scene2");
 
@@ -143,6 +146,8 @@ export default class Chapter4Scene2 extends BaseStoryScene {
 
         emit("badgeEarned", { name: "Greener Commute", icon: "🚌", subtitle: "Small transport choices have big impact." });
 
+        unlockBadge("water-saver");
+
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
 
@@ -193,7 +198,6 @@ export default class Chapter4Scene2 extends BaseStoryScene {
         });
 
         posterItem.destroy();
-
         this.posterCollected += 1;
 
         emit("updateObjective", {
@@ -210,10 +214,6 @@ export default class Chapter4Scene2 extends BaseStoryScene {
 
 
     _onDoorClicked() {
-        console.log("🚪 Door clicked!");
-        console.log("  - doorUnlocked:", this.doorUnlocked);
-        console.log("  - playerInExitZone:", this.playerInExitZone);
-
         if (!this.doorUnlocked) {
             console.log("Door locked. Complete the bus stop conversation first.");
             return;

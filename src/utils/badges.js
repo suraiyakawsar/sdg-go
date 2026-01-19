@@ -14,10 +14,18 @@ import {
 } from "react-icons/fi";
 
 /**
- * Central badge registry — 10 badges for your game
+ * Central badge registry — 10 badges for the game
  * Reference this in BadgePage, unlockBadge, and all scenes
  */
 export const BADGES = [
+    {
+        key: "first-awareness",
+        name: "First Awareness",
+        color: "#23C96F",
+        Icon: FiAward,
+        desc: "Get introduced to the SDGs.",
+        unlockHint: "Talk to a certain someone in Chapter 1.",
+    },
     {
         key: "eco-warrior",
         name: "Eco Warrior",

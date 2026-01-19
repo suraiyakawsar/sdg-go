@@ -36,7 +36,7 @@ function clear() {
   listeners.clear();
 }
 
-// Keep your old API working
+// Keep old API working
 function subscribe(event, callback) {
   return on(event, callback);
 }

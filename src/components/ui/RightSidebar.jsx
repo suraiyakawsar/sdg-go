@@ -398,7 +398,6 @@ export default function RightSidebar() {
       border border-emerald-400/60
       text-emerald-200
       leading-none
-      mt-[2px]
     ">
                                                 Done
                                             </span>

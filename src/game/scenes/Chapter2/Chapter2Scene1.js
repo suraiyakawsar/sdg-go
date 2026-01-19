@@ -1,6 +1,8 @@
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
+import { unlockBadge } from "../../../utils/unlockBadge"; // ← ADD THIS
+import { title } from "framer-motion/client";
 
 export default class Chapter2Scene1 extends BaseStoryScene {
     constructor() {
@@ -12,8 +14,6 @@ export default class Chapter2Scene1 extends BaseStoryScene {
             backgroundKey: "bgFoodBank",
             startNodeId: "ch2_s1_intro",
             exitUnlockedFlag: "chapter2_scene1_exit_unlocked",
-
-
 
             walkArea: {
                 zones: [
@@ -91,7 +91,8 @@ export default class Chapter2Scene1 extends BaseStoryScene {
             slot: "primary",
             collected: 0,
             goal: 1,
-            description: "Talk to the organizer and unlock the next area.",
+            title: "Learn How the Food Bank Works",
+            description: "Talk to the food bank organiser to understand what they do and why it matters.",
             complete: false,
         });
 
@@ -102,7 +103,8 @@ export default class Chapter2Scene1 extends BaseStoryScene {
             active: false,
             collected: 0,
             goal: this.posterGoal,
-            description: "Optional: Collect all the posters.",
+            title: "Recognise the System",
+            description: "Optional: Collect all food bank posters.",
         });
 
         this._createPosters();
@@ -123,7 +125,7 @@ export default class Chapter2Scene1 extends BaseStoryScene {
 
         on("sceneExitUnlocked", this._onSceneExitUnlocked);
 
-        // Cleanup (only if your bus supports off())
+        // Cleanup (only if bus supports off())
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
             // if (typeof off === "function") off("sceneExitUnlocked", this._onSceneExitUnlocked);
         });
@@ -141,11 +143,13 @@ export default class Chapter2Scene1 extends BaseStoryScene {
             complete: true,
         });
 
-        emit("badgeEarned", "Street View Unlocked! 🔓");
+        emit("badgeEarned", { name: "First-Hand Experience", icon: "🥫", subtitle: "You didn’t just hear about it, you showed up." });
+
+        // ← UNLOCK BADGE HERE
+        unlockBadge("fast-learner");
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
-        this._unlockDoorGlow?.();
 
         // Step 2: posters becomes active
         this.objectiveStep = 2;
@@ -158,7 +162,8 @@ export default class Chapter2Scene1 extends BaseStoryScene {
             preview: false,
             collected: 0,
             goal: this.posterGoal,
-            description: "Collect all the posters.",
+            title: "Recognise the System",
+            description: "Optional: Collect all food bank posters.",
         });
     }
 
@@ -205,7 +210,6 @@ export default class Chapter2Scene1 extends BaseStoryScene {
         });
 
         posterItem.destroy();
-
         this.posterCollected += 1;
 
         emit("updateObjective", {
@@ -215,7 +219,11 @@ export default class Chapter2Scene1 extends BaseStoryScene {
 
         if (!this.objectiveCompleted && this.posterCollected >= this.posterGoal) {
             this.objectiveCompleted = true;
-            emit("badgeEarned", "Eco Warrior! 🏅");
+
+            emit("badgeEarned", { name: "Understanding the Process", icon: "📦", subtitle: "Real change starts with small, everyday actions." });
+
+            unlockBadge("eco-warrior");
+
             emit("updateObjective", { slot: "secondary", complete: true });
         }
     }

@@ -5,8 +5,6 @@ import { emit, on, off } from "../../utils/eventBus";
 import { getPoints } from "../../utils/sdgPoints";
 import TooltipManager from "../objects/TooltipManager";
 import NPCIndicator from "../objects/NPCIndicator";
-// import InteractionPanel from "../objects/InteractionPanel";
-import HowToPlayScene from "./HowToPlayScene";
 export default class BaseStoryScene extends Phaser.Scene {
     constructor(key, config = {}) {
         super(key);
@@ -330,7 +328,6 @@ export default class BaseStoryScene extends Phaser.Scene {
 
         this.dialogueManager = new DialogueManager(this, sceneData || {}, this.sdgPointsObj, this.uiLayer);
         this.tooltipManager = new TooltipManager(this, this.uiLayer);
-        // this.interactionPanel = new InteractionPanel(this, this.uiLayer);
     }
 
     _createNPCs() {

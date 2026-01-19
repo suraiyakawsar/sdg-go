@@ -155,6 +155,9 @@ export default class Chapter4Scene1 extends BaseStoryScene {
 
         emit("badgeEarned", { name: "Hands-On Help", icon: "🧤", subtitle: "You learned from someone who leads by example." });
 
+        // ← UNLOCK BADGE HERE
+        unlockBadge("fast-learner");
+
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
 
@@ -220,9 +223,12 @@ export default class Chapter4Scene1 extends BaseStoryScene {
 
         if (!this.objectiveCompleted && this.trashCollected >= this.trashGoal) {
             this.objectiveCompleted = true;
-            emit("badgeEarned", { name: "Leave It Better", icon: "🧤", subtitle: "You improved a shared space through action." });
-            emit("updateObjective", { slot: "secondary", complete: true });
 
+            emit("badgeEarned", { name: "Leave It Better", icon: "🧤", subtitle: "You improved a shared space through action." });
+
+            unlockBadge("eco-warrior");
+
+            emit("updateObjective", { slot: "secondary", complete: true });
 
             // Save chapter stats in profile
             const completedChapters = JSON.parse(localStorage.getItem("completedChapters") || "[]");
@@ -232,9 +238,6 @@ export default class Chapter4Scene1 extends BaseStoryScene {
             }
         }
     }
-
-
-
 
 
     _onDoorClicked() {

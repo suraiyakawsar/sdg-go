@@ -3,7 +3,7 @@ import BootScene from "./scenes/BootScene";
 import UIScene from "./scenes/UIScene";
 import Chapter1Scene2 from "./scenes/Chapter1Scene2";
 
-import { GAME_LAYOUT } from "../config/gameLayoutConfig"; // ← adjust path if needed
+import { GAME_LAYOUT } from "../config/gameLayoutConfig";
 import Chapter1Scene from "../../game/scenes/Chapter1/Chapter1Scene";
 import Chapter1Scene2 from "../../game/scenes/Chapter1/Chapter1Scene2";
 import Chapter1Scene3 from "../../game/scenes/Chapter1/Chapter1Scene3";

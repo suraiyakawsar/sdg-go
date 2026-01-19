@@ -9,33 +9,33 @@
             "nodes": [
                 {
                     "id": "ch4_s1_intro",
-                    "speaker": "narrator",
-                    "text": "The iconic pond at USM's main campus. Usually serene, today you notice plastic bottles and wrappers floating near the edges.  A student with a garbage bag is trying to clean up."
+                    "speaker": "Narrator",
+                    "text": "The iconic pond at APU's main campus. Usually serene, today you notice plastic bottles and wrappers near the edges."
                 },
                 {
                     "id": "inspect_volunteer",
-                    "speaker": "narrator",
-                    "text": "A student you've seen at the food bank before.  She's picking up trash from the pond edge, alone."
+                    "speaker": "Narrator",
+                    "text": "A student with a garbage bag is trying to clean up, but seems overwhelmed by the amount of trash."
                 },
                 {
                     "id": "inspect_pond",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "The pond is home to fish and turtles. The trash pollution is affecting their habitat."
                 },
                 {
                     "id": "ch4_s1_npc",
                     "speaker": "Iman",
-                    "text": "Oh hey! You're from Prof Danny's class right? I'm doing a solo cleanup.  Every Tuesday I come here.  Sad seeing sampah end up in the water.",
+                    "text": "Oh hey! You're from Prof Danny's class right? I'm doing a solo cleanup. Every Tuesday I come here. Sad seeing sampah end up in the water.",
                     "autoNext": "ch4_s1_ask_help"
                 },
                 {
                     "id": "ch4_s1_ask_help",
                     "speaker": "Iman",
-                    "text": "It's just me today — my friends had class.  Want to help for a bit?  I have extra gloves.",
+                    "text": "It's just me today, my friends had class. Want to help for a bit? I have extra gloves.",
                     "choices": [
                         {
                             "id": "ch4_s1_choice_yes",
-                            "text": "Yeah, let's do this together.  Four hands better than two.",
+                            "text": "Yeah, let's do this together. Four hands better than two.",
                             "sdgDelta": 5,
                             "setFlags": [
                                 "chapter4_cleanedPond_positive"
@@ -54,7 +54,7 @@
                         {
                             "id": "ch4_s1_choice_no",
                             "text": "Sorry, I don't want to get my hands dirty. Good luck though! ",
-                            "sdgDelta": -5,
+                            "sdgDelta": -3,
                             "isCareless": true,
                             "setFlags": [
                                 "chapter4_cleanedPond_refused"
@@ -83,13 +83,13 @@
                 },
                 {
                     "id": "ch4_s1_cleanup_montage",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "Together, you collect two full bags of trash — plastic bottles, food wrappers, even a broken umbrella. The pond looks noticeably cleaner.",
                     "autoNext": "ch4_s1_reflection"
                 },
                 {
                     "id": "ch4_s1_cleanup_solo",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "You watch Iman continue alone, methodically picking up trash.  There's something admirable about her persistence.",
                     "autoNext": "ch4_s1_reflection"
                 },
@@ -146,22 +146,22 @@
             "nodes": [
                 {
                     "id": "ch4_s2_intro",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "Evening at the USM bus stop. The semester is ending soon.  You wait for the Rapid Penang bus, reflecting on everything that's happened."
                 },
                 {
                     "id": "inspect_student",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "A junior student you recognize from the food bank. She's reading a book on sustainable development."
                 },
                 {
                     "id": "inspect_poster",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "A poster promoting public transport:  'Satu bas, 40 kereta kurang. Pilihan anda membentuk masa depan. '"
                 },
                 {
                     "id": "inspect_bench",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "The bench has a small plaque: 'Donated by USM Green Campus Initiative 2019. '"
                 },
                 {
@@ -213,7 +213,7 @@
                 },
                 {
                     "id": "ch4_s2_aisyah_arrives",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "Aisyah and Chai Lam appear, also waiting for the bus. They look tired but satisfied after a long semester.",
                     "autoNext": "ch4_s2_friends_reunion"
                 },
@@ -339,7 +339,7 @@
                 },
                 {
                     "id": "ch4_s2_bus_arrives",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "The Rapid Penang bus pulls up. The sun is setting over the campus, casting a warm glow over everything.",
                     "autoNext": "ch4_s2_final_words"
                 },
@@ -357,13 +357,13 @@
                 },
                 {
                     "id": "ch4_s2_boarding",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "You board the bus with your friends, feeling different from the person who started this semester.  The journey of a thousand miles begins with a single step — or in this case, a single choice to care.",
                     "autoNext": "ch4_s2_final_reflection"
                 },
                 {
                     "id": "ch4_s2_final_reflection",
-                    "speaker": "narrator",
+                    "speaker": "Narrator",
                     "text": "Looking out the window as the campus fades into the distance, you realize:  you don't need to change the whole world. You just need to change your corner of it.  And that's exactly what you've started doing.",
                     "autoNext": "ch4_s2_wrapup"
                 },

@@ -2,6 +2,7 @@ import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
 import { unlockBadge } from "../../../utils/unlockBadge"; // ← ADD THIS
+import { title } from "framer-motion/client";
 
 export default class Chapter1Scene extends BaseStoryScene {
     constructor() {
@@ -39,7 +40,7 @@ export default class Chapter1Scene extends BaseStoryScene {
         });
 
         // objectives
-        this.objectiveStep = 1;         // 1 = talk, 2 = trash
+        this.objectiveStep = 1;
         this.objectiveCompleted = false;
 
         this.trashCollected = 0;
@@ -133,7 +134,7 @@ export default class Chapter1Scene extends BaseStoryScene {
         emit("badgeEarned", { name: "First Awareness", icon: "🪪", subtitle: "You’ve officially been introduced to the SDGs." });
 
         // ← UNLOCK BADGE HERE
-        unlockBadge("fast-learner");
+        unlockBadge("first-awareness");
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
@@ -149,7 +150,8 @@ export default class Chapter1Scene extends BaseStoryScene {
             preview: false,
             collected: 0,
             goal: this.trashGoal,
-            description: "Collect 2 pieces of trash around the hallway.",
+            title: "Clean As You Go",
+            description: "Optional: Pick up trash around the hall.",
         });
     }
 
@@ -196,19 +198,13 @@ export default class Chapter1Scene extends BaseStoryScene {
         if (!this.objectiveCompleted && this.trashCollected >= this.trashGoal) {
             this.objectiveCompleted = true;
 
-            // 🔴 DEBUG: Check if this runs
-            console.log("✅ About to unlock eco-warrior badge");
-            console.log("Current localStorage:", localStorage.getItem("collectedBadges"));
-
             emit("badgeEarned", { name: "Small Actions Matter", icon: "♻️", subtitle: "Real change starts with small, everyday actions." });
 
             unlockBadge("eco-warrior");
 
-            console.log("After unlock:", localStorage.getItem("collectedBadges"));
-
             emit("updateObjective", { slot: "secondary", complete: true });
 
-
+            // Save chapter stats in profile
             const completedChapters = JSON.parse(localStorage.getItem("completedChapters") || "[]");
             if (!completedChapters.includes(1)) {
                 completedChapters.push(1);
