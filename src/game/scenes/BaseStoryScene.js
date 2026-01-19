@@ -50,6 +50,7 @@ export default class BaseStoryScene extends Phaser.Scene {
         this._createNPCs();
         this._bindExitUnlockEvent();
         this._startIntroDialogue();
+        this._musicPlayback();
 
         // optional hook for per-scene extras (posters, props, etc.)
         this._customCreate?.();
@@ -68,6 +69,37 @@ export default class BaseStoryScene extends Phaser.Scene {
             if (npc && this.onNPCDialogueComplete) {
                 this.onNPCDialogueComplete(npc.name);
             }
+        });
+
+    }
+
+    _musicPlayback() {
+        // Reuse existing music if already playing
+        if (!this.sound.get('sdgoMusic')) {
+            this.bgMusic = this.sound.add('sdgoMusic', {
+                loop: true,
+                volume: 0.3
+            });
+        } else {
+            this.bgMusic = this.sound.get('sdgoMusic');
+        }
+
+        this.input.once("pointerdown", () => {
+            this.sound.context.resume();
+
+            if (!this.bgMusic.isPlaying) {
+                this.bgMusic.play();
+            }
+        });
+
+        const handleVolume = (v) => {
+            if (this.bgMusic) this.bgMusic.setVolume(v);
+        };
+
+        on("setMusicVolume", handleVolume);
+
+        this.events.once("shutdown", () => {
+            off("setMusicVolume", handleVolume);
         });
 
     }
@@ -97,7 +129,6 @@ export default class BaseStoryScene extends Phaser.Scene {
 
         this.debugCoords.setText(`PLAYER POS - X: ${px}, Y: ${py}`);
     }
-
 
     _debugWalkArea() {
         const a = this.CONFIG.walkArea;

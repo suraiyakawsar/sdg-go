@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FiAward, FiClock, FiSave, FiVolume2, FiVolumeX } from "react-icons/fi";
-import { on, off } from "../utils/eventBus";
+import { emit, on, off } from "../utils/eventBus";
 
 function ChapterHeader({ title }) {
     // ✅ Title change animation state
@@ -26,7 +26,16 @@ function ChapterHeader({ title }) {
     const [justSaved, setJustSaved] = useState(false);
 
     // ✅ Sound toggle
-    const [soundOn, setSoundOn] = useState(true);
+    // const [soundOn, setSoundOn] = useState(true);
+    const [musicVolume, setMusicVolume] = useState(0.3);
+    const [isMuted, setIsMuted] = useState(false);
+    const [lastVolume, setLastVolume] = useState(0.3);
+
+    useEffect(() => {
+        const volume = isMuted ? 0 : musicVolume;
+        emit("setMusicVolume", volume);
+    }, [musicVolume, isMuted]);
+
 
     // ✅ Parse title
     // e.g., "Hallway · Chapter 1" → { scene: "Hallway", chapter: "1" }
@@ -38,6 +47,7 @@ function ChapterHeader({ title }) {
         const chapter = chapterMatch ? chapterMatch[1] : "";
         return { scene, chapter };
     };
+
 
     const { scene, chapter } = parseTitle(title);
 
@@ -209,7 +219,7 @@ function ChapterHeader({ title }) {
                 </motion.div>
 
                 {/* Sound toggle */}
-                <motion.button
+                {/* <motion.button
                     onClick={() => setSoundOn(!soundOn)}
                     className={`p-2 mr-5 rounded-lg transition-all ${soundOn
                         ? "bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10"
@@ -220,7 +230,48 @@ function ChapterHeader({ title }) {
                     title={soundOn ? "Mute" : "Unmute"}
                 >
                     {soundOn ? <FiVolume2 size={14} /> : <FiVolumeX size={14} />}
-                </motion.button>
+                </motion.button> */}
+                {/* Music controls */}
+                <div className="flex items-center gap-2 mr-5 px-2 py-1.5 rounded-lg bg-white/5 border border-white/10">
+
+                    {/* Mute button */}
+                    <motion.button
+                        onClick={() => {
+                            if (isMuted) {
+                                setIsMuted(false);
+                                setMusicVolume(lastVolume);
+                            } else {
+                                setLastVolume(musicVolume);
+                                setIsMuted(true);
+                            }
+                        }}
+                        className={`p-1.5 rounded-md transition-all ${isMuted
+                            ? "text-red-400"
+                            : "text-white/60 hover:text-white"
+                            }`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        title={isMuted ? "Unmute" : "Mute"}
+                    >
+                        {isMuted || musicVolume === 0 ? <FiVolumeX size={14} /> : <FiVolume2 size={14} />}
+                    </motion.button>
+
+                    {/* Volume slider */}
+                    <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value={isMuted ? 0 : musicVolume}
+                        onChange={(e) => {
+                            const value = Number(e.target.value);
+                            setMusicVolume(value);
+                            setIsMuted(value === 0);
+                        }}
+                        className="w-20 h-1 accent-emerald-400 cursor-pointer"
+                    />
+                </div>
+
             </motion.div>
         </div>
     );

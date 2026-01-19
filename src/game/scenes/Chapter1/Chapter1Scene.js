@@ -1,7 +1,7 @@
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
-import { unlockBadge } from "../../../utils/unlockBadge"; // ← ADD THIS
+import { unlockBadge } from "../../../utils/unlockBadge";
 import { title } from "framer-motion/client";
 
 export default class Chapter1Scene extends BaseStoryScene {
@@ -49,6 +49,16 @@ export default class Chapter1Scene extends BaseStoryScene {
 
     create() {
         super.create();
+
+
+        // Play background music
+        const bgMusic = this.sound.add('sdgoMusic', { loop: true, volume: 0.3 });
+        bgMusic.play();
+
+        // Save it if you need to stop or adjust later
+        this.bgMusic = bgMusic;
+
+
 
         // ✅ Reset session counters at the START of chapter 1
         localStorage.setItem("sessionSDGPoints", "0");
