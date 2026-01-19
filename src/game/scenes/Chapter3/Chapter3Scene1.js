@@ -2,6 +2,7 @@
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
+import { unlockBadge } from "../../../utils/unlockBadge";
 
 export default class Chapter3Scene1 extends BaseStoryScene {
     constructor() {
@@ -148,7 +149,8 @@ export default class Chapter3Scene1 extends BaseStoryScene {
                     complete: true,
                 });
 
-                emit("badgeEarned", { name: "Putting Knowledge to the Test", icon: "📝", subtitle: "You now know where action actually happens." });
+                emit("badgeEarned", { name: "Putting Knowledge to the Test", icon: "📝", subtitle: "You completed the SDG quiz after guidance." });
+                unlockBadge("putting-knowledge-to-the-test");
             }
         };
 
@@ -176,7 +178,7 @@ export default class Chapter3Scene1 extends BaseStoryScene {
         });
 
         emit("badgeEarned", { name: "Guided by Experience", icon: "🧠", subtitle: "You sought advice instead of guessing your way forward." });
-
+        unlockBadge("guided-by-experience");
         // Unlock door visuals
         this.doorUnlocked = true;
 

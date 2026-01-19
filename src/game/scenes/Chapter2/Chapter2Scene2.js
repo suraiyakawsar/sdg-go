@@ -1,6 +1,8 @@
 // src/scenes/chapter2/Chapter2Scene2.js
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
+import { addSDGPoints } from "../../../utils/sdgPoints";
+import { unlockBadge } from "../../../utils/unlockBadge";
 
 export default class Chapter2Scene2 extends BaseStoryScene {
     constructor() {
@@ -143,7 +145,9 @@ export default class Chapter2Scene2 extends BaseStoryScene {
                     complete: true,
                 });
 
-                emit("badgeEarned", { name: "Reality Check", icon: "📝", subtitle: "You now know where action actually happens." });
+                emit("badgeEarned", { name: "Reality Check", icon: "👀", subtitle: "You now see where action truly happens." });
+
+                unlockBadge("reality-check");
             }
         };
 
@@ -170,6 +174,8 @@ export default class Chapter2Scene2 extends BaseStoryScene {
         });
 
         emit("badgeEarned", { name: "Every Role Matters", icon: "🤝", subtitle: "You realized the impact of collective effort." });
+
+        unlockBadge("every-role-matters");
 
         // Unlock door
         this.doorUnlocked = true;

@@ -3,7 +3,7 @@ import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
 import { saveChapterStats } from "../../../utils/gameSummary";
-import { title } from "framer-motion/client";
+import { unlockBadge } from "../../../utils/unlockBadge";
 
 export default class Chapter3Scene2 extends BaseStoryScene {
     constructor() {
@@ -150,7 +150,8 @@ export default class Chapter3Scene2 extends BaseStoryScene {
                     complete: true,
                 });
 
-                emit("badgeEarned", { name: "Composting Basics", icon: "♻️", subtitle: "Waste can be part of the solution." });
+                emit("badgeEarned", { name: "Composting Basics", icon: "🌱", subtitle: "Waste can be part of the solution." });
+                unlockBadge("composting-basics");
             }
         };
 
@@ -179,8 +180,8 @@ export default class Chapter3Scene2 extends BaseStoryScene {
         });
 
 
-        emit("badgeEarned", { name: "Climate in Action", icon: "🧤", subtitle: "You learned how everyday actions affect the environment." });
-
+        emit("badgeEarned", { name: "Climate in Action", icon: "🌍", subtitle: "You learned how everyday actions affect the environment." });
+        unlockBadge("climate-in-action");
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
 

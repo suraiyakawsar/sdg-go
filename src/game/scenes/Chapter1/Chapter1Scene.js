@@ -2,7 +2,6 @@ import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
 import { unlockBadge } from "../../../utils/unlockBadge";
-import { title } from "framer-motion/client";
 
 export default class Chapter1Scene extends BaseStoryScene {
     constructor() {
@@ -143,7 +142,6 @@ export default class Chapter1Scene extends BaseStoryScene {
 
         emit("badgeEarned", { name: "First Awareness", icon: "🪪", subtitle: "You’ve officially been introduced to the SDGs." });
 
-        // ← UNLOCK BADGE HERE
         unlockBadge("first-awareness");
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
@@ -210,7 +208,7 @@ export default class Chapter1Scene extends BaseStoryScene {
 
             emit("badgeEarned", { name: "Small Actions Matter", icon: "♻️", subtitle: "Real change starts with small, everyday actions." });
 
-            unlockBadge("eco-warrior");
+            unlockBadge("small-actions-matter");
 
             emit("updateObjective", { slot: "secondary", complete: true });
 

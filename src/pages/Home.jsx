@@ -44,25 +44,25 @@ const sdgPreview = {
     mission:
       "Mini-mission: help an NPC find legit support (scholarship, aid, community resources) and avoid scams.",
     choice:
-      "Choice moment: ignore someone struggling vs. connect them to real help (points + empathy badge).",
+      "Choice moment: ignore someone struggling vs. connect them to real help (points + 'Empathy Gained').",
   },
   2: {
     hook: "Hunger is often about affordability and access—not just a lack of food.",
     action:
-      "Micro-action:  reduce food waste—take what you'll finish; store leftovers properly.",
+      "Micro-action: reduce food waste—take what you'll finish; store leftovers properly.",
     mission:
       "Mini-mission: 'Save the Cafeteria'—make choices that cut waste and help redistribute extra food safely.",
     choice:
-      "Choice moment: toss extra food vs. pack/share responsibly (points + 'No Waste').",
+      "Choice moment: toss extra food vs. pack/share responsibly (points + 'Hungry But Aware').",
   },
   3: {
     hook: "Good health includes mental wellbeing, sleep, prevention, and healthy routines.",
     action:
-      "Micro-action:  20–30 min walk, hydrate, and check in on a friend who seems stressed.",
+      "Micro-action: 20–30 min walk, hydrate, and check in on a friend who seems stressed.",
     mission:
       "Mini-mission: guide an NPC toward healthier coping strategies and support options.",
     choice:
-      "Choice moment: give risky advice vs. recommend safe steps/support (points + 'Wellbeing').",
+      "Choice moment: give risky advice vs. recommend safe steps/support (points + 'Empathy Gained').",
   },
   4: {
     hook: "Quality education is access + support + learning that actually sticks—not only grades.",
@@ -71,7 +71,7 @@ const sdgPreview = {
     mission:
       "Mini-mission: 'Peer Tutor'—help an NPC understand a concept through clear, step-by-step explanations.",
     choice:
-      "Choice moment: gatekeep notes vs. help others learn (points + 'Mentor').",
+      "Choice moment: gatekeep notes vs. help others learn (points + 'SDG 101').",
   },
   5: {
     hook: "Equality shows up in everyday behaviour—respect, safety, and fair opportunity.",
@@ -80,7 +80,7 @@ const sdgPreview = {
     mission:
       "Mini-mission: mediate a group conflict where someone is dismissed or excluded unfairly.",
     choice:
-      "Choice moment: stay silent vs. speak up constructively (points + 'Ally').",
+      "Choice moment: stay silent vs. speak up constructively (points + 'Awareness Advocate').",
   },
   6: {
     hook: "Clean water means responsible use and preventing pollution—every drop counts.",
@@ -98,7 +98,7 @@ const sdgPreview = {
     mission:
       "Mini-mission: 'Power Audit'—spot unnecessary energy waste around campus and resolve it.",
     choice:
-      "Choice moment: convenience vs. energy-conscious choice (points + 'Power Smart').",
+      "Choice moment: convenience vs. energy-conscious choice (points + 'Climate in Action').",
   },
   8: {
     hook: "Decent work means fair pay, safe conditions, and respect—especially for juniors.",
@@ -107,7 +107,7 @@ const sdgPreview = {
     mission:
       "Mini-mission: advise an NPC about a sketchy internship/job offer and safer alternatives.",
     choice:
-      "Choice moment: accept exploitation vs. push back/choose better (points + 'Fair Work').",
+      "Choice moment: accept exploitation vs. push back/choose better (points + 'Every Role Matters').",
   },
   9: {
     hook: "Innovation isn't only big tech—it's better solutions for real problems.",
@@ -125,7 +125,7 @@ const sdgPreview = {
     mission:
       "Mini-mission: improve a fictional campus portal's accessibility and inclusivity.",
     choice:
-      "Choice moment: 'looks cool' vs. 'works for everyone' (points + 'Inclusive Designer').",
+      "Choice moment: 'looks cool' vs. 'works for everyone' (points + 'Everyday Awareness').",
   },
   11: {
     hook: "Sustainable cities mean safe spaces, good transport, clean public areas, and community care.",
@@ -134,7 +134,7 @@ const sdgPreview = {
     mission:
       "Mini-mission: plan a safer route and resolve a community issue (trash, lighting, signage).",
     choice:
-      "Choice moment: take a harmful shortcut vs. pick the responsible option (points + 'Civic Care').",
+      "Choice moment: take a harmful shortcut vs. pick the responsible option (points + 'Greener Commute').",
   },
   12: {
     hook: "Responsible consumption is buying less, buying better, and reusing more.",
@@ -143,7 +143,7 @@ const sdgPreview = {
     mission:
       "Mini-mission: 'Fix-it Quest'—choose repair/reuse options instead of buying new.",
     choice:
-      "Choice moment: impulse buy vs. sustainable alternative (points + 'Mindful Buyer').",
+      "Choice moment: impulse buy vs. sustainable alternative (points + 'Small Actions Matter').",
   },
   13: {
     hook: "Climate action is daily habits + community impact—small changes scale.",
@@ -152,7 +152,7 @@ const sdgPreview = {
     mission:
       "Mini-mission: help organise a low-waste campus activity and persuade NPCs to join.",
     choice:
-      "Choice moment: high-emission convenience vs. lower-impact plan (points + 'Climate Hero').",
+      "Choice moment: high-emission convenience vs. lower-impact plan (points + 'Climate in Action').",
   },
   14: {
     hook: "Life below water is threatened by plastic, pollution, and careless waste systems.",
@@ -161,7 +161,7 @@ const sdgPreview = {
     mission:
       "Mini-mission: identify litter sources and improve disposal habits in a coastal-themed scene.",
     choice:
-      "Choice moment: ignore trash vs. act now (points + 'Ocean Guardian').",
+      "Choice moment: ignore trash vs. act now (points + 'Leave It Better').",
   },
   15: {
     hook: "Life on land is biodiversity—healthy ecosystems need protection and smart choices.",
@@ -170,7 +170,7 @@ const sdgPreview = {
     mission:
       "Mini-mission: restore a green corner by choosing native plants and correct care steps.",
     choice:
-      "Choice moment: aesthetic-only vs. biodiversity-friendly pick (points + 'Nature Keeper').",
+      "Choice moment: aesthetic-only vs. biodiversity-friendly pick (points + 'Composting Basics').",
   },
   16: {
     hook: "Peace & justice includes fairness, safety, accountability, and healthy conflict resolution.",
@@ -179,7 +179,7 @@ const sdgPreview = {
     mission:
       "Mini-mission: navigate a conflict dialogue using calm, evidence-based choices.",
     choice:
-      "Choice moment: escalate drama vs. resolve responsibly (points + 'Peace Builder').",
+      "Choice moment: escalate drama vs. resolve responsibly (points + 'Empathy Gained').",
   },
   17: {
     hook: "Partnerships make progress real—collaboration beats solo effort.",
@@ -188,9 +188,10 @@ const sdgPreview = {
     mission:
       "Mini-mission: recruit NPCs and coordinate roles to complete a sustainability activity.",
     choice:
-      "Choice moment: do everything alone vs. coordinate + delegate (points + 'Team Catalyst').",
+      "Choice moment: do everything alone vs. coordinate + delegate (points + 'Every Role Matters').",
   },
 };
+
 
 function AccentWash({ className }) {
   return (
@@ -590,7 +591,7 @@ export default function Home() {
                 {
                   icon: "🏆",
                   label: "Badges to Unlock",
-                  value: "10",
+                  value: "20",
                   suffix: "+",
                   color: "from-cyan-500/20 to-cyan-500/5",
                   borderColor: "border-cyan-400/30",
@@ -600,8 +601,8 @@ export default function Home() {
                 {
                   icon: "🌍",
                   label: "SDG Goals Covered",
-                  value: "17",
-                  suffix: "",
+                  value: "10",
+                  suffix: "+",
                   color: "from-purple-500/20 to-purple-500/5",
                   borderColor: "border-purple-400/30",
                   accentColor: "text-purple-400",

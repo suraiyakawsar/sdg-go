@@ -2,9 +2,7 @@
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
-import { unlockBadge } from "../../../utils/unlockBadge"; // ← ADD THIS
-import { title } from "framer-motion/client";
-
+import { unlockBadge } from "../../../utils/unlockBadge";
 
 export default class Chapter1Scene2 extends BaseStoryScene {
     constructor() {
@@ -130,10 +128,9 @@ export default class Chapter1Scene2 extends BaseStoryScene {
             complete: true,
         });
 
-        emit("badgeEarned", { name: "SDG 101", icon: "🚌", subtitle: "You’ve been formally introduced to the SDGs." });
+        emit("badgeEarned", { name: "SDG 101", icon: "📚", subtitle: "You’ve been formally introduced to the SDGs." });
 
-        // ← UNLOCK BADGE HERE
-        unlockBadge("water-saver");
+        unlockBadge("sdg-101");
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
@@ -205,9 +202,11 @@ export default class Chapter1Scene2 extends BaseStoryScene {
 
         if (!this.objectiveCompleted && this.posterCollected >= this.posterGoal) {
             this.objectiveCompleted = true;
-            unlockBadge("water-saver");
 
             emit("badgeEarned", { name: "Awareness Advocate", icon: "📣", subtitle: "Sustainability exists in ordinary spaces." });
+
+            unlockBadge("awareness-advocate");
+
             emit("updateObjective", { slot: "secondary", complete: true });
         }
     }

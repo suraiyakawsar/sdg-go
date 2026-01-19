@@ -2,7 +2,7 @@ import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
 import { saveChapterStats } from "../../../utils/gameSummary";
-import { title } from "framer-motion/client";
+import { unlockBadge } from "../../../utils/unlockBadge";
 
 export default class Chapter1Scene3 extends BaseStoryScene {
   constructor() {
@@ -152,6 +152,8 @@ export default class Chapter1Scene3 extends BaseStoryScene {
 
     emit("badgeEarned", { name: "On the Right Track", icon: "🧭", subtitle: "You’re no longer just aware, you’re moving forward." });
 
+    unlockBadge("on-the-right-track");
+
     // unlock door visuals + logic (BaseStoryScene has the glow helper)
     this.doorUnlocked = true;
 
@@ -222,7 +224,11 @@ export default class Chapter1Scene3 extends BaseStoryScene {
 
     if (!this.objectiveCompleted && this.posterCollected >= this.posterGoal) {
       this.objectiveCompleted = true;
-      emit("badgeEarned", { name: "Hungry But Aware", icon: "🍒", subtitle: "Sustainability exists even when you're starving." });
+      emit("badgeEarned", { name: "Hungry But Aware", icon: "🍎", subtitle: "Sustainability exists even when you're starving." });
+
+      unlockBadge("hungry-but-aware");
+
+
       emit("updateObjective", { slot: "secondary", complete: true });
     }
   }
@@ -245,7 +251,9 @@ export default class Chapter1Scene3 extends BaseStoryScene {
     }
 
     this.bag.once("pointerdown", () => {
-      emit("badgeEarned", { name: "Curious Cat", icon: "😼", subtitle: "Why are you touching other people's bag?" });
+      emit("badgeEarned", { name: "Curious Cat", icon: "😼", subtitle: "You noticed something unusual about someone lingering around." });
+
+      unlockBadge("curious-cat");
     });
   }
 

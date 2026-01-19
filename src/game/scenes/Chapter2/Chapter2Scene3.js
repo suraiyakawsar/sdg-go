@@ -3,6 +3,7 @@ import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
 import { saveChapterStats } from "../../../utils/gameSummary";
+import { unlockBadge } from "../../../utils/unlockBadge";
 
 export default class Chapter2Scene3 extends BaseStoryScene {
     constructor() {
@@ -136,7 +137,8 @@ export default class Chapter2Scene3 extends BaseStoryScene {
                     complete: true,
                 });
 
-                emit("badgeEarned", { name: "Empathy Gained", icon: "❤️", subtitle: "You now see the impact through a real person." });
+                emit("badgeEarned", { name: "Quiet Companion", icon: "🐱", subtitle: "Some support doesn’t need words." });
+                unlockBadge("quiet-companion");
             }
         };
 
@@ -165,6 +167,8 @@ export default class Chapter2Scene3 extends BaseStoryScene {
 
 
         emit("badgeEarned", { name: "Empathy Gained", icon: "❤️", subtitle: "You now see the impact through a real person." });
+
+        unlockBadge("empathy-gained");
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;

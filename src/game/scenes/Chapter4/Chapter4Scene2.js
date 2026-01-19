@@ -3,8 +3,7 @@ import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { saveChapterStats } from "../../../utils/gameSummary";
 import { addSDGPoints } from "../../../utils/sdgPoints";
-import { unlockBadge } from "../../../utils/unlockBadge"; // ← ADD THIS
-
+import { unlockBadge } from "../../../utils/unlockBadge";
 
 export default class Chapter4Scene2 extends BaseStoryScene {
     constructor() {
@@ -144,9 +143,9 @@ export default class Chapter4Scene2 extends BaseStoryScene {
             complete: true,
         });
 
-        emit("badgeEarned", { name: "Greener Commute", icon: "🚌", subtitle: "Small transport choices have big impact." });
+        emit("badgeEarned", { name: "Greener Commute", icon: "🚍", subtitle: "Small transport choices have big impact." });
 
-        unlockBadge("water-saver");
+        unlockBadge("greener-commute");
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
@@ -207,7 +206,10 @@ export default class Chapter4Scene2 extends BaseStoryScene {
 
         if (!this.objectiveCompleted && this.posterCollected >= this.posterGoal) {
             this.objectiveCompleted = true;
-            emit("badgeEarned", { name: "Everyday Awareness", icon: "🚌", subtitle: "Sustainability exists in ordinary spaces." });
+            emit("badgeEarned", { name: "Everyday Awareness", icon: "👀", subtitle: "Sustainability exists in ordinary spaces." });
+
+            unlockBadge("everyday-awareness");
+
             emit("updateObjective", { slot: "secondary", complete: true });
         }
     }

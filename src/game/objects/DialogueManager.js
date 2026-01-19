@@ -566,8 +566,6 @@ export default class DialogueManager {
   }
 
 
-
-
   _handleNodeComplete(node) {
     const oc = node?.onComplete;
     if (!oc) return;

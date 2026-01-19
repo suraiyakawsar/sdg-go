@@ -1,8 +1,7 @@
 import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
-import { unlockBadge } from "../../../utils/unlockBadge"; // ← ADD THIS
-import { title } from "framer-motion/client";
+import { unlockBadge } from "../../../utils/unlockBadge";
 
 export default class Chapter2Scene1 extends BaseStoryScene {
     constructor() {
@@ -145,8 +144,7 @@ export default class Chapter2Scene1 extends BaseStoryScene {
 
         emit("badgeEarned", { name: "First-Hand Experience", icon: "🥫", subtitle: "You didn’t just hear about it, you showed up." });
 
-        // ← UNLOCK BADGE HERE
-        unlockBadge("fast-learner");
+        unlockBadge("first-hand-experience");
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
@@ -220,9 +218,9 @@ export default class Chapter2Scene1 extends BaseStoryScene {
         if (!this.objectiveCompleted && this.posterCollected >= this.posterGoal) {
             this.objectiveCompleted = true;
 
-            emit("badgeEarned", { name: "Understanding the Process", icon: "📦", subtitle: "Real change starts with small, everyday actions." });
+            emit("badgeEarned", { name: "Understanding the Process", icon: "📦", subtitle: "You learned how the food bank operates behind the scenes." });
 
-            unlockBadge("eco-warrior");
+            unlockBadge("understanding-the-process");
 
             emit("updateObjective", { slot: "secondary", complete: true });
         }

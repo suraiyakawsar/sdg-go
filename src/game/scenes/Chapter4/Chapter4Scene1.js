@@ -3,7 +3,8 @@ import BaseStoryScene from "../BaseStoryScene";
 import { emit, on, off } from "../../../utils/eventBus";
 import { addSDGPoints } from "../../../utils/sdgPoints";
 import { saveChapterStats } from "../../../utils/gameSummary";
-import { title } from "framer-motion/client";
+import { unlockBadge } from "../../../utils/unlockBadge";
+
 export default class Chapter4Scene1 extends BaseStoryScene {
     constructor() {
         super("Chapter4Scene1", {
@@ -155,8 +156,7 @@ export default class Chapter4Scene1 extends BaseStoryScene {
 
         emit("badgeEarned", { name: "Hands-On Help", icon: "🧤", subtitle: "You learned from someone who leads by example." });
 
-        // ← UNLOCK BADGE HERE
-        unlockBadge("fast-learner");
+        unlockBadge("hands-on-help");
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
@@ -224,9 +224,9 @@ export default class Chapter4Scene1 extends BaseStoryScene {
         if (!this.objectiveCompleted && this.trashCollected >= this.trashGoal) {
             this.objectiveCompleted = true;
 
-            emit("badgeEarned", { name: "Leave It Better", icon: "🧤", subtitle: "You improved a shared space through action." });
+            emit("badgeEarned", { name: "Leave It Better", icon: "🏞️", subtitle: "You improved a shared space through action." });
 
-            unlockBadge("eco-warrior");
+            unlockBadge("leave-it-better");
 
             emit("updateObjective", { slot: "secondary", complete: true });
 
