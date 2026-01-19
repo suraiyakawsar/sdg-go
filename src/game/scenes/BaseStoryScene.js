@@ -5,6 +5,8 @@ import { emit, on, off } from "../../utils/eventBus";
 import { getPoints } from "../../utils/sdgPoints";
 import TooltipManager from "../objects/TooltipManager";
 import NPCIndicator from "../objects/NPCIndicator";
+import { playBGM, setBGMVolume } from "../../pages/BGM";
+
 export default class BaseStoryScene extends Phaser.Scene {
     constructor(key, config = {}) {
         super(key);
@@ -40,6 +42,12 @@ export default class BaseStoryScene extends Phaser.Scene {
     }
 
     create() {
+        // ✅ Reset scene points display when entering any scene
+        localStorage.setItem("sceneSDGPoints", "0");
+        emit("resetScenePoints");
+
+        console.log("🔄 Scene started: Display points reset to 0");
+
         this._createUILayer();
         // this._createCoordinateDebug(); // Add this
         this._createCameraAndBackground();
@@ -74,32 +82,14 @@ export default class BaseStoryScene extends Phaser.Scene {
     }
 
     _musicPlayback() {
-        // Reuse existing music if already playing
-        if (!this.sound.get('sdgoMusic')) {
-            this.bgMusic = this.sound.add('sdgoMusic', {
-                loop: true,
-                volume: 0.3
-            });
-        } else {
-            this.bgMusic = this.sound.get('sdgoMusic');
-        }
-
         this.input.once("pointerdown", () => {
-            this.sound.context.resume();
-
-            if (!this.bgMusic.isPlaying) {
-                this.bgMusic.play();
-            }
+            playBGM(this);
         });
 
-        const handleVolume = (v) => {
-            if (this.bgMusic) this.bgMusic.setVolume(v);
-        };
-
-        on("setMusicVolume", handleVolume);
+        on("setMusicVolume", setBGMVolume);
 
         this.events.once("shutdown", () => {
-            off("setMusicVolume", handleVolume);
+            off("setMusicVolume", setBGMVolume);
         });
 
     }

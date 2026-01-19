@@ -6,9 +6,13 @@ import { on, off } from "../../utils/eventBus";
 
 export default function RightSidebar() {
     // ⭐ SDG STATE
-    const [sdgPoints, setSdgPoints] = useState(() => {
-        return Number(localStorage.getItem("sdgPoints")) || 0;  // Loads on mount
-    });
+    // const [sdgPoints, setSdgPoints] = useState(() => {
+    //     return Number(localStorage.getItem("sdgPoints")) || 0;  // Loads on mount
+    // });
+    const [sdgPoints, setSdgPoints] = useState(0);  // ← Always start at 0
+    // FLOATING TEXT & PARTICLES
+    const [floatingText, setFloatingText] = useState(null); // { text, label } | null
+    const [particles, setParticles] = useState([]);
 
     // ⭐ PRIMARY OBJECTIVE
     const [primaryObj, setPrimaryObj] = useState({
@@ -74,9 +78,7 @@ export default function RightSidebar() {
     const sdgBarPercent = Math.min(sdgPoints, SDG_BAR_MAX);
 
 
-    // FLOATING TEXT & PARTICLES
-    const [floatingText, setFloatingText] = useState(null); // { text, label } | null
-    const [particles, setParticles] = useState([]);
+
 
     const getSDGColor = (value) => {
         if (value < 30) return "from-green-400 to-yellow-400";
@@ -112,18 +114,58 @@ export default function RightSidebar() {
     // ============================================================
     // SDG UPDATES (delta)
     // ============================================================
+    // Change your state to track SCENE points (not lifetime)
+
+    // Update your useEffect for SDG points
     useEffect(() => {
         const handleSdgUpdate = (delta) => {
+            // ✅ Update displayed points (scene-level)
             setSdgPoints((prev) => prev + delta);
 
-            // ✅ ADD THIS:  Trigger floating text
-            if (delta !== 0) {
-                triggerEffects(formatDelta(delta), "SDG", "sdg");
-            }
+            // ✅ Show floating text
+            const isPositive = delta > 0;
+            setFloatingText({
+                text: isPositive ? `+${delta}` : `${delta}`,
+                label: isPositive ? "Good choice!" : "Careless choice",
+                positive: isPositive,
+            });
+
+
+
+            // ✅ Also update scene storage
+            const current = Number(localStorage.getItem("sceneSDGPoints")) || 0;
+            localStorage.setItem("sceneSDGPoints", String(current + delta));
+
+
+            // ✅ Spawn particles
+            const newParticles = Array.from({ length: 6 }, (_, i) => ({
+                id: Date.now() + i,
+                x: Math.random() * 60 - 30,
+                y: Math.random() * -40 - 20,
+                positive: isPositive,
+            }));
+            setParticles(newParticles);
+
+            // ✅ Clear floating text after animation
+            setTimeout(() => setFloatingText(null), 1200);
+            setTimeout(() => setParticles([]), 1000);
+
         };
+
+        const handleReset = () => {
+            setSdgPoints(0);
+            console.log("🔄 Scene points reset to 0");
+        };
+
         on("updateSDGPoints", handleSdgUpdate);
-        return () => off("updateSDGPoints", handleSdgUpdate);
+        on("resetScenePoints", handleReset);
+
+        return () => {
+            off("updateSDGPoints", handleSdgUpdate);
+            off("resetScenePoints", handleReset);
+        };
     }, []);
+
 
     // ============================================================
     // OBJECTIVE UPDATES  (primary / secondary / preview)

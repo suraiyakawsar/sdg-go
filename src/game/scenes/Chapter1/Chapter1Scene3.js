@@ -63,7 +63,17 @@ export default class Chapter1Scene3 extends BaseStoryScene {
   }
 
   create() {
+
+    console.log("🎬 Chapter3Scene2. create() called");
+    console.log("Session values in scene create:", {
+      sessionSDGPoints: localStorage.getItem("sessionSDGPoints"),
+      sessionGoodChoices: localStorage.getItem("sessionGoodChoices"),
+      sessionBadChoices: localStorage.getItem("sessionBadChoices"),
+    });
+
     super.create();
+    // ... rest of your code
+
 
     // ✅ Store current scene (NO SPACE in key)
     localStorage.setItem("sdgo:lastRoute", "/game");

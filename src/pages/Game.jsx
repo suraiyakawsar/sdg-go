@@ -15,6 +15,20 @@ import ChapterSummary from "./ChapterSummary";
 export default function Game() {
   const [ready, setReady] = useState(false);
 
+
+
+
+  useEffect(() => {
+    // ✅ Reset SCENE points (display) - but NOT session points
+    localStorage.setItem("sceneSDGPoints", "0");
+
+    // Tell UI to reset display
+    emit("resetScenePoints");
+
+    console.log("🔄 Scene loaded: Display points reset to 0");
+  }, []);
+
+
   // ✅ Chapter summary state
   const [showChapterSummary, setShowChapterSummary] = useState(false);
   const [completedChapter, setCompletedChapter] = useState(null);
