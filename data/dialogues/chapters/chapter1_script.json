@@ -9,23 +9,38 @@
             "nodes": [
                 {
                     "id": "h_intro_narration",
-                    "speaker": "narrator",
-                    "text": "First day of the new semester. The hallway feels a little louder, a little brighter... and full of posters you never noticed before."
+                    "speaker": "Narrator",
+                    "text": "First day of the new semester at the APU. The hallway buzzes with students catching up after the holidays. Colourful posters line the walls...something about 'Sustainability Week'."
                 },
                 {
                     "id": "h_noticeboard",
-                    "speaker": "narrator",
-                    "text": "SUSTAINABILITY WEEK – Talks, clean-up events, food bank volunteering. Sign up at the cafeteria."
+                    "speaker": "Narrator",
+                    "text": "MINGGU KELESTARIAN APU — Sign up for talks and activities at the cafeteria. Food bank volunteering details will be shared in class."
+                },
+                {
+                    "id": "inspect_npcboy",
+                    "speaker": "Narrator",
+                    "text": "A senior student checking his phone. He looks like he's waiting for someone."
+                },
+                {
+                    "id": "inspect_npcgirl",
+                    "speaker": "Narrator",
+                    "text": "Your coursemate, Sara. She's always involved in campus activities."
+                },
+                {
+                    "id": "inspect_noticeboard",
+                    "speaker": "Narrator",
+                    "text": "The noticeboard is covered with event posters. One catches your eye — 'Be the Change: SDG Campus Challenge'."
                 },
                 {
                     "id": "h_friends_start",
-                    "speaker": "friendA",
-                    "text": "Oi, over here! You saw all the new posters around campus?",
+                    "speaker": "Sara",
+                    "text": "Eh, hi! Over here lah! This is Zheng Lam, by the way. Same intake, same class as us. So, you saw all the new posters around campus or not?",
                     "choices": [
                         {
                             "id": "h_choice_seen_posters",
-                            "text": "Yeah, something about SDGs, right?",
-                            "sdgDelta": 5,
+                            "text": "Yeah, something about SDGs right? Looks interesting.",
+                            "sdgDelta": 2,
                             "setFlags": [
                                 "interest_sdg_positive"
                             ],
@@ -33,8 +48,8 @@
                         },
                         {
                             "id": "h_choice_not_sure",
-                            "text": "Not really… what’s SDG?",
-                            "sdgDelta": 3,
+                            "text": "SDG? What's that ah? First time hearing.",
+                            "sdgDelta": 1,
                             "setFlags": [
                                 "interest_sdg_neutral"
                             ],
@@ -42,8 +57,9 @@
                         },
                         {
                             "id": "h_choice_extra_work",
-                            "text": "Looks like extra work to me.",
-                            "sdgDelta": 0,
+                            "text": "Aiya, more activities ah? Already got so much assignment.",
+                            "sdgDelta": -1,
+                            "isCareless": true,
                             "setFlags": [
                                 "interest_sdg_indifferent"
                             ],
@@ -53,54 +69,53 @@
                 },
                 {
                     "id": "h_explain_positive",
-                    "speaker": "friendA",
-                    "text": "Yeah! Sustainable Development Goals. The uni is doing a whole week about it.",
+                    "speaker": "Sara",
+                    "text": "Ha ah! Sustainable Development Goals. The uni is doing a whole week about it. Got 17 goals covering everything from poverty to climate change.",
                     "autoNext": "h_explain_positive_b"
                 },
                 {
                     "id": "h_explain_positive_b",
-                    "speaker": "friendB",
-                    "text": "They’re doing talks, clean-ups, even something with the campus food bank.",
+                    "speaker": "Zheng Lam",
+                    "text": "Best part is they're connecting it to stuff we can actually do on campus. Not just theory theory only.",
                     "autoNext": "h_friends_wrapup"
                 },
                 {
                     "id": "h_explain_neutral",
-                    "speaker": "friendB",
-                    "text": "SDG stands for Sustainable Development Goals. Stuff like education, equality, climate…",
+                    "speaker": "Zheng Lam",
+                    "text": "Wah, you don't know meh? SDG is Sustainable Development Goals lah. Like education equality, clean water, climate action...big stuff.",
                     "autoNext": "h_explain_neutral_b"
                 },
                 {
                     "id": "h_explain_neutral_b",
-                    "speaker": "friendA",
-                    "text": "You might not know yet, but even small actions matter here on campus.",
+                    "speaker": "Sara",
+                    "text": "Don't worry, I also blur blur at first. But apparently even small things we do on campus can contribute. Interesting right?",
                     "autoNext": "h_friends_wrapup"
                 },
                 {
                     "id": "h_explain_pushback",
-                    "speaker": "friendA",
-                    "text": "Maybe. But if we’re already stuck here studying, might as well make it mean something.",
+                    "speaker": "Sara",
+                    "text": "Haiya, I know lah you busy. But think about it. We already spending time here, might as well do something meaningful kan?",
                     "autoNext": "h_explain_pushback_b"
                 },
                 {
                     "id": "h_explain_pushback_b",
-                    "speaker": "friendB",
-                    "text": "You don’t have to save the whole world lah, just do something small.",
+                    "speaker": "Zheng Lam",
+                    "text": "Betul tu. You don't have to save the whole world. Just do sikit sikit. Small actions also count what.",
                     "autoNext": "h_friends_wrapup"
                 },
                 {
                     "id": "h_friends_wrapup",
-                    "speaker": "friendA",
-                    "text": "Anyway, the lecturer said today’s class is about it. If we’re late, that one is on you.",
+                    "speaker": "Sara",
+                    "text": "Anyway, Prof Riza's class today is about this SDG thing. Jom, later we kena tegur for being late.",
                     "autoNext": "h_objective_update"
                 },
                 {
                     "id": "h_objective_update",
                     "speaker": "system",
-                    "text": "New objective: Go to class to learn how SDGs relate to your campus life.",
+                    "text": "New objective: Attend Prof Riza's class to learn how SDGs connect to campus life.",
                     "onComplete": {
                         "setFlags": [
-                            "chapter1_scene1_dialogue_done",
-                            "{major_choice_flag}"
+                            "chapter1_scene1_dialogue_done"
                         ],
                         "unlockExit": true,
                         "points": 2
@@ -116,25 +131,46 @@
             "nodes": [
                 {
                     "id": "c_intro_prof",
-                    "speaker": "professor",
-                    "text": "Good morning, everyone. Today we’re going to talk about something bigger than grades: the Sustainable Development Goals.",
+                    "speaker": "Narrator",
+                    "text": "The lecture class fills up quickly. Prof Riza, known for her passionate teaching style, stands at the front."
+                },
+                {
+                    "id": "inspect_professor",
+                    "speaker": "Narrator",
+                    "text": "Prof Riza has been teaching Sustainability Studies for 15 years. Students say her classes change perspectives."
+                },
+                {
+                    "id": "inspect_student",
+                    "speaker": "Narrator",
+                    "text": "A student furiously taking notes. Seems really into the topic."
+                },
+                {
+                    "id": "c_prof_start",
+                    "speaker": "Prof Riza",
+                    "text": "Selamat pagi, everyone. Today we're going to talk about something bigger than your CGPA, the Sustainable Development Goals.",
                     "autoNext": "c_prof_explain"
                 },
                 {
                     "id": "c_prof_explain",
-                    "speaker": "professor",
-                    "text": "There are 17 SDGs. They cover poverty, education, climate, equality… and we’ll connect them to your lives here on campus.",
+                    "speaker": "Prof Riza",
+                    "text": "Ada 17 SDGs. They cover poverty, education, climate change, equality, and we'll connect them to your lives right here in APU.",
+                    "autoNext": "c_prof_example"
+                },
+                {
+                    "id": "c_prof_example",
+                    "speaker": "Prof Riza",
+                    "text": "Last semester, some seniors worked with the campus food bank. They helped redistribute surplus food from Dewan Makan to students yang memerlukan.",
                     "autoNext": "c_prof_question"
                 },
                 {
                     "id": "c_prof_question",
-                    "speaker": "professor",
-                    "text": "Be honest. How many of you think students like you can make a difference?",
+                    "speaker": "Prof Riza",
+                    "text": "Now, be honest with me. How many of you actually believe students like you can make a change?",
                     "choices": [
                         {
                             "id": "c_choice_confident",
-                            "text": "If we work together, yeah.",
-                            "sdgDelta": 5,
+                            "text": "If we work together, I think we can make a difference.",
+                            "sdgDelta": 3,
                             "setFlags": [
                                 "confidence_positive"
                             ],
@@ -142,8 +178,8 @@
                         },
                         {
                             "id": "c_choice_unsure",
-                            "text": "Maybe? But it feels far from us.",
-                            "sdgDelta": 3,
+                            "text": "Honestly Prof, it feels quite far from us. We're just students.",
+                            "sdgDelta": 2,
                             "setFlags": [
                                 "confidence_neutral"
                             ],
@@ -151,8 +187,9 @@
                         },
                         {
                             "id": "c_choice_dismissive",
-                            "text": "I don’t think we can do much.",
-                            "sdgDelta": -1,
+                            "text": "Susah lah Prof. We got assignments, exams...where got time?",
+                            "sdgDelta": -2,
+                            "isCareless": true,
                             "setFlags": [
                                 "confidence_negative"
                             ],
@@ -162,42 +199,41 @@
                 },
                 {
                     "id": "c_prof_answer_confident",
-                    "speaker": "professor",
-                    "text": "Exactly. Change starts with small groups taking things seriously. Campus is perfect for experimenting.",
+                    "speaker": "Prof Riza",
+                    "text": "Bagus! That's the spirit. Change always starts with a small group of people who take things seriously. Campus is the perfect place to experiment.",
                     "autoNext": "c_prof_foodbank"
                 },
                 {
                     "id": "c_prof_answer_unsure",
-                    "speaker": "professor",
-                    "text": "It can feel distant. That’s why your projects this semester focus on real issues around you.",
+                    "speaker": "Prof Riza",
+                    "text": "I understand that feeling. That's exactly why your projects this semester will focus on real issues around you. Make it personal.",
                     "autoNext": "c_prof_foodbank"
                 },
                 {
                     "id": "c_prof_answer_dismissive",
-                    "speaker": "professor",
-                    "text": "I get that reaction a lot. By the end of the semester, I hope you’ll prove yourself wrong.",
+                    "speaker": "Prof Riza",
+                    "text": "I hear this every semester. But you know what? By the end of this course, I hope you'll surprise yourself. Give yourself a chance.",
                     "autoNext": "c_prof_foodbank"
                 },
                 {
                     "id": "c_prof_foodbank",
-                    "speaker": "professor",
-                    "text": "Some seniors worked with the campus food bank last year, helping redistribute surplus food to students who needed it.",
+                    "speaker": "Prof Riza",
+                    "text": "The food bank I mentioned tadi, they're looking for volunteers this week. Sorting, packing, distributing. Siapa interested, sign up at the caf.",
                     "autoNext": "c_friend_whisper"
                 },
                 {
                     "id": "c_friend_whisper",
-                    "speaker": "friend",
-                    "text": "(whispers) Food bank actually sounds kind of interesting, doesn’t it?",
+                    "speaker": "Sara",
+                    "text": "(whispers) Eh, food bank kinda sounds interesting kan? Real hands-on experience, not just sitting in class.",
                     "autoNext": "c_system_idea"
                 },
                 {
                     "id": "c_system_idea",
                     "speaker": "system",
-                    "text": "New idea unlocked: Campus Food Bank.",
+                    "text": "New idea unlocked: Campus Food Bank Volunteering (SDG 2: Zero Hunger)",
                     "onComplete": {
                         "setFlags": [
-                            "chapter1_scene2_dialogue_done",
-                            "{major_choice_flag}"
+                            "chapter1_scene2_dialogue_done"
                         ],
                         "unlockExit": true,
                         "points": 3
@@ -205,93 +241,145 @@
                 },
                 {
                     "id": "c_bench_1",
-                    "inspectDialogueId": "inspect_c_bench_1",
-                    "speaker": "student",
-                    "text": "Honestly… I thought SDGs were just another poster thing. But the food bank example is real.",
-                    "sdgDelta": 1
-                },
-                {
-                    "id": "c_poster_sdg4",
-                    "inspectDialogueId": "inspect_c_poster_sdg4",
-                    "speaker": "system",
-                    "text": "Poster: SDG 4 — Quality Education. Education isn't just exams; it’s access, support, and equal opportunity.",
-                    "sdgDelta": 2
-                },
-                {
-                    "id": "c_poster_sdg13",
-                    "inspectDialogueId": "inspect_c_poster_sdg13",
-                    "speaker": "system",
-                    "text": "Poster: SDG 13 — Climate Action. Small campus habits add up: energy use, waste, transport choices.",
-                    "sdgDelta": 2
+                    "speaker": "Student",
+                    "text": "Honestly...I thought SDGs were just another poster thing. But the food bank example tu real lah. Students helping students."
                 }
             ]
         },
         {
             "id": "cafeteria",
             "backgroundKey": "bgCafeteria",
-            "startNodeId": "f_intro_friends",
+            "startNodeId": "f_intro_narration",
             "exitUnlockedFlag": "chapter1_scene3_exit_unlocked",
             "nodes": [
                 {
+                    "id": "f_intro_narration",
+                    "speaker": "Narrator",
+                    "text": "The cafeteria is busy with the lunch crowd. You spot your classmates at a table near the Fire Exit."
+                },
+                {
+                    "id": "inspect_friends",
+                    "speaker": "Narrator",
+                    "text": "Your classmates are deep in conversation, pointing at something on Sara's phone."
+                },
+                {
+                    "id": "inspect_alice",
+                    "speaker": "Narrator",
+                    "text": "Sara, again. She's always organizing something. Not sure why she is here though."
+                },
+                {
                     "id": "friend_looking_posters",
-                    "text": "Hey, you checking out those SDG posters too?",
+                    "speaker": "Chai Lam",
+                    "text": "Eh, you checking out those SDG posters too? They actually put some effort into these designs leh.",
                     "choices": [
                         {
-                            "text": "Okay",
+                            "text": "Yeah, quite informative actually.",
+                            "sdgDelta": 1,
                             "nextNodeId": null
                         }
                     ]
                 },
                 {
                     "id": "alice_npc",
-                    "speaker": "Alice",
-                    "text": "Oh hello."
+                    "speaker": "Sara",
+                    "text": "Oh, hi! The food bank sign-up is over there if you're interested!"
                 },
                 {
                     "id": "f_intro_friends",
-                    "speaker": "friendA",
-                    "text": "Over here! How was class?",
+                    "speaker": "Chai Lam",
+                    "text": "Walao, finally! Did Prof Riza drag the class overtime again?",
                     "choices": [
                         {
                             "id": "f_choice_interesting",
-                            "text": "Interesting, actually.",
+                            "text": "Honestly? It was eye-opening. Totally new perspective.",
                             "sdgDelta": 2,
                             "nextNodeId": "f_friend_react_interesting"
                         },
                         {
                             "id": "f_choice_intense",
-                            "text": "Kind of intense, but okay.",
+                            "text": "Intense lah, but at least it's real issues. Not just theory.",
                             "sdgDelta": 1,
                             "nextNodeId": "f_friend_react_intense"
+                        },
+                        {
+                            "id": "f_choice_boring",
+                            "text": "Same lah, lecture is lecture. I was half asleep honestly.",
+                            "sdgDelta": -2,
+                            "isCareless": true,
+                            "nextNodeId": "f_friend_react_boring"
                         }
                     ]
                 },
                 {
                     "id": "f_friend_react_interesting",
-                    "speaker": "friendB",
-                    "text": "Same. The SDG stuff makes everything feel… bigger than just assignments.",
-                    "autoNext": "f_friend_foodbank_intro"
+                    "speaker": "Chai Lam",
+                    "text": "Right?! The SDG stuff makes everything feel...bigger than just chasing grades. Like we're part of something.",
+                    "autoNext": "f_player_curiosity"
                 },
                 {
                     "id": "f_friend_react_intense",
-                    "speaker": "friendB",
-                    "text": "Yeah, but at least it’s about something real. Not just theory.",
+                    "speaker": "Zheng Lam",
+                    "text": "At least it's not just theory. Prof Riza always brings real examples. That food bank idea stuck with me.",
+                    "autoNext": "f_player_curiosity"
+                },
+                {
+                    "id": "f_friend_react_boring",
+                    "speaker": "Jason",
+                    "text": "Aiyo, typical you. But seriously, the food bank part was legit. You missed out lah.",
+                    "autoNext": "f_player_curiosity"
+                },
+                {
+                    "id": "f_player_curiosity",
+                    "speaker": "Me",
+                    "text": "Wait...how does the food bank actually work?",
+                    "choices": [
+                        {
+                            "id": "f_curiosity_benefits",
+                            "text": "Who actually benefits from this?",
+                            "sdgDelta": 2,
+                            "nextNodeId": "f_curiosity_answer_benefits"
+                        },
+                        {
+                            "id": "f_curiosity_operation",
+                            "text": "Is this run by students or the uni?",
+                            "sdgDelta": 1,
+                            "nextNodeId": "f_curiosity_answer_operation"
+                        },
+                        {
+                            "id": "f_curiosity_neutral",
+                            "text": "Nevermind lah, don't really care that much.",
+                            "sdgDelta": -2,
+                            "isCareless": true,
+                            "nextNodeId": "f_friend_foodbank_intro"
+                        }
+                    ]
+                },
+                {
+                    "id": "f_curiosity_answer_benefits",
+                    "speaker": "Zheng Lam",
+                    "text": "Mostly students who struggling a bit, financial issues, unexpected stuff. Sometimes international students also.",
+                    "autoNext": "f_friend_foodbank_intro"
+                },
+                {
+                    "id": "f_curiosity_answer_operation",
+                    "speaker": "Zheng Lam",
+                    "text": "Joint effort. Student volunteers handle the work, uni helps with space and logistics.",
                     "autoNext": "f_friend_foodbank_intro"
                 },
                 {
                     "id": "f_friend_foodbank_intro",
-                    "speaker": "friendA",
-                    "text": "We were just talking about the food bank the lecturer mentioned. They’re asking for student helpers this week.",
+                    "speaker": "Zheng Lam",
+                    "text": "Anyway, speaking of food banks, I actually looked it up just now during lunch and found out about Dewan Makan. They need helpers this week. Just sorting and packing after class. Nearby only, in Sungai Besi.",
                     "autoNext": "f_friend_question"
                 },
                 {
                     "id": "f_friend_question",
-                    "speaker": "friendA",
-                    "text": "They need people to help sort and pack food after classes. What do you think? Want to join?",
+                    "speaker": "Zheng Lam",
+                    "text": "It's behind the Golf place, you know the one near Selangor Turf Club? Only 10 minutes to go there, help out for 2-3 hours. Got time before next class. What do you think? Wanna join us?",
                     "choices": [
                         {
                             "id": "f_choice_join_yes",
-                            "text": "Yes. I want to help.",
+                            "text": "Count me in. I want to see how it actually works.",
                             "sdgDelta": 5,
                             "setFlags": [
                                 "initiative_foodbank"
@@ -300,7 +388,7 @@
                         },
                         {
                             "id": "f_choice_join_maybe",
-                            "text": "Maybe… I’ll see how my schedule is.",
+                            "text": "Hmm, let me check my schedule first. Got tutorial tomorrow.",
                             "sdgDelta": 2,
                             "setFlags": [
                                 "initiative_foodbank_neutral"
@@ -309,8 +397,9 @@
                         },
                         {
                             "id": "f_choice_join_no",
-                            "text": "I don’t know if I’m the right person for that.",
-                            "sdgDelta": 0,
+                            "text": "Eh, I don't know lah. Not really my thing, all this volunteering stuff.",
+                            "sdgDelta": -2,
+                            "isCareless": true,
                             "setFlags": [
                                 "initiative_foodbank_no"
                             ],
@@ -320,8 +409,8 @@
                 },
                 {
                     "id": "f_friend_join_yes",
-                    "speaker": "friendB",
-                    "text": "Nice! We’ll go together. I’ll send you the details later.",
+                    "speaker": "Sara",
+                    "text": "Yes! Best lah. We go together. I'll add you to the WhatsApp group. They got free milo after volunteering also tau!",
                     "onComplete": {
                         "points": 5,
                         "setFlags": [
@@ -332,26 +421,26 @@
                 },
                 {
                     "id": "f_friend_join_maybe",
-                    "speaker": "friendB",
-                    "text": "That’s okay. Even one day helps. Just let us know when you’re free.",
+                    "speaker": "Chai Lam",
+                    "text": "Okay okay, no pressure. But even one day also helps. Just let us know. We go every Thursday after 4.",
                     "autoNext": "f_friend_closing"
                 },
                 {
                     "id": "f_friend_join_no",
-                    "speaker": "friendA",
-                    "text": "You don’t have to be perfect for this. You just have to care a little. Think about it, okay?",
+                    "speaker": "Sara",
+                    "text": "Hmm, okay lah. But think about it? You don't have to be perfect for this. Just show up and help sikit. That's already a lot.",
                     "autoNext": "f_friend_closing"
                 },
                 {
                     "id": "f_friend_closing",
-                    "speaker": "friendA",
-                    "text": "Anyway, drinks first, saving the world later.",
+                    "speaker": "Chai Lam",
+                    "text": "Alright, enough serious talk. Jom makan dulu, saving the world later. The nasi lemak here today quite sedap.",
                     "autoNext": "f_system_end"
                 },
                 {
                     "id": "f_system_end",
                     "speaker": "system",
-                    "text": "End of Chapter 1: Awareness Begins.",
+                    "text": "End of Chapter 1: Awareness Begins. You have seen how small choices on campus connect to bigger issues. What you do next is up to you.",
                     "onComplete": {
                         "setFlags": [
                             "chapter1_completed",

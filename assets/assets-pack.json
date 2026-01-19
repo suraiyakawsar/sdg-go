@@ -32,19 +32,9 @@
                 "key": "bgMeeting"
             },
             {
-                "url": "assets/images/environments/bgNightCourtyard.png",
-                "type": "image",
-                "key": "bgNightCourtyard"
-            },
-            {
                 "url": "assets/images/environments/bgPond.png",
                 "type": "image",
                 "key": "bgPond"
-            },
-            {
-                "url": "assets/images/environments/bgRoadside.png",
-                "type": "image",
-                "key": "bgRoadside"
             },
             {
                 "url": "assets/images/environments/bgStreet.png",
@@ -52,9 +42,9 @@
                 "key": "bgStreet"
             },
             {
-                "url": "assets/images/environments/bgWaitingRoom.png",
+                "url": "assets/images/environments/bgBusStop.png",
                 "type": "image",
-                "key": "bgWaitingRoom"
+                "key": "bgBusStop"
             },
             {
                 "url": "assets/images/environments/bgHallway.png",
@@ -62,9 +52,44 @@
                 "key": "bgHallway"
             },
             {
-                "url": "assets/images/props/table.png",
+                "url": "assets/images/props/busStopPoster1.png",
                 "type": "image",
-                "key": "table"
+                "key": "busStopPoster1"
+            },
+            {
+                "url": "assets/images/props/busStopPoster2.png",
+                "type": "image",
+                "key": "busStopPoster2"
+            },
+            {
+                "url": "assets/images/props/busStopDoor.png",
+                "type": "image",
+                "key": "busStopDoor"
+            },
+            {
+                "url": "assets/images/props/pondTrash.png",
+                "type": "image",
+                "key": "pondTrash"
+            },
+            {
+                "url": "assets/images/props/pondTrash2.png",
+                "type": "image",
+                "key": "pondTrash2"
+            },
+            {
+                "url": "assets/images/props/pondTrash3.png",
+                "type": "image",
+                "key": "pondTrash3"
+            },
+            {
+                "url": "assets/images/props/busStopSignPond.png",
+                "type": "image",
+                "key": "busStopSignPond"
+            },
+            {
+                "url": "assets/images/props/screen.png",
+                "type": "image",
+                "key": "screen"
             },
             {
                 "url": "assets/images/props/bgClassroom2 - door.png",
@@ -172,16 +197,6 @@
                 "key": "bgMeetingTree"
             },
             {
-                "url": "assets/images/props/bgNight - Fountain.png",
-                "type": "image",
-                "key": "bgNightFountain"
-            },
-            {
-                "url": "assets/images/props/bgNight - Lamps.png",
-                "type": "image",
-                "key": "bgNightLamps"
-            },
-            {
                 "url": "assets/images/props/box.png",
                 "type": "image",
                 "key": "box"
@@ -230,6 +245,16 @@
                 "url": "assets/images/props/trash2.png",
                 "type": "image",
                 "key": "trash2"
+            },
+            {
+                "url": "assets/images/characters/busStopMark.png",
+                "type": "image",
+                "key": "busStopMark"
+            },
+            {
+                "url": "assets/images/characters/pondBoy.png",
+                "type": "image",
+                "key": "pondBoy"
             },
             {
                 "url": "assets/images/characters/professor.png",
