@@ -2,6 +2,11 @@
     "section1": {
         "files": [
             {
+                "url": "assets/sdgoMusic.mp3",
+                "type": "audio",
+                "key": "sdgoMusic"
+            },
+            {
                 "url": "assets/images/environments/bgCafeteria.png",
                 "type": "image",
                 "key": "bgCafeteria"
