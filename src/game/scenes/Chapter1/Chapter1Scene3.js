@@ -12,7 +12,7 @@ export default class Chapter1Scene3 extends BaseStoryScene {
       jsonPath: "data/dialogues/chapters/chapter1_script.json",
 
       backgroundKey: "bgCafeteria",
-      startNodeId: "f_intro_friends",
+      startNodeId: "f_intro_narration",
       exitUnlockedFlag: "chapter1_scene3_exit_unlocked",
 
       walkArea: {

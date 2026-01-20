@@ -56,7 +56,8 @@ export default class Chapter3Scene2 extends BaseStoryScene {
                     x: 700,
                     y: 900,
                     scale: 0.6,
-                    dialogueId: "cat", inspectDialogueId: "inspect_cat"
+                    dialogueId: "cat",
+                    inspectDialogueId: "inspect_cat"
                 },
                 {
                     name: "tools",

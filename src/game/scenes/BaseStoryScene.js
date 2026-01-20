@@ -578,12 +578,20 @@ export default class BaseStoryScene extends Phaser.Scene {
     }
 
     _updateShadow() {
+        if (!this.playerShadow || !this.ladyPlayer) return;
+
         const s = this._currentScaleFactor ?? 1;
+
+        // Position shadow at player's feet (accounting for origin at bottom center)
         this.playerShadow.x = this.ladyPlayer.x;
-        this.playerShadow.y = this.ladyPlayer.y + 10;
+        this.playerShadow.y = this.ladyPlayer.y + (s * 2); // Slight offset scaled with player
+
+        // Keep shadow below player
         this.playerShadow.setDepth(this.ladyPlayer.depth - 1);
-        this.playerShadow.scaleX = s;
-        this.playerShadow.scaleY = s * 0.4;
+
+        // Scale shadow with player size
+        this.playerShadow.scaleX = s * 0.8;  // Width scales with player
+        this.playerShadow.scaleY = s * 0.3;  // Height is flatter (ellipse effect)
     }
 
     _updateExitZoneOverlap() {

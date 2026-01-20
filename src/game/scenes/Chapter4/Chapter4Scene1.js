@@ -46,7 +46,7 @@ export default class Chapter4Scene1 extends BaseStoryScene {
                     y: 710,
                     scale: 1.45,
                     dialogueId: "ch4_s1_npc",
-                    inspectDialogueId: "inspect_pondBoy",
+                    inspectDialogueId: "inspect_volunteer",
                 }
             ],
         });

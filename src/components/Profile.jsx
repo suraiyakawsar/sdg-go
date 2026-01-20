@@ -18,6 +18,7 @@ import { BADGES } from "../utils/badges";
 import { getAvatarUri } from "../utils/avatar";
 import AvatarPicker from "./ui/AvatarPicker";
 import { on, off } from "../utils/eventBus";
+import { getPlayerTitle } from "../utils/gameSummary";
 
 // ✅ Helper functions to read live data from storage
 function getSDGPoints() {
@@ -183,6 +184,34 @@ export default function Profile() {
     };
 
     // ✅ Load stats function
+    // const loadStats = () => {
+    //     const points = getSDGPoints();
+    //     const badgeKeys = getBadgesKeys();
+    //     const completedChapters = getCompletedChapters();
+    //     const currentChapter = getCurrentChapter();
+    //     const currentScene = getCurrentScene();
+    //     const xp = getXP(points);
+
+    //     setStats({
+    //         username: profile?.name || "Explorer",
+    //         title: profile?.role || "Eco Explorer",
+    //         sdgPoints: points,
+    //         badges: badgeKeys.length,
+    //         completedChapters: completedChapters,
+    //         currentChapter: currentChapter,
+    //         currentScene: currentScene,
+    //         xp: xp,
+    //         badgeKeys: badgeKeys,
+    //     });
+
+    //     console.log("📊 Profile stats loaded:", {
+    //         points,
+    //         badges: badgeKeys.length,
+    //         completedChapters,
+    //         currentChapter,
+    //     });
+    // };
+
     const loadStats = () => {
         const points = getSDGPoints();
         const badgeKeys = getBadgesKeys();
@@ -191,9 +220,21 @@ export default function Profile() {
         const currentScene = getCurrentScene();
         const xp = getXP(points);
 
+        // ✅ Calculate good/bad choices for title
+        let totalGood = 0;
+        let totalBad = 0;
+        for (let i = 1; i <= 4; i++) {
+            totalGood += Number(localStorage.getItem(`chapter${i}_goodChoices`)) || 0;
+            totalBad += Number(localStorage.getItem(`chapter${i}_badChoices`)) || 0;
+        }
+
+        // ✅ Get dynamic player title based on performance
+        const playerTitleObj = getPlayerTitle(points, totalGood, totalBad);
+        const dynamicTitle = playerTitleObj?.title || profile?.role || "Eco Explorer";
+
         setStats({
             username: profile?.name || "Explorer",
-            title: profile?.role || "Eco Explorer",
+            title: dynamicTitle,  // ← Now it's dynamic!
             sdgPoints: points,
             badges: badgeKeys.length,
             completedChapters: completedChapters,
@@ -203,12 +244,6 @@ export default function Profile() {
             badgeKeys: badgeKeys,
         });
 
-        console.log("📊 Profile stats loaded:", {
-            points,
-            badges: badgeKeys.length,
-            completedChapters,
-            currentChapter,
-        });
     };
 
     // ✅ Update stats on mount and profile change

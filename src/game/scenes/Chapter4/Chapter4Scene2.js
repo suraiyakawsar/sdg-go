@@ -72,6 +72,7 @@ export default class Chapter4Scene2 extends BaseStoryScene {
                 this.CONFIG.door.w * s,
                 this.CONFIG.door.h * s
             );
+
         }
 
         // ✅ Store current scene (NO SPACE in key)
@@ -149,6 +150,7 @@ export default class Chapter4Scene2 extends BaseStoryScene {
 
         // unlock door visuals + logic (BaseStoryScene has the glow helper)
         this.doorUnlocked = true;
+        this._unlockDoorGlow();
 
         // Step 2: trash becomes active
         this.objectiveStep = 2;
@@ -236,7 +238,6 @@ export default class Chapter4Scene2 extends BaseStoryScene {
             return;
         }
         this._chapterCompleted = true;
-
         console.log("🎉 Chapter 4 Complete!  Showing summary.. .");
 
         saveChapterStats(4);

@@ -8,7 +8,7 @@ export default defineConfig({
   base: "/sdg-go/",
   plugins: [react(), tailwindcss()],
   build: {
-    chunkSizeWarningLimit: 2000,
+    chunkSizeWarningLimit: 4000,
   },
   resolve: {
     alias: {
