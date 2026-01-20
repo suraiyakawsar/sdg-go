@@ -74,7 +74,7 @@ export const CHAPTER_TITLES = [
 ];
 
 // ✅ Chapter info
-export const CHAPTER_INFO = {
+const CHAPTER_INFO = {
     1: { name: "Campus Life", scene: "Hallway", sdgFocus: "Quality Education" },
     2: { name: "Food Bank", scene: "Community", sdgFocus: "Zero Hunger" },
     3: { name: "Garden", scene: "Environment", sdgFocus: "Life on Land" },

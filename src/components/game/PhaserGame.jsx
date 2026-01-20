@@ -66,6 +66,10 @@ export default function PhaserGame() {
           debug: false,
         },
       },
+      fps: {
+        target: 60,
+        forceSetTimeOut: true
+      },
 
       render: {
         antialias: true,
