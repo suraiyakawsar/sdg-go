@@ -1,7 +1,7 @@
 // src/utils/gameSummary.js
 
 // ✅ Title tiers based on SDG points and choices
-export const PLAYER_TITLES = [
+const PLAYER_TITLES = [
     {
         minPoints: 150,
         minGoodChoices: 15,

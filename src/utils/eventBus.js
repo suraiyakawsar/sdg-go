@@ -1,5 +1,3 @@
-// src/utils/eventBus.js
-
 // Map(event -> Set(callback)) avoids duplicates and makes off() reliable.
 const listeners = new Map();
 
@@ -42,6 +40,4 @@ function subscribe(event, callback) {
 }
 
 
-export { on, off, emit, clear, subscribe };
-export default { on, off, emit, clear, subscribe };
-
+export { on, off, emit, subscribe };

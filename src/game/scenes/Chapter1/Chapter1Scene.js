@@ -50,15 +50,6 @@ export default class Chapter1Scene extends BaseStoryScene {
         super.create();
 
 
-        // Play background music
-        const bgMusic = this.sound.add('sdgoMusic', { loop: true, volume: 0.3 });
-        bgMusic.play();
-
-        // Save it if you need to stop or adjust later
-        this.bgMusic = bgMusic;
-
-
-
         // ✅ Reset session counters at the START of chapter 1
         localStorage.setItem("sessionSDGPoints", "0");
         localStorage.setItem("sessionGoodChoices", "0");

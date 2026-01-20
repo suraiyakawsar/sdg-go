@@ -237,7 +237,7 @@ export default class Chapter4Scene2 extends BaseStoryScene {
         }
         this._chapterCompleted = true;
 
-        console.log("🎉 Chapter 2 Complete!  Showing summary.. .");
+        console.log("🎉 Chapter 4 Complete!  Showing summary.. .");
 
         saveChapterStats(4);
 

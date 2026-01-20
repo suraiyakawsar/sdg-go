@@ -1,7 +1,7 @@
 // src/components/ui/GameSidebar. jsx
 import { useMemo, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { emit, on } from "../../utils/eventBus";
+import { emit, on, off } from "../../utils/eventBus";
 import { FiAward, FiUser, FiHome, FiBookOpen } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePlayer } from "../../pages/PlayerContext";
@@ -209,7 +209,7 @@ function SidebarButton({ icon: Icon, label, hotkey, active, onClick }) {
                 w-16 h-16 flex flex-col items-center justify-center
                 rounded-2xl text-white
                 backdrop-blur-md pointer-events-auto
-                border transition-all relative outline-none
+                border transition-all relative outline-none cursor-pointer
                 ${active
                     ? "bg-emerald-500/25 border-emerald-300/80 shadow-[0_0_18px_rgba(16,185,129,0.35)]"
                     : "bg-white/10 hover:bg-white/20 border-white/20 hover:border-emerald-300/40"
