@@ -162,7 +162,9 @@ export default function Game() {
     localStorage.removeItem("collectedBadges");
     localStorage.setItem("sdgo: lastRoute", "/game");
 
-    window.location.reload();
+    // window.location.reload();
+    window.location.href = "/";
+
   };
 
   // ✅ FULL SCREEN LOADING
