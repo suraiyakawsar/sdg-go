@@ -18,11 +18,6 @@
                     "text": "A student with a garbage bag is trying to clean up, but seems overwhelmed by the amount of trash."
                 },
                 {
-                    "id": "inspect_pond",
-                    "speaker": "Narrator",
-                    "text": "The pond is home to fish and turtles. The trash pollution is affecting their habitat."
-                },
-                {
                     "id": "ch4_s1_npc",
                     "speaker": "Iman",
                     "text": "Oh hey! You're from Prof Danny's class right? I'm doing a solo cleanup. Every Tuesday I come here. Sad seeing sampah end up in the water.",
@@ -35,7 +30,7 @@
                     "choices": [
                         {
                             "id": "ch4_s1_choice_yes",
-                            "text": "Yeah, let's do this together. Four hands better than two.",
+                            "text": "Yeah, let's do this together. Four hands are better than two.",
                             "sdgDelta": 5,
                             "setFlags": [
                                 "chapter4_cleanedPond_positive"
@@ -53,7 +48,7 @@
                         },
                         {
                             "id": "ch4_s1_choice_no",
-                            "text": "Sorry, I don't want to get my hands dirty. Good luck though! ",
+                            "text": "Sorry, I don't want to get my hands dirty. Good luck though!",
                             "sdgDelta": -3,
                             "isCareless": true,
                             "setFlags": [
@@ -66,31 +61,31 @@
                 {
                     "id": "ch4_s1_help_yes",
                     "speaker": "Iman",
-                    "text": "Yes!  Terima kasih!  You know, I started this alone 3 months ago. Now sometimes 5-6 people join. Small actions attract others.",
+                    "text": "Yes! Terima kasih! You know, I started this alone 3 months ago. Now sometimes 5-6 people join. Small actions attract others.",
                     "autoNext": "ch4_s1_cleanup_montage"
                 },
                 {
                     "id": "ch4_s1_help_partial",
                     "speaker": "Iman",
-                    "text": "15 minutes is perfect!  Even picking up 10 pieces of trash makes a difference.  The turtles here will thank you.",
+                    "text": "15 minutes is perfect! Even picking up 10 pieces of trash makes a difference. The turtles here will thank you.",
                     "autoNext": "ch4_s1_cleanup_montage"
                 },
                 {
                     "id": "ch4_s1_help_no",
                     "speaker": "Iman",
-                    "text": "Oh...  okay. But you know, this trash affects all of us. The same water flows through our campus. Maybe next time? ",
+                    "text": "Oh...okay. But you know, this trash affects all of us. The same water flows through our campus. Maybe next time?",
                     "autoNext": "ch4_s1_cleanup_solo"
                 },
                 {
                     "id": "ch4_s1_cleanup_montage",
                     "speaker": "Narrator",
-                    "text": "Together, you collect two full bags of trash — plastic bottles, food wrappers, even a broken umbrella. The pond looks noticeably cleaner.",
+                    "text": "Together, you collect two full bags of trash: plastic bottles, food wrappers, even a broken umbrella. The ground around the pond and the pond itself look noticeably cleaner.",
                     "autoNext": "ch4_s1_reflection"
                 },
                 {
                     "id": "ch4_s1_cleanup_solo",
                     "speaker": "Narrator",
-                    "text": "You watch Iman continue alone, methodically picking up trash.  There's something admirable about her persistence.",
+                    "text": "You watch Iman continue alone, methodically picking up trash. There's something admirable about his persistence.",
                     "autoNext": "ch4_s1_reflection"
                 },
                 {
@@ -107,7 +102,7 @@
                         {
                             "id": "ch4_s1_reflect_doubt",
                             "text": "Isn't it tiring doing this when most people don't care?",
-                            "sdgDelta": 0,
+                            "sdgDelta": -2,
                             "nextNodeId": "ch4_s1_iman_honest"
                         }
                     ]
@@ -115,25 +110,24 @@
                 {
                     "id": "ch4_s1_iman_encourage",
                     "speaker": "Iman",
-                    "text": "That's the spirit! Start small. Consistency matters more than scale. And hey, you already started today by joining me! ",
+                    "text": "That's the spirit! Start small. Consistency matters more than scale. And hey, you already started today by joining me!",
                     "autoNext": "ch4_s1_wrapup"
                 },
                 {
                     "id": "ch4_s1_iman_honest",
                     "speaker": "Iman",
-                    "text": "Honestly? Sometimes.  But then I see the pond getting cleaner, the turtles swimming happily...  and I remember why I started. Impact, not applause.",
+                    "text": "Honestly? Sometimes. But then I see the area getting cleaner, the turtles swimming happily...and I remember why I started. Impact, not applause.",
                     "autoNext": "ch4_s1_wrapup"
                 },
                 {
                     "id": "ch4_s1_wrapup",
                     "speaker": "system",
-                    "text": "You've participated in a student-led environmental cleanup.  (SDG 6: Clean Water, SDG 14: Life Below Water, SDG 15: Life on Land)",
+                    "text": "You've participated in a student-led environmental cleanup. (SDG 6: Clean Water, SDG 14: Life Below Water, SDG 15: Life on Land)",
                     "onComplete": {
                         "setFlags": [
                             "chapter4_scene1_dialogue_done"
                         ],
-                        "unlockExit": true,
-                        "points": 5
+                        "unlockExit": true
                     }
                 }
             ]
@@ -147,31 +141,26 @@
                 {
                     "id": "ch4_s2_intro",
                     "speaker": "Narrator",
-                    "text": "Evening at the USM bus stop. The semester is ending soon.  You wait for the Rapid Penang bus, reflecting on everything that's happened."
+                    "text": "Evening at the APU bus stop. The campus is quiet, everyone is heading home. You wait for the RapidKL bus, reflecting on everything that's happened."
                 },
                 {
                     "id": "inspect_student",
                     "speaker": "Narrator",
-                    "text": "A junior student you recognize from the food bank. She's reading a book on sustainable development."
+                    "text": "A junior student you recognize from the food bank. He's reading a book on sustainable development."
                 },
                 {
                     "id": "inspect_poster",
                     "speaker": "Narrator",
-                    "text": "A poster promoting public transport:  'Satu bas, 40 kereta kurang. Pilihan anda membentuk masa depan. '"
-                },
-                {
-                    "id": "inspect_bench",
-                    "speaker": "Narrator",
-                    "text": "The bench has a small plaque: 'Donated by USM Green Campus Initiative 2019. '"
+                    "text": "A poster promoting public transport: 'Satu bas, 40 kereta kurang. Pilihan anda membentuk masa depan. (One bus, 40 cars less. Your choice shapes the future.)'"
                 },
                 {
                     "id": "ch4_s2_junior",
                     "speaker": "Anis",
-                    "text": "Senior!  I heard you've been really active with sustainability stuff this semester. I'm thinking of joining Pantri Siswa next sem.  Any advice?",
+                    "text": "Senior! I heard you've been really active with sustainability stuff. I'm thinking of joining Pantri Siswa next sem. Any advice?",
                     "choices": [
                         {
                             "id": "ch4_s2_advice_encourage",
-                            "text": "Just start. Don't wait until you feel ready.  Show up, and you'll learn along the way.",
+                            "text": "Just start. Don't wait until you feel ready. You'll learn along the way.",
                             "sdgDelta": 5,
                             "setFlags": [
                                 "ch4_mentored_junior"
@@ -180,13 +169,13 @@
                         },
                         {
                             "id": "ch4_s2_advice_practical",
-                            "text": "Talk to Kak Sarah at the food bank. She'll guide you. And bring friends — it's more fun together.",
+                            "text": "Talk to Kak Sara at the food bank. She'll guide you. And bring friends.",
                             "sdgDelta": 3,
                             "nextNodeId": "ch4_s2_junior_thanks"
                         },
                         {
                             "id": "ch4_s2_advice_dismissive",
-                            "text": "Hmm, I'm not really the best person to ask.  I just did it for the experience.",
+                            "text": "Hmm, I'm not really the best person to ask. I just did it for the experience.",
                             "sdgDelta": -3,
                             "isCareless": true,
                             "nextNodeId": "ch4_s2_junior_disappointed"
@@ -196,61 +185,52 @@
                 {
                     "id": "ch4_s2_junior_grateful",
                     "speaker": "Anis",
-                    "text": "Wow, that's really inspiring, senior! You're right — I keep waiting for the 'perfect time' but it never comes. I'll sign up tomorrow! ",
+                    "text": "Wow, that's really inspiring! You're right, I keep waiting for the 'perfect time' but it never comes. I'll sign up tomorrow!",
                     "autoNext": "ch4_s2_aisyah_arrives"
                 },
                 {
                     "id": "ch4_s2_junior_thanks",
                     "speaker": "Anis",
-                    "text": "Thanks, senior! I'll find Kak Sarah.  And yeah, I'll drag my roommates along.  Hopefully they won't complain too much, haha.",
+                    "text": "Thanks, senior! I'll find Kak Sara. And yeah, I'll drag my roommates along. Hopefully they won't complain too much, haha.",
                     "autoNext": "ch4_s2_aisyah_arrives"
                 },
                 {
                     "id": "ch4_s2_junior_disappointed",
                     "speaker": "Anis",
-                    "text": "Oh...  okay. I thought you were really passionate about it.  Nevermind, I'll ask someone else.",
+                    "text": "Oh...okay. I thought you were really passionate about it. Nevermind, I'll ask someone else.",
                     "autoNext": "ch4_s2_aisyah_arrives"
                 },
                 {
                     "id": "ch4_s2_aisyah_arrives",
                     "speaker": "Narrator",
-                    "text": "Aisyah and Chai Lam appear, also waiting for the bus. They look tired but satisfied after a long semester.",
+                    "text": "Sara and Chai Lam appear, also waiting for the bus. They look tired but satisfied after a long day.",
                     "autoNext": "ch4_s2_friends_reunion"
                 },
                 {
                     "id": "ch4_s2_friends_reunion",
-                    "speaker": "Aisyah",
-                    "text": "Eh!  There you are!  Wah, one whole semester of SDG adventures.  Remember when you didn't even know what SDG was? Now look at you — cleaning ponds, packing food boxes! ",
+                    "speaker": "Sara",
+                    "text": "Eh! There you are! Wah, one whole day of SDG adventures. Remember when you didn't even know what SDG was? Now look at you, cleaning ponds, packing food boxes!",
                     "autoNext": "ch4_s2_Chai Lam_joke"
                 },
                 {
                     "id": "ch4_s2_Chai Lam_joke",
                     "speaker": "Chai Lam",
-                    "text": "Betul tu! From 'aiya, extra work' to actually leading initiatives. Prof Danny would be proud.  Character development sia!",
+                    "text": "Betul tu! From 'aiya, extra work' to actually leading initiatives. Prof Riza and Danny would be proud. Character development sia!",
                     "autoNext": "ch4_s2_reflection_prompt"
                 },
                 {
                     "id": "ch4_s2_reflection_prompt",
-                    "speaker": "Aisyah",
-                    "text": "Serious question though — looking back, what changed for you? Like, what's different now compared to the start of sem?",
+                    "speaker": "Sara",
+                    "text": "Serious question though, looking back, what changed for you? Like, what's different now compared to the start of all of this?",
                     "choices": [
                         {
                             "id": "ch4_s2_reflect_action",
-                            "text": "I realized I don't have to wait for someone else to start. If I see a problem, I can be the one to act.",
+                            "text": "I realized I don't have to wait for someone else to start.",
                             "sdgDelta": 5,
                             "setFlags": [
                                 "ch4_reflection_leader"
                             ],
                             "nextNodeId": "ch4_s2_aisyah_proud"
-                        },
-                        {
-                            "id": "ch4_s2_reflect_connection",
-                            "text": "I feel more connected now — to people, to the campus, to something bigger than just my grades.",
-                            "sdgDelta": 4,
-                            "setFlags": [
-                                "ch4_reflection_connected"
-                            ],
-                            "nextNodeId": "ch4_s2_Chai Lam_agree"
                         },
                         {
                             "id": "ch4_s2_reflect_uncertain",
@@ -269,36 +249,30 @@
                 },
                 {
                     "id": "ch4_s2_aisyah_proud",
-                    "speaker": "Aisyah",
-                    "text": "THAT.  That right there is growth. You went from 'not my problem' to 'I can be part of the solution.' I'm actually proud of you lah! ",
-                    "autoNext": "ch4_s2_future_plans"
-                },
-                {
-                    "id": "ch4_s2_Chai Lam_agree",
-                    "speaker": "Chai Lam",
-                    "text": "Same feeling here bro. Before this, uni was just classes and assignments. Now it feels like we're actually part of a community. Different vibes.",
+                    "speaker": "Sara",
+                    "text": "THAT. That right there is growth. You went from 'not my problem' to 'I can be part of the solution.' I'm actually proud of you lah!",
                     "autoNext": "ch4_s2_future_plans"
                 },
                 {
                     "id": "ch4_s2_aisyah_support",
-                    "speaker": "Aisyah",
-                    "text": "That's okay!  The fact that you're trying means you're already ahead of most people.  Progress, not perfection right? ",
+                    "speaker": "Sara",
+                    "text": "That's okay! The fact that you're trying means you're already ahead of most people. Progress, not perfection, right?",
                     "autoNext": "ch4_s2_future_plans"
                 },
                 {
                     "id": "ch4_s2_Chai Lam_challenge",
                     "speaker": "Chai Lam",
-                    "text": "Hmm, that's a bit sad to hear. But hey, maybe next sem something will click?  Don't close the door completely lah.",
+                    "text": "Hmm, that's a bit sad to hear. But hey, maybe next time something will click? Don't close the door completely lah.",
                     "autoNext": "ch4_s2_future_plans"
                 },
                 {
                     "id": "ch4_s2_future_plans",
-                    "speaker": "Aisyah",
-                    "text": "So, what's the plan for next semester? Prof Danny mentioned the SDG Campus Challenge — teams compete to create the best sustainability project. We should join!",
+                    "speaker": "Sara",
+                    "text": "So, what's the plan next? Prof Danny mentioned the SDG Campus Challenge, teams compete to create the best sustainability project. We should join!",
                     "choices": [
                         {
                             "id": "ch4_s2_plan_lead",
-                            "text": "Count me in.  Actually, I have some ideas already.  Let's form a team! ",
+                            "text": "Count me in.  Actually, I have some ideas already. Let's form a team! ",
                             "sdgDelta": 5,
                             "setFlags": [
                                 "ch4_committed_future"
@@ -313,7 +287,7 @@
                         },
                         {
                             "id": "ch4_s2_plan_maybe",
-                            "text": "Let me think about it first. Next sem quite packed also.",
+                            "text": "Let me think about it first. The sem quite packed also.",
                             "sdgDelta": 0,
                             "nextNodeId": "ch4_s2_team_maybe"
                         }
@@ -322,55 +296,55 @@
                 {
                     "id": "ch4_s2_team_form",
                     "speaker": "Chai Lam",
-                    "text": "Wooo! That's what I'm talking about!  Okay okay, I'll handle logistics, Aisyah does outreach, you lead the vision.  Dream team confirmed!",
+                    "text": "Wooo! That's what I'm talking about! Okay okay, I'll handle logistics, Sara does outreach, you lead the vision. Dream team confirmed!",
                     "autoNext": "ch4_s2_bus_arrives"
                 },
                 {
                     "id": "ch4_s2_team_support",
-                    "speaker": "Aisyah",
+                    "speaker": "Sara",
                     "text": "Deal! We need people who show up consistently anyway. That's more valuable than having a fancy title.  Welcome to the team! ",
                     "autoNext": "ch4_s2_bus_arrives"
                 },
                 {
                     "id": "ch4_s2_team_maybe",
-                    "speaker": "Aisyah",
-                    "text": "Okay, no pressure.  But the offer is always open. You know where to find us — probably at the food bank or covered in compost somewhere!",
+                    "speaker": "Sara",
+                    "text": "Okay, no pressure. But the offer is always open. You know where to find us, probably at the food bank or covered in compost somewhere!",
                     "autoNext": "ch4_s2_bus_arrives"
                 },
                 {
                     "id": "ch4_s2_bus_arrives",
                     "speaker": "Narrator",
-                    "text": "The Rapid Penang bus pulls up. The sun is setting over the campus, casting a warm glow over everything.",
+                    "text": "The RapidKL bus pulls up. The sun is setting over the campus, casting a warm glow over everything.",
                     "autoNext": "ch4_s2_final_words"
                 },
                 {
                     "id": "ch4_s2_final_words",
                     "speaker": "Chai Lam",
-                    "text": "You know what? This semester started with us dragging you to learn about SDGs. Now you're the one inspiring juniors.  Full circle, bro.",
+                    "text": "You know what? This semester started with us dragging you to learn about SDGs. Now you're the one inspiring juniors. Full circle, bro.",
                     "autoNext": "ch4_s2_aisyah_closing"
                 },
                 {
                     "id": "ch4_s2_aisyah_closing",
-                    "speaker": "Aisyah",
-                    "text": "The SDGs aren't just goals on a poster.  They're about choices we make every day. And you've been making good ones.  Jom, bus dah sampai!",
+                    "speaker": "Sara",
+                    "text": "The SDGs aren't just goals on a poster. They're about choices we make every day. And you've been making good ones. Jom, bus dah sampai!",
                     "autoNext": "ch4_s2_boarding"
                 },
                 {
                     "id": "ch4_s2_boarding",
                     "speaker": "Narrator",
-                    "text": "You board the bus with your friends, feeling different from the person who started this semester.  The journey of a thousand miles begins with a single step — or in this case, a single choice to care.",
+                    "text": "You board the bus with your friends, feeling different from the person who started this semester. The journey of a thousand miles begins with a single step, or in this case, a single choice to care.",
                     "autoNext": "ch4_s2_final_reflection"
                 },
                 {
                     "id": "ch4_s2_final_reflection",
                     "speaker": "Narrator",
-                    "text": "Looking out the window as the campus fades into the distance, you realize:  you don't need to change the whole world. You just need to change your corner of it.  And that's exactly what you've started doing.",
+                    "text": "Looking out the window as the campus fades into the distance, you realize: you don't need to change the whole world. You just need to change your corner of it. And that's exactly what you've started doing.",
                     "autoNext": "ch4_s2_wrapup"
                 },
                 {
                     "id": "ch4_s2_wrapup",
                     "speaker": "system",
-                    "text": "End of Chapter 4: Becoming a Changemaker.  Your journey from awareness to action is complete. But the real journey — making sustainable choices every day — is just beginning.",
+                    "text": "End of Chapter 4 & Game: Becoming a Changemaker. Your journey from awareness to action is complete. But the real journey, making sustainable choices every day, is just beginning.",
                     "onComplete": {
                         "setFlags": [
                             "chapter4_completed",

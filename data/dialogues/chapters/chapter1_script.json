@@ -10,12 +10,12 @@
                 {
                     "id": "h_intro_narration",
                     "speaker": "Narrator",
-                    "text": "First day of the new semester at the APU. The hallway buzzes with students catching up after the holidays. Colourful posters line the walls...something about 'Sustainability Week'."
+                    "text": "First day of the new semester at APU. The hallway buzzes with students catching up after the holidays. Colourful posters line the walls...something about 'Sustainability Week'."
                 },
                 {
-                    "id": "h_noticeboard",
+                    "id": "inspect_noticeboard",
                     "speaker": "Narrator",
-                    "text": "MINGGU KELESTARIAN APU — Sign up for talks and activities at the cafeteria. Food bank volunteering details will be shared in class."
+                    "text": "The noticeboard is covered with event posters. One catches your eye — 'Be the Change: SDG Campus Challenge'."
                 },
                 {
                     "id": "inspect_npcboy",
@@ -28,9 +28,9 @@
                     "text": "Your coursemate, Sara. She's always involved in campus activities."
                 },
                 {
-                    "id": "inspect_noticeboard",
+                    "id": "h_noticeboard",
                     "speaker": "Narrator",
-                    "text": "The noticeboard is covered with event posters. One catches your eye — 'Be the Change: SDG Campus Challenge'."
+                    "text": "MINGGU KELESTARIAN APU — Sign up for talks and activities at the cafeteria. Food bank volunteering details will be shared in class."
                 },
                 {
                     "id": "h_friends_start",
@@ -70,7 +70,7 @@
                 {
                     "id": "h_explain_positive",
                     "speaker": "Sara",
-                    "text": "Ha ah! Sustainable Development Goals. The uni is doing a whole week about it. Got 17 goals covering everything from poverty to climate change.",
+                    "text": "Yeaaah. Sustainable Development Goals. The uni is doing a whole week about it. Got 17 goals covering everything from poverty to climate change.",
                     "autoNext": "h_explain_positive_b"
                 },
                 {
@@ -111,8 +111,8 @@
                 },
                 {
                     "id": "h_objective_update",
-                    "speaker": "system",
-                    "text": "New objective: Attend Prof Riza's class to learn how SDGs connect to campus life.",
+                    "speaker": "Narrator",
+                    "text": "The hallway feels familiar, but the conversations around you plant new questions in your mind. (SDG 4: Quality Education)\nNow look for the door to the classroom.",
                     "onComplete": {
                         "setFlags": [
                             "chapter1_scene1_dialogue_done"
@@ -145,6 +145,11 @@
                     "text": "A student furiously taking notes. Seems really into the topic."
                 },
                 {
+                    "id": "c_bench_1",
+                    "speaker": "Student",
+                    "text": "Honestly...I thought SDGs were just cincai cincai. But the food bank example tu real lah. Students helping students."
+                },
+                {
                     "id": "c_prof_start",
                     "speaker": "Prof Riza",
                     "text": "Selamat pagi, everyone. Today we're going to talk about something bigger than your CGPA, the Sustainable Development Goals.",
@@ -159,7 +164,7 @@
                 {
                     "id": "c_prof_example",
                     "speaker": "Prof Riza",
-                    "text": "Last semester, some seniors worked with the campus food bank. They helped redistribute surplus food from Dewan Makan to students yang memerlukan.",
+                    "text": "Last semester, some seniors worked with the campus food bank. They helped redistribute surplus food from Dewan Makan to students. It was a small project, but it made a real difference.",
                     "autoNext": "c_prof_question"
                 },
                 {
@@ -218,19 +223,19 @@
                 {
                     "id": "c_prof_foodbank",
                     "speaker": "Prof Riza",
-                    "text": "The food bank I mentioned tadi, they're looking for volunteers this week. Sorting, packing, distributing. Siapa interested, sign up at the caf.",
+                    "text": "The food bank I mentioned tadi, they're looking for volunteers this week. Sorting, packing, distributing. Siapa interested, sign up at the cafeteria.",
                     "autoNext": "c_friend_whisper"
                 },
                 {
                     "id": "c_friend_whisper",
                     "speaker": "Sara",
                     "text": "(whispers) Eh, food bank kinda sounds interesting kan? Real hands-on experience, not just sitting in class.",
-                    "autoNext": "c_system_idea"
+                    "autoNext": "c_system_wrapup"
                 },
                 {
-                    "id": "c_system_idea",
-                    "speaker": "system",
-                    "text": "New idea unlocked: Campus Food Bank Volunteering (SDG 2: Zero Hunger)",
+                    "id": "c_system_wrapup",
+                    "speaker": "Narrator",
+                    "text": "You proceed to leave the class with a clearer understanding of the Sustainable Development Goals and why they matter beyond the classroom. (SDG 4: Quality Education)",
                     "onComplete": {
                         "setFlags": [
                             "chapter1_scene2_dialogue_done"
@@ -238,11 +243,6 @@
                         "unlockExit": true,
                         "points": 3
                     }
-                },
-                {
-                    "id": "c_bench_1",
-                    "speaker": "Student",
-                    "text": "Honestly...I thought SDGs were just another poster thing. But the food bank example tu real lah. Students helping students."
                 }
             ]
         },
@@ -266,18 +266,6 @@
                     "id": "inspect_alice",
                     "speaker": "Narrator",
                     "text": "Sara, again. She's always organizing something. Not sure why she is here though."
-                },
-                {
-                    "id": "friend_looking_posters",
-                    "speaker": "Chai Lam",
-                    "text": "Eh, you checking out those SDG posters too? They actually put some effort into these designs leh.",
-                    "choices": [
-                        {
-                            "text": "Yeah, quite informative actually.",
-                            "sdgDelta": 1,
-                            "nextNodeId": null
-                        }
-                    ]
                 },
                 {
                     "id": "alice_npc",

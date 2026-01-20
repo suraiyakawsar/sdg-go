@@ -25,13 +25,19 @@
                 {
                     "id": "ch3_s1_screen_read",
                     "speaker": "Narrator",
-                    "text": "As you look at the screen, you read about the different programs:\n\n• Solar Panel Installation Project (40% complete) — Installing solar panels on campus buildings to reduce carbon emissions. • Zero Waste Canteen Program (Active) — Incentivizing students to bring reusable containers instead of using disposables.",
+                    "text": "As you look at the screen, you read about the different programs:\n• Solar Panel Installation Project (40% complete) — Installing solar panels on campus buildings to reduce carbon emissions.",
+                    "autoNext": "ch3_s1_screen_read_on"
+                },
+                {
+                    "id": "ch3_s1_screen_read_on",
+                    "speaker": "Narrator",
+                    "text": "• Zero Waste Canteen Program (Active) — Incentivizing students to bring reusable containers instead of using disposables.\n• Campus Water Harvest Initiative (Ongoing) — Collecting rainwater for landscaping and cleaning.",
                     "autoNext": "ch3_s1_screen_continue"
                 },
                 {
                     "id": "ch3_s1_screen_continue",
                     "speaker": "Narrator",
-                    "text": "• Campus Water Harvest Initiative (Ongoing) — Collecting rainwater for landscaping and cleaning.\n\n• Student Sustainability Network (250 members) — A student-led organization advocating for campus-wide sustainable practices.\n\nEach program shows that change is possible when people commit to it.",
+                    "text": "• Student Sustainability Network (250 members) — A student-led organization advocating for campus-wide sustainable practices.\nEach program shows that change is possible when people commit to it.",
                     "choices": [
                         {
                             "id": "ch3_s1_screen_choice_impressed",
@@ -165,13 +171,19 @@
                 {
                     "id": "ch3_s1_guidance",
                     "speaker": "Prof Danny",
-                    "text": "Remember this: look closely at everyday life, how people handle waste, water, food, transport. Change doesn't start with grand gestures. It starts with daily choices.",
+                    "text": "Remember this: look closely at everyday life, how people handle waste, water, food, transport, electricity. Change doesn't start with grand gestures. It starts with daily choices.",
+                    "autoNext": "ch3_s1_wrapup_stalled"
+                },
+                {
+                    "id": "ch3_s1_wrapup_stalled",
+                    "speaker": "Prof Danny",
+                    "text": "For today, before you go home, why don't you go meet Pakcik Halim in the community garden behind the Engineering block? He’s been doing amazing work with sustainable food systems on campus.",
                     "autoNext": "ch3_s1_wrapup"
                 },
                 {
                     "id": "ch3_s1_wrapup",
                     "speaker": "system",
-                    "text": "End of Chapter 3: Deepening Understanding. Prof Danny has challenged you to take ownership of your sustainability journey. What will you do next? ",
+                    "text": "You leave the classroom with a clearer sense of how everyday campus choices contribute to a more sustainable future. (SDG 12: Responsible Consumption, SDG 13: Climate Action)",
                     "onComplete": {
                         "setFlags": [
                             "chapter3_scene1_decision_done"
@@ -190,7 +202,7 @@
                 {
                     "id": "ch3_s2_intro",
                     "speaker": "Narrator",
-                    "text": "Behind the Engineering block, you step into the campus community garden. What used to be an empty patch of land is now full of life, vegetable beds, herbs, compost bins."
+                    "text": "Behind the Engineering block, you step into the campus community greenhouse. What used to be an empty patch of land is now full of life, vegetable beds, herbs, and compost bins."
                 },
                 {
                     "id": "inspect_gardener",
@@ -205,7 +217,7 @@
                 {
                     "id": "inspect_cat",
                     "speaker": "Narrator",
-                    "text": "A ginger campus cat naps between the tomato plants, completely unbothered by sustainability efforts."
+                    "text": "The same ginger campus cat naps between the tomato plants, completely unbothered by sustainability efforts."
                 },
                 {
                     "id": "cat",
@@ -226,7 +238,7 @@
                         {
                             "id": "ch3_s2_tools_choice_leave",
                             "text": "I'll just observe for now. I want to understand how this all works first.",
-                            "sdgDelta": 0,
+                            "sdgDelta": 1,
                             "nextNodeId": "ch3_s2_screen_end"
                         },
                         {
@@ -244,7 +256,7 @@
                 {
                     "id": "ch3_s2_screen_end",
                     "speaker": "Narrator",
-                    "text": "You put down the trowel and decide to leave the garden for now.",
+                    "text": "You put down the trowel and decide to come back here in the future, in case you're interested.",
                     "onComplete": {
                         "setFlags": [
                             "compost_table_interacted"
@@ -258,7 +270,7 @@
                     "choices": [
                         {
                             "id": "ch3_s2_choice_help",
-                            "text": "I'd like to help, Pakcik. I've been trying to get more involved in sustainability efforts.",
+                            "text": "I'd like to help, Pakcik. I've been trying to get more involved.",
                             "sdgDelta": 4,
                             "nextNodeId": "ch3_s2_help_confirm",
                             "onChoose": {
@@ -298,12 +310,12 @@
                     "id": "ch3_s2_leave_confirm",
                     "speaker": "Pakcik Halim",
                     "text": "Ah, the busy life of students. But remember, even 10 minutes in nature can change your perspective. The garden will be here when you're ready.",
-                    "autoNext": "ch3_s2_lesson"
+                    "autoNext": "ch3_s2_wrapup"
                 },
                 {
                     "id": "ch3_s2_lesson",
                     "speaker": "Pakcik Halim",
-                    "text": "You know, this garden produces about 50kg of vegetables monthly. All goes to Pantri Siswa and Dewan Makan. Nothing wasted, everything connected.",
+                    "text": "You know, this garden produces about 50kg of vegetables monthly. All goes to Pantri Siswa and Dewan Makan. Nothing wasted, everything is connected.",
                     "autoNext": "ch3_s2_reflection"
                 },
                 {
@@ -368,7 +380,7 @@
                 {
                     "id": "ch3_s2_wrapup",
                     "speaker": "system",
-                    "text": "You've experienced the campus community garden and learned about sustainable food systems. (SDG 2: Zero Hunger, SDG 12: Responsible Consumption, SDG 15: Life on Land)",
+                    "text": "End of Chapter 3: Deepening Understanding. You've experienced the campus community garden and learned about sustainable food systems. (SDG 2: Zero Hunger, SDG 12: Responsible Consumption, SDG 15: Life on Land)",
                     "onComplete": {
                         "setFlags": [
                             "chapter3_scene2_done",
